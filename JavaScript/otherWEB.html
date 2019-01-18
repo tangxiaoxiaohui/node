@@ -1,0 +1,131 @@
+<meta charset="utf-8">
+<title>javascriptBOM</title>
+一.渲染模式
+	1.标准模式
+		①.<!DOCTYPE html>
+		②.dtd4的写法
+		③.dtd5的写法
+	2.怪异模式
+		①.只要没写,或者写错,都是怪异模式
+	3.document.compatMode(浏览器兼容模式)
+		①."Css1Compat"	(标准模式)当前浏览器兼容模式
+		②."BackCompat"	向后兼容
+	4.标准模式的渲染模式
+		①.当元素width:100,boder:10,padding:10 ,此时元素的宽高为140.内容区域宽高为100.
+		②.行级元素不可设置宽高.
+		③.拥有margin.
+	5.怪异模式的渲染模式
+		①.当元素width:100,boder:10,padding:10 ,此时元素的宽高为100.内容区域宽高为60.
+		②.行级元素可以设置宽高.
+		③.没有margin.
+
+二.绑定
+	1.lable
+	<lable for="id"></lable>
+	<input type="text" id="id" />
+	此时lable与input进行了绑定,点击lable就相当于点击了input.
+
+三.映射
+	1.如id,name,style,class,type等元素本身就有(系统定义:特性)的属性,可以直接通过element.attr这种方法来设置或者获取元素的属性.
+	2.setAttribute("attrName","attrValue"),getAttribute("attrName","attrValue").
+
+四.图片预加载
+	<script type="text/javascript">
+		var img = new Image();
+		ing.src = "http://imgsrc.baidu.com/imgad/pic/item/34fae6cd7b899e51fab3e9c048a7d933c8950d21.jpg";
+		img.onload(){
+			dovument.body.appendChild(img);
+		}
+	</script>
+
+五.图片懒加载
+	<script type="text/javascript">
+		var div = document.getElementById("hehe");
+		div.addEventListener("click", function () {
+			var img = new Image();
+			ing.src = "http://imgsrc.baidu.com/imgad/pic/item/34fae6cd7b899e51fab3e9c048a7d933c8950d21.jpg";
+			img.onload(){
+				dovument.body.appendChild(img);
+			}
+		}, false);
+	</script>
+
+六.随机数
+	<script type="text/javascript">
+		//生成x到y之间的数不包含y.x<y.
+		//下面生成的是x到y-1之间的整数.
+		Math.floor(Math.random()*x+(y-x));
+	</script>
+
+七.文档碎片
+	1.利用文档碎片来提高效率,
+	假设当需要动态生成10000个li元素,把元素插入到ul中.假如直接获取这个ul元素的dom模型来进行append,那么每当插入一个li(由于文档结构改变,文档会重新绘制)文档都会重新绘制一次,浏览器会在极短的时间内绘制1000次,极其消耗效率,
+	此时我们可以创建一个新的document.element对象,把10000个li放入,这个不存在document文档中的对象中,之后再把这个element对象append到ul中,
+	这样浏览器便自会绘制一次,为了不改变原来的文档结构(添加不必要的element),可以创建文档碎片对象,把li放入文档碎片对象中,再把文档碎片对象放入ul中,这样就不会添加新的DOM结构.
+	<script type="text/javascript">
+		var oul = document.getElementsByTagName("ul")[0];
+		//文档碎片
+		var ofraf = document.createDocumentFragment();
+		for (var i = 10000 - 1; i >= 0; i--) {
+			var oli = document.createElement("li");
+			ofraf.appendChild(oli);
+		}
+		oul.appendChild(ofraf);
+	</script>
+	2.拼接字符串
+	<script type="text/javascript">
+		var oul = document.getElementsByTagName("ul")[0];
+		var str;
+		for (var i = 10000 - 1; i >= 0; i--) {
+			str += "<li></li>";
+		}
+		oul.innerHTML = str;
+	</script>
+
+八.CDN(内容分发网络,缓存服务器)
+	1.当你经行请求时,当这个CDN服务器没有你要的数据,它会向上级服务器发送请求,知道最后的服务器,当CDN服务器拿到数据后,会自己留一份,然后在给客户端.
+	2.当你访问一个网站时,下载了一些缓存(css,js),当你再次请求这个网址,并且访问的是同一个CDN服务器时,浏览器会自动把刚刚缓存的文件给到你,不用再下载一份了.减少了网络请求.
+
+九.断点调试.
+	1.debugger; 	程序会执行到debugger时停止.
+	2.在控制台中的具体列上进行点击标记,也可以实现debugger
+	3.debugger后可以一步一步的查看层序的执行.
+
+十.Arrar.forEach()
+	<script type="text/javascript">
+		var arr = ["1","2","3","4","5"];
+		//element 	元素值
+		//index 	元素坐标
+		arr.array.forEach( function(element, index) {
+			
+		});
+	</script>
+
+十一.自定义一个getByClassName();
+	<script type="text/javascript">
+		function getByClassName(className) {
+			var arr = document.body.getElementsByTagName('*');
+			//把类数组变成数组
+			arr = Array.prototype.slice.call(arr);
+			var eles = [];
+			arr.forEach( function(element, index) {
+				 var classArr = getClassArray(element);
+				 for(var str in classArr) {
+				 	if(classArr[str] == className){
+				 		eles.push(element);
+				 		break;
+				 	}
+				 };
+
+			});
+			function getClassArray(element) {
+				var str = element.className;
+				var regStr = / +/;
+				if(str){
+					str = str.replace(regStr, " ").trim();
+					return str.split(" ");
+				}
+			}
+			return eles;
+		}
+	</script>

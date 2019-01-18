@@ -1,0 +1,248 @@
+<meta charset="utf-8">
+<title>Less</title>
+一.变量
+	1.@varname : #fff 	@变量名 : 变量值
+	2.声明好的变量 可以在less脚本中直接使用
+	编译前
+	<style type="text/css">
+		@nice-blue: #5B83AD;
+		@light-blue: @nice-blue + #111;
+
+		#header {
+		  color: @light-blue;
+		}
+	</style>
+	编译后
+	<style type="text/css">
+		#header {
+		  color: #6c94be;
+		}
+	</style>
+
+二.混合
+	1.混合是指把已经定义好的的样式直接拿过来使用
+	编译前
+	<style type="text/css">
+		.bordered {
+		  border-top: dotted 1px black;
+		  border-bottom: solid 2px black;
+		}
+		div{
+		  color: #111;
+		  .bordered;
+		}
+	</style>
+	编译后
+	<style type="text/css">
+		.bordered {
+		  border-top: dotted 1px black;
+		  border-bottom: solid 2px black;
+		}
+		div{
+		  color: #111;
+		  border-top: dotted 1px black;
+		  border-bottom: solid 2px black;
+		}		
+	</style>
+
+三.嵌套
+	1.嵌套是指子孙写法,即模仿html结构的css
+	编译前
+	<style type="text/css">
+		body{
+			margin: 0;
+			padding: 0;
+			div{
+				width: 100px;
+				height: 100px;
+				p{
+					background-color: #ccc;
+					span{
+						color: red;
+					}
+				}
+			}
+		}
+	</style>
+	编译后
+	<style type="text/css">
+		body{
+			margin: 0;
+			padding: 0;
+		}		
+		body div{
+			width: 100px;
+			height: 100px;
+		}		
+		body div p{
+			background-color: #ccc;
+		}
+		body div p span{
+			color: red;
+		}
+	</style>
+	2.& 当前选择器
+	编译前
+	<style type="text/css">
+		div{
+			width: 100px;
+			height: 100px;
+			&:hover{
+				background-color:#fff;
+			}
+		}
+	</style>
+	编译前
+	<style type="text/css">
+		div{
+			width: 100px;
+			height: 100px;
+		}		
+		div:hover{
+			background-color:#fff;
+		}
+	</style>
+	3. @media与@supports(css3属性) @media(多媒体查询) @supports(判断属性)
+	当出现@media与@supports,相当于if当前的选择器的元素.
+	编译前
+	<style type="text/css">
+		.text{
+			height:200px;
+			.component {
+			  width: 300px;
+			  @media (min-width: 768px) {
+			    width: 600px;
+			    color:red;
+			    @media  (min-resolution: 192dpi) {
+			      background-image: url(/img/retina2x.png);
+			    }
+			  }
+			  @media (min-width: 1280px) {
+			    width: 800px;
+			  }
+			}	
+		}		
+	</style>
+	编译后
+	<style type="text/css">
+		.text {
+		  height: 200px;
+		}
+		.text .component {
+		  width: 300px;
+		}
+		@media (min-width: 768px) {
+		  .text .component {
+		    width: 600px;
+		    color: red;
+		  }
+		}
+		@media (min-width: 768px) and (min-resolution: 192dpi) {
+		  .text .component {
+		    background-image: url(/img/retina2x.png);
+		  }
+		}
+		@media (min-width: 1280px) {
+		  .text .component {
+		    width: 800px;
+		  }
+		}
+	</style>
+
+四.运算
+	1.运算符 + - * / 
+	<style type="text/css">
+		@conversion-1: 5cm + 10mm; 			// result is 6cm
+		@conversion-2: 2 - 3cm - 5mm; 		// result is -1.5cm
+		@incompatible-units: 2 + 5px - 3cm; // result is 4px
+
+		@base: 5%;
+		@filler: @base * 2; 				// result is 10%
+		@other: @base + @filler;			// result is 15%		
+	</style>
+	2.calc() 可以的进行,单位转化的的计算.
+	<style type="text/css">
+		@var: 50vh/2;
+		width: calc(50% + (@var - 20px));  // result is calc(50% + (25vh - 20px));
+	</style>
+
+五.Escaping
+	另一种变量
+	编译前
+	<style type="text/css">
+		@min: ~"(min-width: 768px)";
+		.element {
+		  @media @min {
+		    font-size: 1.2rem;
+		  }
+		}		
+	</style>
+	编译后
+	<style type="text/css">
+		@media (min-width: 768px) {
+		  .element {
+		    font-size: 1.2rem;
+		  }
+		}		
+	</style>
+
+六.函数
+	percentage(0.5); 	函数将 0.5 转换为 50%.
+	saturate(#ccc,5%); 	将颜色饱和度增加 5%.
+	lighten(#ccc, 25%);	颜色亮度降低 25%.
+	spin(#ccc,8);		色相值增加 8 等用法.
+	<style type="text/css">
+		@base: #f04615;
+		@width: 0.5;
+		.class {
+		  width: percentage(@width); // returns `50%`
+		  color: saturate(@base, 5%);
+		  background-color: spin(lighten(@base, 25%), 8);
+		}		
+	</style>
+
+七.对象
+	用 #bundle() 的方式注册对象
+	#bundle > .classname的方式来获取对象进行注入
+	解析前
+	<style type="text/css">
+		#bundle() {
+		  .button {
+		    display: block;
+		    border: 1px solid black;
+		    background-color: grey;
+		    &:hover {
+		      background-color: white
+		    }
+		  }
+		}
+		body img {
+		  color: orange;
+		  #bundle > .button; 
+		}		
+	</style>
+	解析后
+	<style type="text/css">
+		body img {
+		  color: orange;
+		  display: block;
+		  border: 1px solid black;
+		  background-color: grey;
+		}
+		body img:hover {
+		  background-color: white;
+		}		
+	</style>
+
+八.作用域,注释
+	1.作用域(定义的变量,他的作用域在,代表自己所在的{}内,与js类似)
+	2.注释/****** 注释 *******/
+
+九.导入
+	1.“导入” 的工作方式和你预期的一样
+	2.你可以导入一个 .less 文件，此文件中的所有变量就可以全部使用了。
+	3.如果导入的文件是 .less 扩展名，则可以将扩展名省略掉：
+	<style type="text/css">
+		@import "library"; 	//library.less
+		@import "typo.css" ;
+	</style>

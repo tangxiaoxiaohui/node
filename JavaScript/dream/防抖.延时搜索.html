@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>delayed(延时搜索)</title>
+		<link rel="stylesheet" href="">
+	</head>
+	<body>
+		<input type="text" id="inpu" >
+	</body>
+	<script type="text/javascript">
+		var inpu = document.getElementById("inpu");
+		inpu.oninput = delayed;
+		function  delayed() {
+			var that = this,proto = delayed.prototype;
+			clearTimeout(proto.timer);
+			proto.timer = setTimeout(function(){
+				console.log(that.value);
+			},1000)
+		}
+
+
+	</script>
+	<script type="text/javascript">
+		var inpu = document.getElementById("inpu");
+		// 防抖函数工厂(返回一个具有防抖功能的函数)
+		// hander 要进行防抖操作的函数
+		// delay  延时时间
+		function debounce(hander,delay){
+			var timer = "";
+			// 返回值-防抖函数
+			return function(){
+				var self = this,	// 事件对象
+					arg = arguments;// 事件对象,参数列表
+				clearTimeout(timer);
+				timer = setTimeout(function(){
+					// 改变函数指向为事件对象 
+					// 把事件对象的参数传给,防抖函数.
+					hander.apply(self,arg);	
+				},delay)
+			}
+		}
+		// 事件触发后执行的函数
+		function input_(e){
+			console.log(this.value);
+			console.log(e);
+		}
+		// 事件绑定
+		inpu.oninput = debounce(input_,1000);
+	</script>
+</html>

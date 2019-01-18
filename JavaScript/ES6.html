@@ -1,0 +1,483 @@
+<meta charset="utf-8">
+<title>ES6</title>
+一.块级作用域(let/const)
+	1.不存在变量提升
+	2.暂时性死区(在声明之前不可以使用)
+	3.不允许重复声明
+	4.let
+	<script type="text/javascript">
+		var arr = []
+		for (let i = 0; i < 3; i++) {
+			arr[i] = function () { console.log(i) }
+		}
+		arr[0]();
+		// 个人理解for,let的解析.
+		let i = 0;
+		if(i < 3){
+			arr[i] = function () { console.log(i) }	
+		}
+		i++;
+		if(i < 3){
+			arr[i] = function () { console.log(i) }	
+		}
+		i++;
+		// 由于let i是块级作用域所以当for循环后
+		// {}内的i 都是独立存在的.
+	</script>
+	5.const : 常量
+		1.由const定义的为常量,不可更改
+		2.由const定义的为常量为对象是.修改对象的内容是可以的.
+
+二.变量的结构赋值(实质:模式匹配)
+	1.数组的结构赋值(有序)
+	<script type="text/javascript">
+		var [a,b,c] = [1,2,3];
+		let [d,e,f] = [1,2,3];
+		// 结构不成功
+		let [g,h,i] = [1,2];
+		// 不完全结构
+		let [j,k] = [1,2,3];
+		// 默认值
+		let [l = 1,m = 2] = [];
+	</script>
+	2.对象的结构赋值(无序),实际只是以对象的模式,进行模式匹配赋值而已.
+	<script type="text/javascript">
+		//***** a代表模式. b代表变量 *****//
+		let {a,b} = {a:1,b:2};
+		
+		let {a:a,b:b} = {a:1,b:2}; // a=1,b=2
+		let {a:b,b:a} = {a:1,b:2}; // a=2,b=1
+		
+		// 默认值
+		let {a=1,b=1} = {};
+		let {a:a=1,b:b=1} = {};
+		
+		// 对象的多次解构
+		var obj = {
+			person : {
+				name : "xiaohui",
+				like : ["eat",{"fulit":["banana","orange"]}]
+			}
+		}
+		var {person:{name,like:[eat,{fulit:[a,b]}]}} = obj;
+		var {person,person:{name,like,like:[eat,{fulit,fulit:[a,b]}]}} = obj;
+		var {person:person,person:{name:name,like:like,like:[eat:eat,{fulit:fulit,fulit:[a:a,b:b]}]}} = obj;
+	</script>
+	3.默认值
+		①.当进行结构赋值时,先进行模式匹配进行赋值,假如模式匹配失败,再取默认值.
+		②.当模式匹配赋值绝对等于undefined(===undefined)时,取默认值.
+	4.默认结构
+	<script type="text/javascript">
+		// 执行时,先把string解析为对象(浏览器内核自动完成的).
+		var {length} = "length"; 		// length=6
+		// 执行时,先把字符串解析为数组(浏览器内核自动完成的).
+		var [a,b,c,d,e,f] = "123456"; 	// a=1,b=2,c=3,d=4,e=5,f=6
+		var arr = [[1,2],[3,4],[5,6],[7,8]];
+		// 令函数在赋值执行时,以结构的方式对形参进行赋值.
+		function add([a,b]){
+			console.log(a,b);
+		}
+		add([1,2]);
+
+		arr.forEach(function([a,b]){
+			console.log(a,b);	//  1,2  3,4  5,6  7,8  	
+		})
+
+		var {toString:num} = 1;
+		var {toString:str} = "1";
+		var {toString:arr} = [];
+		var {toString:fun} = function(){};
+		var a=	num === Number.prototype.toString;
+		var	b=	str === String.prototype.toString;
+		var	c=	arr === Array.prototype.toString;
+		var	d=	fun === Function.prototype.toString;
+	</script>
+
+三.字符串的扩展
+	1.模板字符串( `` )
+		①.增强的字符串
+		<script type="text/javascript">
+			var div = `
+				<div class="">
+					<a href="javascript:0" class=""></a>
+				</div>`
+		</script>
+		②.在字符串中添加变量或者表达式
+		<script type="text/javascript">
+			var user = {
+				name:"xiaoming",
+				age:18,
+				like:"fulit",
+			}
+			var str = `name : ${user['name']} ,age : ${user['age']} ,like : ${user['like']}`;
+			console.log(str);
+
+			// 调用函数
+			function get_name(){
+				return "xiao hui"
+			}
+			console.log(`my name is ${get_name()}`);
+
+			// 模板字符串嵌套
+			var arr = [1,2,3,4,5];
+			var str = `${arr.map(function(item,index){
+				return `${index} : ${item}`
+			})}`
+			console.log(str);
+		</script>
+	
+	2.标签模板
+		①.标签模板实质——函数调用的特殊形式
+		<script type="text/javascript">
+			alert`呵呵`;
+
+			name = "xiao hui";
+			area = "Bei Jing";
+			function test(name){
+				console.log(name);	
+				return name;
+			}
+			// ["", "", raw: Array[2]]
+			test`${name}`;	
+
+			// [" hello ", " ,welcome to ", "", raw: Array[3]]
+			test` hello ${name} ,welcome to ${area}`;		
+		</script>
+		②.重要应用——过滤HTML字符串
+		<script type="text/javascript">
+				var demo = '<script>console.log("ok")<\/script>';
+
+				filterHtml`<p> ${demo} </p>`;
+
+				function filterHtml(arr){
+					var str = arr[0],
+						len = arguments.length;
+					for(var i= 1;i<len;i++){
+						str +=  arguments[i].replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+						str +=  arr[i];
+					}
+					return str; // "<p> &lt;script&gt;console.log("ok")&lt;/script&gt; </p>"
+				}
+		</script>
+
+四.函数的扩展
+	1.函数参数的默认值
+		①.基本使用
+		<script type="text/javascript">
+			function demo(x,y=100){
+				console.log(x,y);
+			}
+			demo(10);	// 10 100
+		</script>
+		②.结构赋值结合使用
+		<script type="text/javascript">
+			function demo({x,y=5}){
+				console.log(x,y);
+			}
+			// demo()
+			// error : 不能分解"未定义"或"null"的属性`x`
+			// 也就是说在执行x值的结构时结构失败的error;
+			// 与 var {x,y} = null error 相同
+			demo({});			// undefined 5
+			demo({x:1});		// 1 5
+			demo({y:2});		// undefined 2
+			demo({x:3,y:4});	// 3 4
+
+			function f1({x=0,y=0} = {}){ 
+				console.log(x,y);
+			}
+			f1();			// 0 0
+			f1({});			// 0 0
+			f1({x:1});		// 1 0
+			f1({y:2});		// 0 2
+			f1({x:3,y:4});	// 3 4
+
+			function f2({x,y} = {x:0,y:0}){
+				console.log(x,y);
+			}
+			f2();			// 0 0
+			f2({});			// undefined undefined
+			f2({x:1});		// 1 undefined
+			f2({y:2});		// undefined 2
+			f2({x:3,y:4});	// 3 4		
+		</script>
+	2.参数作用域以及注意事项
+		<script type="text/javascript">
+			let x =5;	
+			function(){ 
+				let x = 10;
+			}
+		</script>
+	3.扩展运算符 
+		①. ... 运算符
+		②. 在函数定义时,可以将参数列表变成数组
+		②. 在函数执行时可以讲数组拆分为参数列表,进行多参的函数执行
+		<script type="text/javascript">
+			function print(...arg){
+				console.log(arg);
+			}
+			print(1,2,3,4,5,6); // [1,2,3,4,5,6]
+
+			var arr = [1,2,3,4,5,6];
+			print(...arr);		// [1,2,3,4,5,6]
+		</script>
+
+五.箭头函数
+	<script type="text/javascript">
+		// 无参
+		var fun = () => num;
+		var fun = function(){
+			return num;
+		}
+		// 一参
+		var fun = num => num;
+		var fun = function(num){
+			return num;
+		}
+		// 多参
+		var fun = (x,y) => x+y;
+		var fun = function(x,y){
+			return x+y;
+		}
+		// 返回参数为对象时
+		var fun = () => ({name:"xiaohui"})
+	</script>
+	箭头函数中的this,指向当前作用域的this(当前作用域的实例)
+	<script type="text/javascript">
+		var name =  "window"
+		var Person = {
+			name : "person",
+			eat :function(){
+				console.log(this.name);
+			},
+			xiaoming : {
+				name : "xiaoming",
+				drink : () => console.log(this.name),
+				eat : function(){
+					console.log(this.name);
+				}
+			}
+		}
+		Person.xiaoming.drink(); 	// window
+		Person.xiaoming.eat();		// xiaoming
+	</script>
+	嵌套的箭头函数
+	<script type="text/javascript">
+		function fun(str){
+			return function(){
+				return str.split("");
+			}
+		}
+		var fun = str => () => str.split("");
+	</script>
+
+六.数组的扩展
+	1.扩展运算符
+	<script type="text/javascript">
+		var arr = [1,2,3,4,5];
+		...arr === 1,2,3,4,5
+
+			arr.push(1,2,3,4,5) 
+		=== arr.push(...[1,2,3,4,5]) 
+		=== arr.push.apply(arr,[1,2,3,4,5]) 
+		=== Array.prototype.push.apply(arr,[1,2,3,4,5]);
+
+		var arr1 = [1,2,3],arr2 = ["4","5","6"],arr3 = [true,false];
+		// [1, 2, 3, "4", "5", "6", true, false]
+		var arr2 = [...arr1,...arr2,...arr3];
+
+		// x =1 y=[]
+		var [x,...y] = [1];
+
+		// x=1 y=[2,3,4,5]
+		var [x,...y] = [1,2,3,4,5];
+
+		// error : Rest element must be last element in array
+		// 		   Rest(剩余部分) 元素必须是数组中的最后一个元素
+		// var [x,...y,...z] = [1,2,3,4,5];
+		 
+		// arr = ['s','t','r','i','n','g']
+		var arr = [..."string"]; 
+	</script>
+	2.Array.form() 把类数组转换为数组
+	<script type="text/javascript">
+		// ["s", "t", "r", "i", "n", "g"]
+		var arr = Array.from("string");
+
+		var arr_1 = {
+			"0" : 1,
+			"1" : 2,
+			"2" : 3,
+			length : 3
+		}
+		
+		// arr = [1, 2, 3]
+		var arr = Array.from(arr_1);
+
+		// 第二个参数fnction
+		// 处理类数组中的每一位,进行值返回.
+		var arr = Array.from(arr_1,function(item,index){
+			console.log(val);	
+		});	
+
+		// 参数传入一个数组,会返回一个 新的 内容一样的数组.
+		Array.from(arr);
+	</script>
+	3.Array.of() 将一组数转换为数组
+	<script type="text/javascript">
+		var arr = new Array(5); 		// [,,,,]
+		var arr = new Array(1,2,3);		// [1,2,3]
+		
+		var arr = Array.of(5);			// [5]
+		var arr = new Array(1,2,3);		// [1,2,3]
+		Array.prototype.of = function(){
+			return Array.from(arguments);
+		}
+		Array.prototype.of = function(){
+			return Array.prototype.slice.call(arguments);
+		}
+		Array.prototype.of = function(...arg){
+			return arg;
+		}
+	</script>
+	4.Array.prototype.copyWithin(target,start=0,end=this.length);
+	// target 从那个坐标开始替换
+	// start-end  要进行替换的值的 取值范围(取头不取尾,支持负数)
+	<script type="text/javascript">
+		var arr = [1,2,3,4,5];
+		// 返回被改变后的原数组
+		// [4, 5, 3, 4, 5]
+		// 拿后面的值替换的前面的值,
+		// 不写 end 参数默认拿到最后一位
+		// [4, 5, 3, 4, 5] => [...[4,5],...[3,4,5]]
+		var arr1 = arr.copyWithin(0,3);
+	</script>
+	5.Array.prototype.fill(val,start,end) 	填充
+	val		要填充的值
+	start	开始填充的位置
+	end		结束填充的位置
+	<script type="text/javascript">
+		var arr = new Array(5);
+		arr.fill("0");	// ["0","0","0","0","0"]
+	</script>
+	6.entries() keys() values()  遍历数组中的值
+	<script type="text/javascript">
+		var arr = ["1","2","3","4","5"];
+		for(item of arr.entries() ){
+			// [0, "1"]
+			// [1, "2"]
+			// [2, "3"]
+			// [3, "4"]
+			// [4, "5"]
+			console.log(item)
+		}
+		for(item of arr.keys() ){
+			// 0
+			// 1
+			// 2
+			// 3
+			// 4
+			console.log(item)
+		}
+		for(item of arr.values() ){
+			// "1"
+			// "2"
+			// "3"
+			// "4"
+			// "5"
+			console.log(item)
+		}
+	</script>
+	7.includes() find() findIndex()
+	<script type="text/javascript">
+		// item 返回第一个满足条件的参数
+		var arr = [1,2,3,4,5];
+		var val = arr.find(item => item>3);	// 4
+
+		// item 返回第一个满足条件的参数在数组中的坐标
+		// 找不到返回-1
+		var arr = [1,2,3,4,5];
+		var val = arr.findIndex(item => item>3); // 3
+
+		// 查找数组中有没有我要查找的值,可以判断NaN
+		// indexOf判断不了.
+		var arr = [1,2,3,4,5];
+		var val = arr.includes(2);
+	</script>
+
+七.对象的扩展
+	1.属性的简洁表示法以及属性名表达式
+	<script type="text/javascript">
+		var name = "xiaohui";
+		var obj = {name : name};
+		// 属性的简洁表示法
+		var obj = {name};
+		
+		var obj = {function demo(){
+			console.log("demo");
+		}};
+		function demo(){
+			console.log("demo");
+		}
+		var obj = {demo};
+
+		// 属性名表达式,以变量作为属性名
+		var name = "name_";
+		var age  = "age_";
+		// {name_: "xiaohui", age_: 18}
+		var obj = {
+			[name] : "xiaohui",
+			[age] : 18,
+		}
+	</script>
+	2.属性的可枚举性以及属性的遍历
+	<script type="text/javascript">
+		// for ... in
+		// Object.keys
+
+		var obj = {demo:"demo"};	
+		// configurable:true 		
+		// enumerable:true 			可枚举性(可不可以遍历出来)
+		// value:"demo" 			当前对象,当前属性的值
+		// writable:true 			是否可修改
+		Object.getOwnPropertyDescriptor(obj,"demo");
+
+		// Object.is() 在大多数情况下 与 === 相同
+		Object.is(NaN,NaN);	// true
+		Object.is(+0,-0);	// false
+
+		// 将多个对象的可枚举属性放到一个对象中
+		// 返回值为obj5 === obj
+		// 修改原对象的值不会影响新对象的值(对象除外,浅copy).
+		var obj = {};
+		var obj1 = {a:{a:"a"}};
+		var obj2 = {b:{b:"b"},bb:"bb"};
+		var obj5 = Object.assign(obj,obj1,obj2,obj3,obj4); 
+		obj1.a.a = "obj1";
+		obj2.bb = "bbb";
+		console.log(obj);
+		console.log(obj1);
+		console.log(obj2);
+
+		// entries() keys() values()
+		var obj = {a:"a",b:true,c:function(){}};
+		var keys = Object.keys(obj);			// ["a", "b", "c"]
+		var values = Object.values(obj);		// ["a", true, ƒ]
+		var entries = Object.entries(obj);		// [["a", "a"],["b", true],["c", function]]
+
+
+	</script>
+	3.对象的扩展运算符
+	<script type="text/javascript">
+		// a=1 b=2 c={c: 3, d: 4} 
+		var {a,b,...c} = {a:1,b:2,c:3,d:4};
+
+		var a = {a:1,b:2},
+			b = {c:3,d:4};
+		var c = {...a,...b};	// {a: 1, b: 2, c: 3, d: 4}
+	</script>|
+八.Symbol(第七种数据类型)
+	1.symbol 的值
+	<script type="text/javascript">
+		
+	</script>

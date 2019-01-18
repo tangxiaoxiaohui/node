@@ -1,0 +1,974 @@
+<meta charset="utf-8"><h1>查看网页源代码.</h1><div id="div"></div>
+
+一.script标签		<script></script>
+	1.用来导入外部js文件
+ 		<script type="text/javascript" src="filename.js"></script>
+	2.用来编写内部Java script脚本.
+		<script type="text/javascript">
+			var i = 0; 			
+		</script>
+	3.script标签的位置可随意设置
+	4.script标签的加载会阻断浏览器引擎对html的解析.
+	5.异步加载script标签的方法
+		①.IE支持 defer 当html文档解析完成后执行
+		②.非IE支持 ascyn 当加载完毕后就立刻执行.
+		③.创建script标签.插入到dom中.
+			<script type="text/javascript">
+				var script 	= document.createElement("script");
+				script.type = "text/javascript";
+				script.src 	= "demo.js";
+			</script>
+		④.注意当script标签为加载完毕不要去调用script属性和函数
+		⑤.加载完毕后CallBack
+		⑥.判断script是否加载完毕
+			a.非IE浏览器
+				<script type="text/javascript">
+					document.onload = function () {
+						console.log('script加载完毕.')
+					}
+				</script>
+			b.在IE浏览器中script.readyState会拥有一个状态值,每当状态值改变 script.onreadystatechange 会执行一次.
+			sprite.readyState : [lodding,complete,loaded];
+		⑦.兼容性方法
+			<script type="text/javascript">
+				// url 为JavaScript 文件地址 ,fun 为要执行的方法.
+				function loadScript (url , fun) {
+					var script 	= document.createElement("script");
+					script.type = "text/javascript";
+					if(script.readyState){
+						script.onreadystatechange = function () {
+							if(script.readyState == "conplete" || script.readyState == "loaded"){
+								fun();
+							}
+						}
+					}else {
+						script.onload = function(){
+							fun();
+						}
+					}
+					//当浏览器执行到这里时,就开始加载JavaScrip脚本了
+					//为了防止在事件绑定前,IE就已经完成js脚本的加载.所以把脚本的加载,放在事件绑定之后.
+					script.src 	= url;
+					document.head.appendChild(script);
+				}
+			</script>
+	
+
+二.严格模式 "use strict";
+	1."use strict" 必须写在逻辑层的最上面才会生效
+
+	2."use strict" 写在function内部的最前面,表示严格模式作用域为这个方法内
+	
+	3.严格模式下除了全局this之外,所有的this默认都是undefined,并不会默认指向window,
+	function new之前,this为undefined,所以此时使用this做操作,相当于那undefined做操作,可能会造成error.
+	
+	4.去除with关键词
+		①.with关键字,用于改变作用域
+		在wish块内可以使用,传入的域内的属性和方法.
+			 <script type="text/javascript">
+			 	var obj = {
+			 		"name" 	: "小慧",
+			 		"age"  	: "20"
+			 	}
+			 	with (obj) {
+				    console.log(name);  
+				}
+			 </script>
+
+	5.去除arguments.callee(当前函数的引用)
+
+	6.去除arguments.caller(调用当前函数的函数引用).函数是在全局范围内调用的话，那么caller的值为null.
+
+	7.所有的属性在未声明前不可使用,即针对于在function内,未声明的变量,不在默认是全局的了.
+		 <script type="text/javascript">
+		 	"use strict"
+		 	function test(){
+		 		a = 5;
+		 		//这里会产生error : a is not defile;
+		 		console.log(a);
+		 	}
+		 </script>
+
+	8.默认模式下ECMA3.0与ECMA5.0产生冲突的部分使用ECMA3.0的标准,方法.....在严格模式下反之.
+
+	9.严格模式下，arguments不会再提供访问与调用这个函数相关的变量的途径,
+	参数的值不会随 arguments 对象的值的改变而变化,即arguments与形参和实参之间不会产生关联映射.
+
+	10.对只读属性进行赋值或者删除操作,会抛出Error(语法错误).
+
+	11.不可被删除的属性，在赋值或者取值时会报错(类型错误)：
+	
+	12.严格模式下不允许,对象拥有重名属性,在解析式产生语法错误.
+
+三.document.write();
+	1.如果在整个文档加载完毕之后调用document.write(),整个文档将会被覆盖,document.write()重写的是文档.一般用不到.
+					
+四.表达式
+	1.() 小括号
+		①.小括号代表执行符号.
+		②.所有在()内的东西都被浏览器内核定义为表达式.
+		<script type="text/javascript">
+			function demo (argument) {}
+			// demo() === demo.call();
+			demo();
+		</script>
+	
+	2.表达式例子
+		①.单个字符串	"string";
+		②.单个number	123456;
+		③.算数表达式	1+1+1;
+	
+	3.把函数变成表达式,函数名失效,函数变为匿名函数.
+		①.(function demo(){});
+		②.+function demo(){};
+		③.-function demo(){};
+
+五.原始值的比较规则
+	1.自动做Number()处理的情况
+		String == number
+		String == boolean
+		number == boolean
+	2.NaN 不等于任何事物			
+	3.undefined == undefined == null;
+	4.null == null == undefined;
+	5."",NaN,undefined,null,0 : 默认是布尔值false,但在比较运算中,(NaN,undefined,null)不会做任何的隐式操作.
+	6.正无穷 Infinity 在 javaScript 中是固定值. 
+	7."==="(绝对等于),在比较时等号两边都不会进行默认的隐式类型转换.只有类型相同的两个值才会相等.
+
+
+六.typeof(obj)运算返回参数值类型
+	1.typeof(obj) 小括号形式,建议使用此类形式
+	2.typeof obj  后跟空格加变量的形式
+	3.typeof obj  是唯一一种使用未定义变量不会报错的情况,返回值为undefined.
+
+七.一元运算符号
+	1.delete obj.attribute
+		①.直接删除对象的属性
+		②.在非严格模式下,可以删除对象没有的属性,不会报错.
+		③.只读属性不可删除.
+	2.void : 默认值 undefined.
+		①.function在没有return的情况下默认返回undefined.
+		②.++i(先加一再做表达式运算),--i(先减一再做表达式运算),i++(先做表达式运算再加一),i--(先做表达式运算再减一);
+		③.+()正,-(负).
+
+八.逻辑运算符(&&,||,!)
+	1.&&(与,AND,并且)的规则
+		①.(a)&&(b)&&(c)&&(d)&&(e)
+			当前一个表达式值为true时,假如后一个表达式为最后一个表达式,直接把后面的表达式计算并返回,当前一个表达式值为flase时,直接把前一个表达式的结果返回.后面的不在计算
+	2.||(或,OR,或者)的规则.
+		①.(a)||(b)||(c)||(d)||(e)
+			当前一个表达式值为flase时,假如后一个表达式为最后一个表达式,直接把后面的表达式计算并返回,当前一个表达式值为true时,直接把前一个表达式的结果返回.后面的不在计算
+	3.!(非,取反).
+		①.!!obj 强制转布尔值
+
+九.标签语句
+
+十.for / forEach
+	1.for的执行顺序.
+	<script type="text/javascript">
+		//	    ① 		    ② 	  ③
+		for (var i = 0; i < 100; i++) {
+		//	②.①
+			console.log('');
+		}
+		//var i = 0;
+		//if(i<100) console.log("")
+		//i++
+		//if(i<100) console.log("")
+		//i++
+		//if(i<100) console.log("")
+		//i++
+		//...............
+	</script>
+	2.forEach实现
+	<script type="text/javascript">
+		Array.prototype.forEach = function(fun){
+			var len = this.length;
+			for(var i = 0;i < len;i++){
+				// 第一个参是element
+				// 第二个参是索引
+				fun(this[i],i);
+			}
+		}
+		// 这里的function 就是上面的参数fun
+		// ele 就是上面的this[i] 
+		// index 就是上面的 i
+		[1,2,3,4,5,6].forEach(function(ele,index){
+
+		});
+	</script>
+	3.map (带返回值的forEach,不改变原数组,返回值为自定义元素处理的结果数组.)
+	<script type="text/javascript">
+		Array.prototype.map = function(fun){
+			var len = this.length,
+				arr = [];
+			for(var i = 0 : i<len ;i++){
+				arr.push(fun(this[i],i));
+			}
+			return arr;
+		}
+	</script>
+
+十一.函数
+	1.函数的声明,有且仅有这一种情况是函数的声明.
+		①.function funName(){}
+
+	2.函数表达式
+		①.var demo = function(){} 		(匿名函数表达式,匿名函数表达式默认被称为函数表达式)
+		②.var demo = function test(){} 	(命名函数表达式)	demo.name = test
+
+十二.arguments(参数列表)
+	1.参数列表是伪数组
+	2.当实参与形参相对应时,形参与实参相互映射,,形参发生改变时,相对应的arguments[i]也会发生改变,反之亦然.
+	3.arguments.callee 当前函数引用
+	4.arguments.caller 调用当前函数的函数引用.函数是在全局范围内调用的话，那么caller的值为null.
+
+十三.new 关键字.
+	1.当new一个关键字函数时函数体会执行
+	2.改变当前函数的this指向
+	<script type="text/javascript">
+		function Person(){ 
+			//当执行new关键字时.
+			// var this = {
+			// 	__proto__ : Person.prototype;
+			// };
+			console.log('test');
+		}	
+		var person = new Person();
+	</script>
+
+十四.JavaScript运行3步曲.
+	1.语法解析	检查语法错误.
+	2.预编译
+		函数预编译
+			①.在函数执行前,创建AO(Activation Object:活跃对象)对象 --- 函数执行期上下文
+			②.找形参,变量声明,把形参,变量声明作为AO的属性名.值为undefined
+			③.将实参和形参统一
+			④.找函数声明 函数名作为AO属性名,值为函数体
+		全局预编译
+			①.创建 GO (Global Object) 对象 --- 作用域 : 全局执行期上下文
+			②.找变量声明,将变量名作为AO属性名,值为undefined
+			③.找函数声明 值 赋予函数体
+			④.GO === Window
+	3.解释执行
+
+十五.[[scope]] 作用域链
+	1.只少由一个GO加上0到多个AO组成.
+	2.函数的定义会生成作用域链
+	3.函数执行前创建自己的AO(执行器上下文--作用域),并放到作用域链的最顶端.
+
+十六.立即执行函数.
+	1.var obj = (function(){}());	官方建议使用的方式				
+	2.var obj = (function(){})();
+
+十七.对象的创建
+	1.var obj = {};
+	2.var obj = new Object();
+	3.var obj = Object.create(obj);
+	4.var obj = Object.create(null); 一个完全空的对象,不继承自Object.没有任何属性和方法.除了这种抢情况,其它所有对象都继承自Object.
+
+十八.call() / apply() 改变this的指向
+	1.没有参数this为默认值.
+	2.第一个参数代表this需要指向的对象
+	3.call(obj,attrbute,attrbute,attrbute,....)的其它参数是非固定的.
+	4.apply(obj,[attrbute,attrbute,attrbute,....])是以arguments类型来传入参数.
+	<script type="text/javascript">
+		var obj = {} ;
+		function demo(){};
+		demo.call(obj,1,2,3,4,5,6,7);
+		demo.call(obj);
+		demo.apply(obj, []);
+	</script>
+
+十九."."运算符
+	1.访问对象的属性
+	<script type="text/javascript">
+		var obj = {
+			"name" 	: "小慧",
+			"age"	: "23"
+		}
+		//obj.name === obj["name"];
+		//obj.name === obj[name.tostring];
+		obj.name == obj["name"];
+	</script>
+
+二十.hasOwnProperty/in/instanceof
+	1.hasOwnProperty:判断attribute是否为obj对象的属性,排除其原型的自设置属性
+	2.in:判断obj对象中是否能够取到attribute属性.
+	3.object instanceof Object 判断原型链上有没有Object的原型;
+	<script type="text/javascript">
+		Person.prototype.likeFruit = "苹果";
+		function Person() { 
+			this.personName = "personName"
+		}
+		var person = new Person();
+		Son.prototype = person;
+		function Son() {
+			this.sonName = "sonName";		
+		}
+		var son = new Son();
+		console.log(son.hasOwnProperty("sonName"));
+		console.log(son.hasOwnProperty("personName"));
+		
+		console.log("sonName" in son);
+		console.log("personName" in son);
+
+		console.log(son instanceof Person);
+		console.log(son instanceof Object);
+	</script>
+
+二一.判断数组和对象
+	1.instanceof 	判断的原型链上是否有Array,来区分数组和对象
+	2.constructor 	利用构造器来区分,当前对象由那个构造器构造的.
+	3.Object.prototype.tostring.call(obj) 查看当前对象原型的tostring方法.来进行判断.
+
+二二.数组(散列存储结构)
+	能够改变原数组的素组方法.
+	1.push() 向数组结尾插入一个或多个元素,返回值为新数组的长度.
+		<script type="text/javascript">
+			//push方法的实现
+			Array.prototype.push = function (){
+				//this.length代表当前数组的最后一位.
+				//arguments 代表传入的参数
+				var length = this.length;
+				for (var i in arguments) {
+					this[length++] = arguments[i];
+				}
+				return length;
+			}
+		</script>
+	2.pop() 把数组的最后一位进行剪切并返回
+		<script type="text/javascript">
+			Array.prototype.pop = function (){
+				var i = this.length-1;
+				var obj = this[i];
+				this[i] = undefined;				
+				return obj
+			}
+		</script>
+
+	3.unshift() 向数组的第一位插入一个或多个元素
+		<script type="text/javascript">
+			Array.prototype.unshify = function (){
+				var arr = arguments.slice();
+				arr.push(this);
+			}
+		</script>
+
+	4.shift() 把数组的第一个元素剪切,并返回.
+		<script type="text/javascript">
+			
+		</script>
+
+	5.reverse() 颠倒数组中元素的顺序并返回.
+		<script type="text/javascript">
+			Array.prototype.reveres = function () {
+				return this.sort(function (a,b){ 
+					return b-a ; 
+				});
+			}
+		</script>
+
+	6.splice(x,y,z...) 在第x位开始,截取y个长度,并在切口处添加新的数据.
+		<script type="text/javascript">
+			
+		</script>
+
+	7.sort();	自定义的排序规则
+		<script type="text/javascript">
+			var arr = [1,5,2,7,5,7,9,4,5,8,3,4,6,3,7,8];
+			//当返回值为正数,两个数交换位置
+			arr.sort(function (a , b){
+				//a代表前面的数
+				//b代表后面的数
+				//a-b判断a是否大于b.若果大于则交换位置.否则不变.
+				return a-b;
+			});
+
+			//乱序排列
+			arr = [1,2,3,4,5,6,7,8,9,0];
+			arr.sort(function(a,b){
+				return 0.5 - Math.round();
+			});
+		</script>
+	8.every() / some()
+		①.every用于检测数组所有元素是否都符合指定条件
+		②.some用于检测数组是否有元素符合指定条件
+		<script type="text/javascript">
+			var arr = [1,2,3,4,5];
+			// arr_val_1 返回值为false
+			// 因为有一个以上的函数返回值为false
+			// every 类似并且
+			var arr_val_1 =  arr.every(function(val){
+				if(val > 3){
+					return true;
+				}
+			})
+
+			// arr_val_2 返回值为true
+			// 因为有一个以上的函数返回值为true
+			// some 类似或者
+			var arr_val_1 =  arr.some(function(val){
+				if(val > 3){
+					return true;
+				}
+			})
+		</script>
+
+	9.fliter 筛选
+	<script type="text/javascript">
+		// 返回 当前数组 满足过滤条件的值得数组
+		Arrar.prototype.filter = function(fun){
+			var newArray = [];
+			var len = this.length;
+			for(var i = 0;i<len ;i++){
+				if(fun(this[i]),i){
+					newArray.push(this[i]);
+				}
+			}
+			return newArray;
+		}
+	</script>
+
+	10.reduce 对数组所有元素尽行统一处理,并返回.
+	<script type="text/javascript">
+		Array.prototype.reduce = function(fun,init){
+			var len = this.length,
+				pre = init === undefined ? this[0] : init;
+				i   = pre  === undefined ? 1 : 0;
+			for(; i<len ; i++){
+				pre = fun(pre,this[i],i,this);
+			}
+			return pre;
+		}
+	</script>
+
+
+	不能改变远数组的函数
+	1.concat();		连接两个或更多的数组，并返回结果。
+	2.join(str);	把数组的所有元素放入一个字符串。元素通过指定的分隔符进行分隔。不写默认为",".
+	  split(str);	string的函数.返回按照str拆分后的数组.			
+	3.tosring();	把数组中的元素拼接成字符串并返回.引用值类型的转换结果为[object Object].
+	4.slice();		一个参数时从第一个参数截取到最后一个参数,两个参数从第一个参数位截取到第个参数位,并返回.空截取可以把类数组转换为数组.
+	<script type="text/javascript">
+		Array.prototype.slice = function (a , b) {
+			var arr = [];
+			for (; a < b; a++) {
+				arr.push(this[a]);
+			}
+			return arr;
+		}
+	</script>
+	
+二三.深度克隆
+	<script type="text/javascript">
+		function clone(origin,target){
+			var calStr = Object.prototype.toString,
+				objstr = "[object Object]",
+				target = target || (calStr.call(origin) == objstr ? {} : [] );
+
+			for (var val in origin) {
+				if(origin.hasOwnProperty(val)){
+					if(typeof(val) == "object" && val != null){
+						return clone(val);
+					}else{
+						target[val] = origin[val];
+					}
+				}
+			}
+			return target;
+		}
+	</script>
+
+二四.闭包
+	1.闭包的主要用
+		①.实现共有变量
+		②.可以做缓存(存储结构)
+		③.可以实现封装属性私有化
+		<script type="text/javascript">
+			function Person(){
+				var name = "小慧";
+				var age = "23";
+				return {
+					"myname" 	: function(){ return name; },	
+					"myage"		: function () { return age; }
+				} 
+			}
+		</script>
+		④.模块化开发,防止污染全局变量
+	2.闭包实现计数器
+	当运行 counter 函数时会产生
+		AO{
+			i = 0;
+			plus = function plus(){console.log(i ++);}
+		}
+	这样的一个AO对象;
+	当函数执行完毕 counter 会撤销掉自己的应用.
+	并将 plus 对象返回,此时 plus 仍然链接着 AO 所以 AO 会随着plus一起保存在对内存中.
+	当A执行,i取值时,自己没有就去父级作用域的 AO 中拿到并且使用.
+	<script type="text/javascript">
+		function counter() {
+			var i = 0;
+			function plus(){
+				console.log(i ++);
+			}
+			return plus;
+		}
+		var demo = counter();
+		demo();
+	</script>
+
+二五.JavaScript的五种报错类型.
+	1.EvalError 	eval()的使用与定义不一致.
+	2.RangeError 	数值越界
+	3.RefereneError 非法或不能识别的引用数值.
+	4.SyntaxError 	发生语法解析错误
+	5.TypeError 	操作数类型错误.
+	6.UrlError 		URL处理函数使用不当
+
+二六.Node(节点)
+	1.节点类型
+		元素节点(Eliment)			1
+		属性节点(Attribute)			2
+		文本节点(Text)				3
+		注释节点(Comment)			8
+		document 					9
+		DocumentFragment			11
+
+	2.节点的四个属性
+		attr: nodeName:	元素表签名,以大写形式表示只读.
+		attr: nodeValue:	Text节点,或者Comment节点内容可读
+		attr: nodeType:	该节点的类型
+		attr: attributes:	Element 节点的属性集合
+
+	3.节点的遍历
+		attr: parentNode				(父节点:最顶端的parentNode为#document)
+		attr: childNodes				(子节点们)
+		attr: firstChild				(第一个子节点)
+		attr: lastCgild				(最后一个子节点)
+		attr: nextslicebling				(后一个兄弟节点)
+		attr: previousSibling			(前一个兄弟节点)
+		attr: node.hasChildNodes(); 	判断该节点是否有子节点元素.
+
+	4.元素节点的遍历(利用Element节点的属性来遍历),以下都是属性,不是函数	
+		attr: parentElenent			(当前元素节点的父元素节点,IE不兼容);
+		attr: children				(返回当前元素节点的字节元素子节点们,0到多个)
+		attr: node.children.length  ===  node.childElementCount() 当前节直接子元素节点的个数,IE9以下不兼容
+		attr: firstElementChild		(当回当前元素的第一个子元素节点,IE9以下不兼容)
+		attr: lastElementChild		(当回当前元素的最后一个子元素节点,IE9以下不兼容)
+		attr: nextElementSibling		(返回当前元素的下一个兄弟节点,IE9以下不兼容)
+		attr: previousElementSibling	(返回当前元素的上一个兄弟节点)
+	
+	5.文档对象
+		document --> HTMLDocument.prototype --> Document.prototype
+
+	6.节点的查询
+		doucument代表整个页面的文档
+		fun:  getElementById("id");					Document.prototype 		Element节点对象不能使用
+		fun:  getElementsByName("name");			HTMLDocument.prototype 	非html中的document不能使用
+		fun:  getElementsByTagName("tagname");		Document.prototype && Element.protoment
+		fun:  getElementsByCalssName("classname");	Document.prototype && Element.protoment
+		fun:  querySelector("str");					Document.prototype && Element.protoment
+		fun:  querySelectorAll("str");				Document.prototype && Element.protoment
+		attr: Document.prototype.documentElement 	指代文档的根元素,在HTML中总是代指<!-- <html></html> -->标签.
+
+
+	7.节点的新增
+		fun: document.createElement();				元素节点
+		fun: document.createTextNode();				文本节点
+		fun: document.createComment();				注释节点
+		fun: document.createDocumentFragment();		文档节点
+
+	8.节点的插入
+		fun: parentnode.appendChild(a);		剪切操作,在父节点parentnode最后添加a节点
+		fun: parentnode.insertBefore(a,b);	在父节点parentnode内,insert a before b.
+		1.实现insertAfter(a,b);
+		<script type="text/javascript">
+			function insertAfter(a,b) {
+				var before = this.nextElementSibling;
+				if(before){
+					this.insertBefore(b,before);
+				}else {
+					this.appendChild(b);
+				}
+			}
+		</script>
+		2.实现子元素的逆转排序
+		<script type="text/javascript">
+			function reveresElement(origin) {
+				var children = origin.children;
+				for (var len = children.length - 2 ;len >= 0 ;len--) {
+					origin.appendChild(children[len]);
+				}
+			}
+		</script>
+
+	9.节点的删除
+		fun: parent.removeChild(a);			(剪切)删除父节点点下的a节点
+		fun: child.remove();				删除节点自身
+
+	10.节点的替换.
+		fun: parentNode.replaceChild(new,origin)	(截切旧的)拿新的替换旧的.
+
+	10.元素节点
+		attr: innerHTHL : 获取,改变对象内的HTML内容.(可以识别HTML语法结构)
+		attr: innerText(火狐不兼容:目前都兼容)/textContent(老版本IE不好使) : 关注内容包含标签(不可识别HTML语法结构)
+		fun : element.setAttribute("attributeName","attributeValue");	增加元素节点的属性和方法
+		fun : element.getAttribute("attribute"); 						获取指定的属性的属性值
+		
+二七.for的扩散性思维    ??????????
+	1.获取下一个兄弟节点
+	<script type="text/javascript">
+		function nextSibling(){
+			if(this.nextElementSibling){
+				return 	this.nextElementSibling();
+			}else{
+				var nextElementSibling;
+				// 当 nextElementSibling.type == 1 的时候,条件不满足退出循环.
+				for (nextElementSibling; nextElementSibling.type != 1; nextElementSibling.nextSibling); 
+			}
+		}
+	</script>
+
+二八.计时器
+	1.setTimeout 	定时计时器(定时执行一次);
+	<script type="text/javascript">
+		setTimeout("console.log('hello')", 1000);
+		setTimeout(function (){ console.log('hello'); }, 1000);
+		setTimeout(demo, 1000);
+		function demo(){ console.log('hello'); };
+	</script>
+	2.setInterval 	循环计时器(每隔规定的时间执行一次);
+	<script type="text/javascript">
+		setInterval("console.log('hello')", 1000);
+		setInterval(function (){ console.log('hello'); }, 1000);
+		setInterval(demo, 1000);
+		function demo(){ console.log('hello'); };
+	</script>
+	3.计时器中的时间是不可更改的,在计时器运行前,会首先获取变量的值,并保存,再次修改变量的值,计时器的计时值不会改变.
+	4.计时器中的时间是不可信任的.
+	5.steTimeout 与 setInterval 都会拥有返回值,且两个返回值的合集不会重复.第一个定义的默认值为"1",以此类推.
+	6.calearTimeout() 和 clearIntview(); 放入计时器的返回值即可停止计时器的运行.
+
+二九.BOM
+	1.滚动条
+		①.window.pageXOffset/window.pageYOffset 	: IE9以下不兼容 	当前混动条的滚动距离(滚动条位置);
+		②.document.body.scrollLeft/scrollTop || document.documentElement.scrollLeft/scrollTop 
+		求滚动条距离兼容性写法
+		<script type="text/javascript">
+			function getScrollOffset() {
+				if(window.pageXOffset){
+					return {
+						"x" : window.pageXOffset,
+						"y" : window.pageYOffset
+					}
+				}
+				return {
+					"x" : document.body.scrollLeft+document.documentElement.scrollLeft,
+					"y" : document.body.scrollTop+document.documentElement.scrollTop
+				}
+			}
+		</script>
+
+		③.window.scroll(x,y)/window.scrollTo(x,y);	滚动到目标距离
+		  window.scrollBy(x,y);					滚动多少距离,在当前基础上累加滚动
+		<script type="text/javascript">
+			
+		</script>
+
+	2.可视区窗口尺寸
+		attr: window.innerWidth 	可视区窗口宽度
+		attr: window.innerHeight 	可视区窗口高度
+		attr: document.documentElement.clientWidth 	可视区窗口宽度(标准模式下,全浏览器兼容)
+		attr: document.documentElement.clientHeight 可视区窗口高度(怪异模式下,全浏览器兼容)
+		attr: document.body.clientWidth 	可视区窗口宽度(标准模式)
+		attr: document.body.clientHeight 可视区窗口高度(怪异模式)
+		可视区窗口尺寸
+		<script type="text/javascript">
+			function geiInnerVierOffset() {
+				if (window.innerWidth) {
+					return {
+						"width" : window.innerWidth,
+						"height": window.innerHeight
+					}
+				}
+
+				if (document.compatMode === "BackCompat") {
+					return {
+						"width" : document.body.clientWidth,
+						"height": document.body.clientHeight
+					}
+				}
+				
+				return {
+					"width" : document.documentElement.clientWidth,
+					"height": document.documentElement.clientHeight
+				}
+			}
+		</script>
+
+	3.查看元素的几何尺寸/位置
+		①.eleme.getBoundingClientReat(); 返回属性是静态的,基本报废
+		<script type="text/javascript">
+			var div = document.getElementById("div");
+			//返回值为左上,右下点的坐标
+			//left 		= 左上点距离屏幕左边垂直距离
+			//right 	= 右下点距离屏幕左边垂直距离
+			//top 		= 左上点距离屏幕上边垂直距离
+			//botton 	= 右下点距离屏幕上边垂直距离
+			//width 	= 元素宽度	老版本IE没有
+			//height 	= 元素高度	老版本IE没有
+			div.getBoundingClientRect();  
+		</script>
+		
+		②.attr: offsetWidth/offsetHeight 动态获取(返回值会随着元素的变化而变化)元素宽高,获取的是视觉上的尺寸,绝对不包含margin(宽高不计算margin).
+		这里的获取的高,也会受到maring塌陷的影响
+		<script type="text/javascript">
+	
+			var width  = div.offsetWidth;
+			var hergin = div.offsetWidth;
+
+		</script>
+		
+		③.attr: element.offsetLeft/offsetRight	忽略自身是否定位,对于无父级是定位元素的元素,返回相对于文档坐标,对于有父级是定位元素的元素,返回相对最近有定位父级的坐标.
+		<script type="text/javascript"></script>
+
+		④.attr: offsetParent();	返回最近的有定位的父级.( body.offsetParent == null )
+
+		⑤.window.getComputedStyle(element,null||伪类选择器) 	查询计算样式,获取当前元素css的显示值(同时也是绝对值).
+		  attr: element.currentStyle IE独有的方法.返回的是权重最高的值,不是计算后的值.
+		  浏览器兼容(获取元素的绝对属性);
+		  <script type="text/javascript">
+			//pseudo:假的,虚伪的
+			function getStyleValue(element,css) {
+				return window.getComputedStyle ? window.getComputedStyle(element,null)[css] : element.currentStyle[css];
+			}
+		 </script>
+	
+	4.style
+		①.attr: element.style 只能读写行间样式,没有兼容性问题,(font-size 要转换为 fontSize 这种模式,碰到float要变成cssFloat: cssFloat === float,复合属性建议拆解.),IE9以下不兼容.	
+
+三十.渲染模式
+	1.标准模式	: 				<!-- <!DOCTYPE html> -->
+	2.怪异模式/混杂模式 : 没有	<!-- <!DOCTYPE html> -->
+	3.document.compatMode(浏览器兼容模式)
+		①."Css1Compat"	(标准模式)当前浏览器兼容模式
+		②."BackCompat"	向后兼容
+
+三一.事件
+	1.事件绑定
+		①.element.onclack = function(){}; 以表达式的方式来为元素节点绑定事件,一个元素节点自能绑定一个相同类型的事件.this代表自己.
+		②.element.addEventListener函数来进行绑定,给一个元素节点的同一个事件绑定多个处理函数,先绑定先执行.this代表自己
+		③.element.attachEvent("onclick",fun,);IE浏览器独有.this代表window.
+		解决attachEvent中this的问题.
+		<script type="text/javascript">
+	
+			div.attachEvent("onclock",function () {
+				//改变函数的this指向为element.
+				start.call(div);
+			});
+			function start() {
+				console.log(this);
+			}
+		</script>
+		④.当事件绑定出现在for循环中的时候,容易出现闭包的问题.
+		<script type="text/javascript">
+	
+			div.onclick = function () { };
+			div.addEventListener("事件类型","处理函数",false);
+			div.addEventListener("click",function () {},false);
+
+			//这样绑定即给同一个元素的同一个事件绑定了同一个处理函数,只会执行一遍.
+			div.addEventListener("click",test,false);
+			div.addEventListener("click",test,false);
+			function test() {}
+		</script>
+		//给一个dom对象添加一个事件类型的一个事件处理函数,兼容性问题.
+		<script type="text/javascript">
+			function addEvent(element,type,handle) {
+				if (element.addEventListener) {
+					element.addEventListener("type",handle,false);
+				}else if (element.attachEvent) {
+					element.attachEvent("on"+type,function () {
+						handle.call(element);
+					});
+				}else{
+					element[on+type] = handle;
+				}
+			}
+		</script>
+		<script type="text/javascript">
+	
+
+			//事件注销
+			div.onclack = null;
+			//以下两种事件的解除必须是,与绑定是的事件类型,处理函数相同才能够接触,该元素绑定的事件.
+			div.detachEvent("on"+"type",demo);			
+			div.removeEventListener("",demo,false);
+			//若绑定匿名函数,则无法解除.(可以利用arguments.callee来接触绑定);
+			div.addEventListener("click",function () {},false);
+			function demo() {};
+		</script>
+	
+	2.事件处理模型
+		一个元素的一个事件,自能拥有一个事件处理模型,执行顺序先捕获后冒泡(元素自己为事件执行,不是捕获或冒泡).
+		元素的事件冒泡和捕获都是默认的,当设置时间参数时第三个参数传入false,默认为为冒泡事件处理模型,传入true为捕获事件处理模型
+		①.冒泡
+			事件的冒泡,基于元素结构,子元素冒泡到父元素(由内向外,自低向上).
+
+		②.捕获(只有谷歌实现,最新版本的火狐,oppro拥有.IE没有事件捕获)
+			事件的冒泡,基于元素结构,父元素捕获到子元素(由外向内,自顶向下).
+			elememt.setCapture();把页面上所有的元素都捕获到自己的身上.只有IE能用.
+			element.releaseCapture();清除此事件绑定.
+
+		③.focus(聚焦事件),blur(),change(失去焦点),submint(提交),reset(复位),select(选择)等事件不冒泡.
+
+		④.阻止冒泡
+			e.stopPropagation();
+			e.cancalBubble = true; // IE
+			<script type="text/javascript">
+		
+				div.addEventListener("click",demo,false);	
+				function demo(e) {
+					//事件对象
+					//bubble [ˈbʌbəl] : 气泡
+					//Propagation [ˌprɑpəˈɡeʃən] : 传播
+					e.stopPropagation();
+					e.cancalBubble = true;
+				}
+				//stopBubble
+				function stopBubble(enent) {
+					if(enent.stopPropagation){
+						enent.stopPropagation();
+					}else{
+						enent.stopBubble = true;
+					}
+				}
+			</script>
+
+		⑤.阻止默认事件
+			i.return false; 只对句柄方式绑定的事件有效 element.oncontextmenu = function(){ return false };
+			ii.event.preventDefault();W3c标准 IE9以下不兼容
+			iii.evevt.returnValue = false; 兼容IE 
+			<script type="text/javascript">
+					function cancelHandler(event) {
+						if (event.preventDefault) {
+							evevt.preventDefault();
+						}else{
+							evevt.returnValue = false;
+						}
+					}
+			</script>
+			取消a标签默认事件.
+			<!-- <a href="javascript:void(0)></a> -->
+
+		⑥.事件对象 var e = e || window.event;
+		//做IE的兼容处理(window.event);
+		<script type="text/javascript">
+	
+			div.onclack = function (e) {
+				var e = e || window.event;
+			}
+		</script>
+
+		⑦.事件源(var target = e.target || e.srcElement )
+		<script type="text/javascript">
+			//target : 目标
+			//e.path[0] || e.srcElement ||e.target||e.toElement;
+			//var target = e.target || e.srcElement 
+		</script>
+
+		⑧.鼠标事件
+		onclick : 鼠标点下去再抬起来算是一个click事件
+		onmousedown : 鼠标点下去的事件
+		onmouseup : 鼠标抬起来的事件
+		执行顺序 : onmousedown --> onmouseup --> onclick
+		contextmenu : 右键显示菜单
+		onmousemove : 鼠标移动事件
+		onmouseover : 鼠标移动到元素上方 
+		onmouseout	: 鼠标离开元素
+		onmouseenter : 鼠标移动到元素上方 
+		onmouseleave : 鼠标离开元素
+		区分鼠标左右键
+		i.(onmousedown || onmouseup)只有这两个事件可以区分鼠标左右键
+		ii.左键 : event.button = 0;右键 : event.button = 2;滚动论 : event.button = 1;
+		iii.右键不能触发click,click事件只能监听左键,不能监听右键,能触发右键的只有onmousedown,onmouseup.
+		移动端点击事件
+		touchstart 	点击屏幕
+		touchend  	手指离开屏幕
+		touchmove 	手机执行了一次点击(点击+厉害),手指滑动会连续触发.
+
+		⑨.键盘事件.
+		keydown		按下按键(能够检测到除了fn以外的所有键盘类按键)
+		keypress	按下按键(能够检测字符按键,仅ASCI码表里有的按键),想检测字符类按键并区分大小写时使用
+		keyup		松开按键
+		keydown --> keypress --> keyup
+		event.key 		代表你当前按下的值
+		event.keycode 	代表该键在ASC码表中的位置.String.fromCharCode(keycode);返回ASC码中的改字符.keycode可以说
+		event.which 	值代表键盘108个键 
+
+		⑩.文本操作事件
+		input 	: 当input值发生改变就触发
+		focus 	: 元素获得焦点
+		onblur 	: 元素失去焦点
+		change 	: 对比当元素聚焦时和失去焦点时,该元素两个状态(内容值)是否发生改变,如果发生改变触发change事件,否则不触发.
+
+		⑪.窗体操作事件
+		window.onscore() 	当滚动条滚动时触发
+		window.onload() 	发生在文档解析并且加载(下载)完毕.
+		拖拽操作
+		<script type="text/javascript">
+			
+			var div = document.getElementsByClassName("demo")[0];
+			
+			div.addEventListener("mousedown", function () {
+				var e = e || window.event;
+				var thatX =  e.clientX - this.offsetLeft;
+				var thatY =  e.clientY - this.offsetTop;
+				var that = this;
+				document.onmousemove = function(e){
+					that.style.left = e.clientX - thatX + "px";
+					that.style.top = e.clientY - thatY + "px";
+				}
+				document.onmouseup = function(){
+					document.onmousemove = null;
+					document.onmouseup = null;
+				}
+			},false );
+			
+		</script>
+
+三二.时间线
+	1.创建Document(文档)对象,开始解析web页面,解析HTML元素和他们文本内容后,添加Element对象和Text节点到文档中这个阶段,document.readyState = 'loading';
+	2.遇到link外部css,创建线程加载,并继续解析这个文档.
+	3.遇到script外部js,并且没有设置asyenc,defer,浏览器对js文件加载并阻塞(加载js文件加载完毕之前,暂停解析),等待js加载完成并执行该脚本,然后继续解析文档.
+	4.遇到script外部js文件,并且设置有asyenc,defer,浏览器创建线程加载,并继续解析文档.对于async属性的脚本,脚本加载完成后立刻执行,(禁止使用document.write()).
+	5.遇到image等,先正常解析dom结构,然后浏览器异步加载src,并继续解析文档.
+	6.当文档解析完成.document.readyState = "interactive".
+	7.文档解析完成后,所有设置有defer的脚本会按照顺序执行.(注意与async的不同,但同样禁止使用document.write()).
+	8.document对象触发DOMContentLoaded()事件,这也标志着程序执行从同步脚本执行阶段,转化为事件驱动阶段.
+	9.当所有async加载完成并执行后,img等加载完成后,document.readyState = 'complete',window对象触发load(onlode)事件.
+	10.从此,以异步响应方式处理用户输入,网络事件等.
+		
+三三.Number,parseInt,parseFlow
+
+
+
+			
+
+	
+
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					

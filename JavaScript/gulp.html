@@ -1,0 +1,260 @@
+<meta charset="utf-8">
+<title>gulp</title>
+gulp(task runner)	:	任务运行期
+
+一.gulp.task(任务)
+	1.gulp 是基于task的方式来运行
+	2.gulp.task(name ,[deps],fn)
+		①.name 任务名称
+		②.deps 任务依赖,代表执行当前任务前需要执行的任务,依赖任务执行完毕后在执行当前任务,无执行顺序,并行执行的.
+		③.fun  当先任务函数,当前任务需要做的事
+	3.gulp.task("default" ,["task1","task2","task3"],function(){}) 
+		①.default任务为默认任务.
+		②.执行default,即相当于执行了 gulp default.
+	<script type="text/javascript">
+		gulp.task("html" ,["css"],function(){
+			console.log("这个是 gulp html 任务.")
+		})
+	</script>
+
+
+二.gulp.src(gulp文件读取插件)
+	1.src 是用来匹配,读取文件的.
+	2.gulp.src((glob || [globs]), options)
+		①.globs(是用来配置文件的字符串或者字符串数组) 	== (String || Array)
+			"src/a.js" 	：指定具体文件；
+			"*"			：匹配所有文件    例：src/*.js(包含src下的所有js文件)；
+			"**"		：匹配0个或多个子文件夹    例：src/**/*.js(包含src的0个或多个子文件夹下的js文件)；
+			"{}"		：匹配多个属性  例：
+							src/{a,b}.js(包含a.js和b.js文件)  
+							src/*.{jpg,png,gif}(src下的所有jpg/png/gif文件)；
+			"!"			：排除文件    例：!src/a.js(不包含src下的a.js文件)；
+		②.options 	== Object
+			options 类型(可选)：Object，有3个属性buffer、read、base.
+				options.base 	类型：(String) 
+					设置输出路径以某个路径的某个组成部分为基础向后拼接，具体看下面示例.
+				<script type="text/javascript">
+					gulp.src('client/js/**/*.js') 
+					  .pipe(minify())
+					  .pipe(gulp.dest('build'));  // Writes 'build/somedir/somefile.js'
+					 
+					gulp.src('client/js/**/*.js', { base: 'client' })
+					  .pipe(minify())
+					  .pipe(gulp.dest('build'));  // Writes 'build/js/somedir/somefile.js'					
+				</script>	
+				options.buffer  类型： (Boolean)
+					默认：true 设置为false，将返回file.content的流并且不缓冲文件，处理大文件时非常有用.
+					**注意：**插件可能并不会实现对 stream 的支持。
+				options.read  	类型：(Boolean)
+					默认：true 设置false，将不执行读取文件操作，返回null.
+
+	<script type="text/javascript">
+		gulp.src(globs[, options]);
+	</script>
+
+三.dest(最终文件要输出的路径)
+	1.能被 pipe 进来，并且将会写文件。并且重新输出（emits）所有数据，
+	2.因此你可以将它 pipe 到多个文件夹。如果某文件夹不存在，将会自动创建它。
+	3.gulp.dest(path[, options])
+		①.path (String or Function)	指定文件输出路径，或者定义函数返回文件输出路径亦可
+		②.options (Object)
+			options.cwd：  	类型：String  默认：process.cwd():前脚本的工作目录的路径 当文件输出路径为相对路径将会用到.
+			options.mode：  类型：String  默认：0777 八进制权限字符,指定被创建文件夹的权限.
+	<script type="text/javascript">
+		
+	</script>
+
+
+
+三.watch(监视文件)
+	1.可以在文件发生改动时候做一些事情。它总会返回一个 EventEmitter 来发射（emit） change 事件.
+	2.gulp.watch(glob[, opts], tasks)
+		①.glob 	(strig || array) 用来指定具体监控哪些文件的变动.
+		②.opts 	(Object) 	传给 gaze 的参数。
+		③.tasks (Array) 	需要在文件变动后执行的一个或者多个通过 gulp.task() 创建的 task 的名字，
+	<script type="text/javascript">
+		var watcher = gulp.watch('js/**/*.js', ['uglify','reload']);
+		watcher.on('change', function(event) {
+		  console.log('File ' + event.path + ' was ' + event.type + ', running tasks...');
+		});
+	</script>
+	3.gulp.watch(glob[, opts, cb])
+		①.glob 	(strig || array) 用来指定具体监控哪些文件的变动.
+		②.opts 	(Object) 	传给 gaze 的参数。
+		③.cb(event) 每次变动需要执行的 callback。
+			event.type 类型： String
+				发生的变动的类型：added , changed 或者 deleted.
+			event.path 类型： String
+				触发了该事件的文件的路径。
+	<script type="text/javascript">
+		gulp.watch('js/**/*.js', function(event) {
+		  console.log('File ' + event.path + ' was ' + event.type + ', running tasks...');
+		});
+	</script>
+
+四.CLI
+	<script type="text/javascript">
+		
+	</script>
+
+五.END
+	gulpfile.js
+	<script type="text/javascript">
+		var gulp = require("gulp");
+		// 图片压缩
+		var imagemin = require("gulp-imagemin");
+		// 判断是不是新的文件
+		var newer = require("gulp-newer");
+		// html压缩
+		var htmlclean = require("gulp-htmlclean");
+		// 压缩js代码
+		var uglify = require("gulp-uglify");
+		// 去掉js调试语句(console,debugger)
+		var htmlclean = require("gulp-strip-debug");
+		// 拼接(合并)文件
+		var concat = require("gulp-concat");	// concat("main.js")合并后文件的文件名
+		// less转css文件
+		var less = require("gulp-less");
+		// postcss 对css进行集成
+		var postcss = require("gulp-postcss"); // pipe(postcss([autoprefixer(),cssnano()]));
+		// 增加css前缀
+		var autoprefixer = require("gulp-autoprefixer");
+		// 压缩css
+		var cssnano = require("gulp-cssnano");
+		// 一个简单的服务器
+		// connect.server({
+		// 	prot:8090,
+		// 	livereload : true,	// 自动刷新 
+		// })
+		// connect.reload()
+		var connect = require("gulp-connect"); // connect.server();
+
+
+		// 设置当前环境为开发环境
+		// export NODE_ENV=development
+		// 获取当前环境变量
+		// 生产环境
+		porcess.env.NODE_ENV == "producation";
+		// 开发环境
+		porcess.env.NODE_ENV == "development";
+
+
+		var folder = {
+			src : "./src/",
+			bulid : "./bulid/",
+		}
+
+		// task 任务
+		// 流读取文件	task running
+		gulp.task("images",function(){
+			// src(读取) : 把匹配到的文件变成流文件
+			gulp.src(folder.src + "img/*")
+				// pipe 管道流操作,通过管道对文件的流形式,进行操作
+				// 检查是不是新的图片,传入要监听的文件夹
+				.pipe(newer(folder.bulid+ "img"))
+				// 图片压缩
+				.pipe(imagemin())
+				// dest运输存储
+				.pipe(gulp.dest(folder.bulid+ "img"))
+		})
+
+		// task 的第二个参数,任务依赖,执行当前任务前先执行任务依赖中的任务
+		gulp.task("html",["images"],function(){
+			gulp.src(folder.src + "html/*")
+				.pipe(htmlclean())
+				.pipe(gulp.dest(folder.bulid+ "html"))
+		})
+
+		// 默认任务,当执行 gulp 时默认执行 gulpdefault 任务
+		gulp.task("default",["images","html"])		
+	</script>
+	gulpfile.js
+	<script type="text/javascript">
+		var gulp = require("gulp");
+
+		var folder = {
+			bind : "./build/",
+			src : "./src/"
+		}
+
+		// html 压缩插件
+		var htmlclean = require("gulp-htmlclean");
+
+		// 统一处理css
+		var postcss = require("gulp-postcss");
+		// less 解析
+		var less = require("gulp-less");
+		// 增加css前缀
+		var autoprefixer = require("gulp-autoprefixer");
+		// 压缩css
+		var cssnano = require("gulp-cssnano");
+
+		// 压缩图片
+		var imagemin = require("gulp-imagemin");
+
+		// 压缩js代码
+		var uglify = require("gulp-uglify");
+		// 去掉js调试语句(console,debugger)
+		var stripdebug = require("gulp-strip-debug");
+
+		// 检查是不是新的文件
+		var newer = require("gulp-newer");
+		// 合并文件 
+		var concat = require("gulp-concat");	
+		// 服务器
+		var connect = require("gulp-connect"); 
+
+		var dev = process.env.NODE_ENV == "development";
+
+
+		gulp.task("default",["html","js","css","image","watch","server"],function(){
+			console.log('默认函数');
+		});
+
+		gulp.task("html",[],function(){
+			var stream = gulp.src(folder.src+"html/*.html")
+				.pipe(connect.reload());
+			!dev && stream.pipe(htmlclean());
+			stream.pipe(gulp.dest(folder.bind+"html/"));
+		});
+
+		gulp.task("js",[],function(){
+			var stream = gulp.src(folder.src+"js/*.js")
+				.pipe(connect.reload());
+			!dev && stream.pipe(concat("mian.js"))
+						  .pipe(uglify())
+						  .pipe(stripdebug());
+			stream.pipe(gulp.dest(folder.bind+"js/"));
+		});
+
+		gulp.task("css",[],function(){
+			var stream = gulp.src(folder.src+"css/*.less")
+				.pipe(connect.reload())	
+				.pipe(concat("main.css"))
+				.pipe(less())
+				.pipe(autoprefixer())
+				.pipe(cssnano())
+				.pipe(gulp.dest(folder.bind+"css/"))
+		});
+
+		gulp.task("image",[],function(){
+			var stream = gulp.src(folder.src+"image/*.{jpg,png,svg}");
+			!dev && stream.pipe(newer(folder.bind+"image/*.{jpg,png,svg}"))
+				.pipe(imagemin());
+			stream.pipe(gulp.dest(folder.bind+"image/"));
+		});
+
+		gulp.task("server",[],function(){
+			connect.server({
+				port : 8090,
+				livereload : true,
+			});
+		})
+
+		gulp.task("watch",function(){
+			gulp.watch(folder.src+"html/*.html",["html"]);
+			gulp.watch(folder.src+"js/*.js",["js"]);
+			gulp.watch(folder.src+"css/*.css",["css"]);
+			gulp.watch(folder.src+"image/*.image",["image"]);
+		})		
+	</script>

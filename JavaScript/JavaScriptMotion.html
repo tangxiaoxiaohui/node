@@ -1,0 +1,367 @@
+<meta charset="utf-8">
+<title>javascriptMotion</title>
+一.匀速运动
+	1.匀速运动到目标位置
+	<script type="text/javascript">
+		//匀速运动,左右移动到谋个位置.
+		//element  : 需要移动的元素
+		//speed	   : 移动的速度
+		//interval : 移动到那个位置
+		var timer;
+		function moveTo(element,speed,interval) {
+			var	speed = Math.abs(speed),		//移动速度
+				leftIndex = element.offsetLeft,	//记录元素的坐标
+				trun = leftIndex < interval,	//控制移动方向
+			clearInterval(timer);				//清除定时器
+			timer =  setInterval(function () {
+				leftIndex = element.offsetLeft;
+				if(leftIndex === interval){
+					clearInterval(timer);
+				}else{
+					if(trun){
+						element.style.left = ( leftIndex + speed > interval ? interval : leftIndex + speed ) + "px";
+					}else{
+						element.style.left = ( leftIndex - speed < interval ? interval : leftIndex - speed ) + "px";
+					}
+				}
+			},50);
+		}
+	</script>
+	2.匀速朝着某个方向移动X单位
+	<script type="text/javascript">
+		//匀速运动,左右移动多少距离.
+		//element  : 需要移动的元素
+		//speed	   : 移动的速度,以及方向
+		//interval : 移动多少的距离
+		var timer;
+		function moveBy(element,speed,interval) {
+			var leftIndex = element.offsetLeft,
+				interval = Math.abs(interval),
+				toIndex = speed > 0 ? leftIndex + interval:leftIndex-interval;
+			clearInterval(timer);				//清除定时器
+			timer =  setInterval(function () {
+				leftIndex = element.offsetLeft;
+				if(interval == 0 ){
+					clearInterval(timer);
+				}else{
+					if(speed > 0){
+						element.style.left = leftIndex + speed > toIndex ? toIndex : leftIndex + speed +"px";
+					}else{
+						element.style.left = leftIndex + speed < toIndex ? toIndex : leftIndex + speed +"px";
+					}
+				}
+			},50);
+		}
+	</script>
+
+二.缓冲运动
+	<script type="text/javascript">
+		//缓冲运动,左右移动到谋个位置.
+		//element  : 需要移动的元素
+		//speed	   : 移动的速度.
+		//interval : 移动到那个位置
+		var timer = 0;
+		function moveTo(element,speed,interval) {
+			clearInterval(timer);				//清除定时器
+			timer =  setInterval(function () {
+				speed = (interval - element.offsetLeft)/20;
+				speed = speed > 0 ? Math.ceil(speed) : Math.floor(speed);
+				if(element.offsetLeft === interval){
+					clearInterval(timer);
+				}else{
+					element.style.left = element.offsetLeft + speed + "px";
+				}
+				 
+			},50);
+		}
+	</script>
+	<script type="text/javascript">
+		//缓冲运动,改变元素的颜色透明度.(opacity)
+		//element  	: 需要移动的元素
+		//speed	   	: 要改变的的速度.
+		//interval 	: 改变成那个值
+		//css		: 你要改变的那个css
+		var timer = 0;
+		function moveTo(element,speed,target,css) {
+			//sign : 标记
+			var sign;
+			clearInterval(timer);
+			timer =  setInterval(function () {
+				sign = parseFloat(getStyleValue(element,css))*100;
+				speed = (target - sign)/10;
+				speed = speed > 0 ? Math.ceil(speed) : Math.floor(speed);
+				if(sign == target){
+					clearInterval(timer);
+				}else{
+					element.style[css] = (sign+speed)/100;
+				}
+				 
+			},50);
+		}
+	</script>
+	<script type="text/javascript">
+		//让元素自己使用自己的计时器
+		function moveTo(ele,width) {
+			var speed,
+				nowWidth;
+			clearInterval(ele.timer);
+			 ele.timer = setInterval(function () {
+			 	nowWidth = parseInt(getStyleValue(ele,"width"));
+				speed =  (width - nowWidth)/7;
+				if(nowWidth === width){
+					clearInterval(ele.timer);
+				}else{
+					ele.style.width = nowWidth + speed +"px";	
+				}
+				
+			},50);
+		}
+	</script>
+
+三.匀加速/减速运动
+	<script type="text/javascript">
+		function move (that) {
+			var speed = 10;
+			setInterval(function(){
+				speed ++;
+				that.style.left = that.offsetLeft+speed+"px";
+			},50)
+		}
+	</script>
+	<script type="text/javascript">
+		function move (that) {
+			var speed = 50;
+			setInterval(function(){
+				speed --;
+				that.style.left = that.offsetLeft+speed+"px";
+			},50)
+		}
+	</script>
+
+四.弹性运动
+	<script type="text/javascript">
+		function move (that) {
+			clearInterval(that.timer);
+			var speed = 1,
+				sgin;
+			that.timer = setInterval(function(){
+				//模仿,当小球距离目标点越近,速度越小.
+				//speed为正向右走,speed为负向左走
+				//当走到目标点时speed已经等于,目标值.
+				//所以即使在向右走,得到的负数+speed并返回给speed的值不为负就会一直走,
+				//当speed第一次为负数向左走.加的值也是负数,最后会加到负的目标值.情况和正数时相同.
+				sgin = (300 - that.offsetLeft)/100;
+				speed = speed +sgin;
+				speed *= 0.99;
+				that.style.left = that.offsetLeft+speed+"px";
+				console.log(Math.abs(speed) +"--"+(300 - that.offsetLeft));
+				if(Math.abs(speed) < 1 && Math.abs(300 - that.offsetLeft) < 1){
+					clearInterval(that.timer);		
+				}
+			},50)
+		}
+	</script>
+	<script type="text/javascript">
+		function move (that,target) {
+			clearInterval(that.timer);
+			var speed = 10,
+				sgin;
+			that.timer = setInterval(function(){
+				//模仿,当小球距离目标点越近,速度越小.
+				sgin = (target - that.offsetLeft)/10;
+				speed = speed +sgin;
+				speed *= 0.9;
+				that.style.left = that.offsetLeft+speed+"px";
+				console.log(Math.abs(speed) +"--"+(target - that.offsetLeft));
+				if(Math.abs(speed) < 1 && Math.abs(target - that.offsetLeft) < 1){
+					clearInterval(that.timer);		
+				}
+			},50)
+		}
+	</script>
+
+五.碰撞运动
+	<script type="text/javascript">
+		function move (that) {
+			var speedX = 10,
+				speedY = 10,
+				bignX,
+				bignY,
+				thatWidth = that.offsetWidth,
+				thatHeight = that.offsetHeight,
+				windowWidth  = document.documentElement.clientWidth,
+				windowHeight = document.documentElement.clientHeight;
+			setInterval(function() {
+				windowWidth  = document.documentElement.clientWidth,
+				windowHeight = document.documentElement.clientHeight;
+				bignX = that.offsetLeft + speedX;
+				bignY = that.offsetTop + speedY;
+				console.log(windowWidth - thatWidth);
+				if(bignX >= windowWidth - thatWidth){
+					speedX *= -1;
+					bignX = windowWidth - thatWidth;
+				}
+				
+				if(bignY > windowHeight - thatHeight){
+					speedY *= -1;
+					bignY = windowHeight - thatHeight;
+				}
+				
+				
+				if(bignX <= 0 ){
+					speedX *= -1;
+					bignX = 0;
+				}
+				
+				if(bignY <= 0){
+					speedY *= -1;
+					bignY = 0;
+				}
+				
+				that.style.left = bignX + "px";
+				that.style.top = bignY+"px";
+			},10)
+		};
+	</script>
+
+六.重力运动(模拟重力厂)
+	<script type="text/javascript">
+		function move (that) {
+			var speedX = 10,
+				speedY = 10,
+				addSpeedY = 1,//纵向加速运动
+				bignX,
+				bignY,
+				thatWidth = that.offsetWidth,
+				thatHeight = that.offsetHeight,
+				windowWidth  = document.documentElement.clientWidth,
+				windowHeight = document.documentElement.clientHeight;
+			setInterval(function() {
+				windowWidth  = document.documentElement.clientWidth,
+				windowHeight = document.documentElement.clientHeight;
+				speedY += addSpeedY;
+				bignX = that.offsetLeft + speedX;
+				bignY = that.offsetTop + speedY;
+				console.log(windowWidth - thatWidth);
+				if(bignX >= windowWidth - thatWidth){
+					speedX *= -1;
+					speedX *= 0.8;
+					speedY *= 0.8;
+					bignX = windowWidth - thatWidth;
+				}
+				
+				//speedY的值会不断的变大,会导致物体的可活动范围变小,从而产生类似重力效果.
+				if(bignY > windowHeight - thatHeight){
+					speedY *= -1;
+					speedX *= 0.8;
+					speedY *= 0.8;
+					bignY = windowHeight - thatHeight;
+				}
+				
+				
+				if(bignX <= 0 ){
+					speedX *= -1;
+					speedX *= 0.8;
+					speedY *= 0.8;
+					bignX = 0;
+				}
+				
+				if(bignY <= 0){
+					speedY *= -1;
+					speedX *= 0.8;
+					speedY *= 0.8;
+					bignY = 0;
+				}
+				
+				that.style.left = bignX + "px";
+				that.style.top = bignY+"px";
+			},10)
+		};
+	</script>
+
+七.重力场拖拽
+<script type="text/javascript">
+	var div = document.getElementsByClassName("demo")[0];
+	
+	div.onmousedown = function(e){
+		var lastX = div.offsetLeft;
+		var lastY = div.offsetTop;
+		var e = e || window.event;
+		var thatX =  e.clientX - this.offsetLeft;
+		var thatY =  e.clientY - this.offsetTop;
+		var that = this;
+		var speedX,speedY,newleft,newtop;
+		clearInterval(that.timer);
+		document.onmousemove = function(e){
+			newleft = e.clientX - thatX;
+			newtop  = e.clientY - thatY;
+			that.style.left = newleft + "px";
+			that.style.top  = newtop  + "px";
+			speedX = newleft - lastX;
+			speedY = newtop  - lastY;
+			lastX = newleft;
+			lastY = newtop;
+		}
+		document.onmouseup = function(){
+			move(that,speedX? speedX :0,speedY? speedY :0);
+			document.onmousemove = null;
+			document.onmouseup = null;
+		}
+	}
+	
+	function move(that,speedX,speedY){
+		clearInterval(that.timer);
+		var nowSpeedX,
+			nowSpeedY,
+			nowAddSpeedY = 3,
+			windowWidth,
+			windowHeight,
+			thatWidth,
+			thatHeigth;
+		that.timer = setInterval(function(){
+			windowWidth = document.documentElement.clientWidth;
+			windowHeight = document.documentElement.clientHeight;
+			thatWidth  = that.offsetWidth;
+			thatHeigth = that.offsetHeight; 
+			speedY += nowAddSpeedY;
+			nowSpeedX = that.offsetLeft + speedX;
+			nowSpeedY = that.offsetTop + speedY;
+//			console.log(speedX +" - "+speedY)
+			if(nowSpeedX > windowWidth - thatWidth){
+				speedX *= -1;
+				speedX *= 0.95;
+				speedY *= 0.95;
+				nowSpeedX = windowWidth - thatWidth;
+			}
+			
+			if(nowSpeedY > windowHeight - thatHeigth){
+				speedY *= -1; 
+				speedX *= 0.95;
+				speedY *= 0.95;
+				nowSpeedY = windowHeight - thatHeigth;
+			}
+			
+			if(nowSpeedX < 0){
+				speedX *= -1; 
+				speedX *= 0.95;
+				speedY *= 0.95;
+				nowSpeedX = 0;
+			}
+			
+			if(nowSpeedY < 0){
+				speedY *= -1; 
+				speedX *= 0.95;
+				speedY *= 0.95;
+				nowSpeedY = 0;
+			}
+			
+			if(Math.abs(speedX) < 1 && Math.abs(nowSpeedY) && nowSpeedY == windowHeight - thatHeigth ){
+				clearInterval(that.timer);
+			}
+			
+			that.style.left	= nowSpeedX + "px";
+			that.style.top  = nowSpeedY + "px";
+		},50);
+		 
+	}
+</script>

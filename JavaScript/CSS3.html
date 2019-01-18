@@ -1,0 +1,240 @@
+<meta charset="utf-8">
+<title>CSS3</title>
+一.CSS3前缀
+	1.chroem 和 safari		: -webkik
+	2.firefox 				: -moz
+	3.IE 					: -ms
+	4.opera 				: -o
+
+二.属性
+	1.圆角(border-radius) 这是一个复合属性
+	<style type="text/css" media="screen">
+		*{
+			border-radius: 20px 20px 20px 20px;
+			/*前面代表四个角x轴的取值,后面代表四个角Y轴的取值*/
+			border-radius: 20px 20px 20px 20px/20px 20px 20px 20px;
+			border-top-left-radius: 20px;
+			/*这里也是拆分了圆角的x,y轴的弧度取值范围*/
+			border-top-left-radius: 20px 20px;
+		}
+	</style>
+	2.盒子阴影(box-shadow)
+	<style type="text/css" media="screen">
+		box-shadow: X轴偏移量 	Y轴偏移量 	[阴影模糊半径] 	[阴影扩展半径] 	[阴影颜色] 	[投影方式];
+		box-shadow: 2px			2px 		5px 			5px 			red 		outset(默认)/inset;
+		/**/
+		box-shadow: 2px 2px 5px 5px red,2px 2px 5px 5px red,2px 2px 5px 5px red,2px 2px 5px 5px red;			
+	</style>
+	3.文本阴影text-shadow
+	<style type="text/css">
+		/*				水平偏移	垂直偏移	模糊程度	阴影颜色*/
+		text-shadow: 	3px 		3px 		0			#fff;
+	</style>
+	4.文字边界换行
+	<style type="text/css">
+		*{
+			/*文字边界换行*/
+			/*默认文字不换行*/
+			word-wrap:normal;
+			/*强制换行*/
+			word-wrap:break-word
+
+			/*字体*/
+			font-face:;
+		}
+	</style>
+	5.字体
+	<style type="text/css">
+		@font-face{
+			/* 字体别名 */
+			font-family:"myFirstFont";
+			/* url 字体地址 */
+			src:url('Sansation_Light.ttf'),
+				url('Sansation_Light.eot')
+				/* 字体文件类型 */
+				format(‘eot’)
+			}
+		p{
+			/*根据字体的别名引入*/
+			font-family:"myFristFont";
+		}
+		/* 字体引入的兼容性写法 */
+		@font-face {
+			font-family: 'diyfont';
+			src: url('diyfont.eot'); /* IE9+ */
+			src: url('diyfont.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+				 url('diyfont.woff') format('woff'), /* chrome、firefox */
+				 url('diyfont.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
+				 url('diyfont.svg#fontname') format('svg'); /* iOS 4.1- */
+		}
+	</style>
+		
+三.颜色
+	1.RGBA
+		①.R(red:红色) G(green:绿色) B(blue:蓝色) A(alpha:透明度)
+
+	2.线性渐变色
+	<style type="text/css">
+		*{
+			/*从下向上,从粉到红的颜色渐变*/
+			/* to top || to top left || 0deg(0代表角度)*/
+			background: linear-gradient(to top,pink ,red);
+			/* 0%-25% 由粉色到红色渐变 25-50由红到绿 50-75由绿向黄  */
+			background: linear-gradient(0deg, pink 0%, red 25%, green 50%, blue 75%,yellow 100%);
+			/* 0%-25% 为粉色 25-50由粉向红 50-75由红到绿 75-100绿色   */
+			background: linear-gradient(0deg, pink 25%, red 50%, green 75%);
+		}
+	</style>
+	3.径向渐变色
+	<style type="text/css">
+		*{
+			/* circle || ellipse */
+			background: radial-gradient(circle at 50% 50%,pink ,red);
+			background: radial-gradient(circle at 10px 10px,pink ,red);
+			background: radial-gradient(circle at center center,pink ,red);
+			/* 自写一个坐标值另一个默认为center */
+			background: radial-gradient(circle at 100px center,pink ,red);
+			/* 规定渐变范围为50px */
+			background: radial-gradient(circle 50px at 100px center,pink ,red);
+			/* 最外面是什么颜色那么渐变范围之外便是什么颜色(范围不到100%,就没有渐变色之外) */
+			background: radial-gradient(circle 100px,pink 0%,yellow 99%,transparent);
+			/* 椭圆拥有长短值*/
+			background: radial-gradient(ellipse 100px 80px,pink 0%,yellow 99%,transparent);
+		}
+	</style>
+	4.边框背景色
+	<style type="text/css">
+		div{
+			width: 200px;
+			height: 200px;
+			border: 50px solid;
+			/* 引入的背景图片会被 压缩/拉伸 大小为各个border角的大小 */
+			border-image: url('0.0.jpg');
+			/* 第二个值为切割点,假如图片为300px*300px,那么则切割值为300 */
+			/* 切割方向以当前border为基准,例:左上则距离左边50px,距离上边50px处,开始切割,把切割出来的图片为背景,放在左上角*/
+			/* 切割之后余下来的部分/切割时的切割值小于总值的一半 会放在border中间进行填充 */
+			border-image: url('0.0.jpg') 50;
+			/* stretch(拉伸:默认) || repeat (平铺) || round(铺满)*/
+			/* round会维持图形的完整性,当拉伸大于本身宽高1.5倍时,便会进行分裂*/
+			border-image: url('0.0.jpg') 50 repeat;
+			/* 背景图片的起始位置 默认是从padding区域开始渲染 */
+			/* 渲染起始位置 border-box | padding-box | content-box */
+			background-origin: padding-box ;
+			/* 默认repeat,其它空白位置以当前方式进行渲染 */
+			border-repeat = no-repeat;
+			/* 裁剪背景(固定渲染范围) : border-box | padding-box | content-box | no-clip */
+			background-clip ： content-box;
+			/* 设置图片的大小 */
+			/* auto(默认值,不改变宽高) | <长度值> | <百分比> | cover(保证按比例拉伸铺满背景) | contain(保证背景图片的完整性) */
+			background-size: auto;
+			/* 设置图片的位置(图片左上角的渲染位置) */
+			background-position: center center;
+		}
+	</style>
+
+四.css选择器
+	1.属性选择器
+	<style type="text/css">
+		/* 属性值等于指定值 */
+		li[type='text']{}
+		/*  属性值被单词分割后包含指定值 */
+		li[class~='left']{}
+		/* 属性值以指定值开头 */
+		li[class^='left']{}
+		/* 属性值以指定值结尾 */
+		li[class$='left']{}
+		/* 属性值包含指定值 */
+		li[class*='left']{} 
+	</style>
+	2.伪类选择器
+	<style type="text/css">
+		/* 空标签选择器(内容为空的标签)*/
+		empty{}
+		/* 目标元素选择器(当前锚点元素)*/
+		div:target{}
+		/* 唯一子元素选择器 */
+		li:only-child{}
+		/* 唯一类型子元素选择器 */
+		li:only-of-type{}
+		/* 可用的元素*/
+		input:enabled {} 
+		/* 不可用的元素*/
+		input:disabled {}
+		/* 选择框的被选中状态 (checkbox, radio的一些默认状态不可用属性进行改变，如边框颜色。) */
+		input:checked{}
+		/* 选中只读的元素*/
+		input:read-only{}
+		/* 选中非只读的元素 */
+		input:read-write{}
+		/* 第一个字*/
+		::first-letter{}
+		/* 第一行字*/
+		::first-line{}
+		/* 被选择的元素,也就是你想选择复制的操作 */
+		::selection{}
+		/* 不让用户选中 */
+		*{user-select: none}
+		/* 紧跟着当前按li元素的兄弟节点span元素 */
+		li+span{}
+		/* 紧跟着当前按li元素后面的所有兄弟节点 */
+		li~span{}
+
+
+	</style>
+	伪元素选择器
+	3.not选择器(排除不要的)
+	<style type="text/css">
+		li:not([class*='left']){}
+	</style>
+	4.子选择器
+	<style type="text/css">
+		/* 选择第一个子元素是li 的  li元素*/
+		li:first-child{}
+		/* 选择是最后一个子元素的 li 元素*/
+		li:last-child{}
+		/* 第几个子元素,1从一开始*/
+		li:nth-child(1){}
+		/* even(偶数) || odd(奇数) */
+		li:nth-child(even){}
+		/* n是自然数,这里是一个表达式 */
+		li:nth-child(2n){}
+		/* 从后往前数,规则与nth-child 相同 */
+		li:nth-last-child(){}
+
+		/* 选择第一个是li的子元素  */
+		li:first-of-type{}
+		li:last-of-type{}
+		li:nth-of-type(){} 
+		:nth-last-of-type(){} 
+	</style>
+		
+
+五.多媒体查询
+	1.@media all(所有多媒体类型设备)/print(打印机)/screen(电脑屏幕，平板，智能手机等)/speech(屏幕阅读器)
+	实例 当屏幕可视窗口尺寸大于 480 像素的设备上修改背景颜色
+	<style type="text/css">
+		@media screen and (min-width: 480px) {
+		    body {
+		        background-color: lightgreen;
+		    }
+		}
+	</style>
+	2.@supports 条件判断规则,根据判断的结果来配置相应的样式
+	<script type="text/javascript">
+		当判断当浏览器支持 display:flex 时启用内部样式
+		@supports (display:flex) {
+		  section { display: flex }
+		}
+		这里是判断当不支持样式时所做出的操作
+		@supports not (display:flex) {
+		  #container div{float:left;}
+		}	
+	3.其它语法 and/or/()
+	</script>
+	
+六.box-sizing
+	1.当设置为box-sizing:content-box时，将采用标准模式解析计算，也是默认模式,在标准模式下，一个块的总宽度= width + margin(左右) + padding(左右) + border(左右).
+
+	2.当设置为box-sizing:border-box时，将采用怪异模式解析计算,在怪异模式下，一个块的总宽度= width + margin(左右)（即width已经包含了padding和border值）.
+
+

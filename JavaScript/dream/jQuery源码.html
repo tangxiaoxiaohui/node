@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title></title>
+	<link rel="stylesheet" href="">
+</head>
+<body>
+	<div id="hehe" ></div>
+</body>
+一.无 new 构造的jQuery
+<script type="text/javascript">
+	function jQuery(str){
+		return new jQuery.prototype.init(str);
+	}
+	jQuery.prototype.init = function(str){
+		this[0] = document.getElementById(str);
+		this.length = 1;
+	}
+	console.log(jQuery("hehe"));
+</script>
+二.封闭作用域(防止污染全局变量/变量冲突)
+<script type="text/javascript">
+	// 闭包返回要闭包数据
+	(function(){
+		var demo = "demo";
+		return demo;
+	}());
+	// 闭包把数据挂载到window上
+	(function(){
+		var demo = "demo";
+		window.demo = demo;
+	}());
+	// 把jQuery $ 挂载到window上
+	(function(jQuery){
+		window.jQuery = window.$ = jQuery;
+	}(jQuery || function(){}));
+</script>
+三.jQuery原型的函数注册,函数链
+<script type="text/javascript">
+	(function(){
+		window.jQuery = window.$ = jQuery;
+		function jQuery(selecter){
+			return new jQuery.prototype.init(str);
+		}
+		// selecter 用来做jq的dom元素选择器操作的
+		jQuery.prototype.init = function(selecter){
+			console.log('init');
+			return this;
+		}
+		jQuery.prototype.html = function(str){
+			console.log('html')
+			return this;
+		}
+		jQuery.prototype.css  = function(str){
+			console.log('css')
+			return this;
+		}
+		jQuery.prototype.init.prototype = jQuery.prototype;
+	}())
+	jQuery().init().html().css();
+</script>
+四.jQuery的结构实现
+<script type="text/javascript">
+	(function(global,factorym){
+		if(false){
+		}else{
+			factorym(global);
+		}
+	// 防止污染全局变量,封闭作用域,链式调用
+	}(typeof window !== "undefined" ? window,function(window,noGlobal){
+		window.jQuery = window.$ = jQuery;
+		function jQuery(selecter){
+			return new jQuery.prototype.init(str);
+		}
+		// selecter 用来做jq的dom元素选择器操作的
+		jQuery.prototype.init = function(selecter){
+			console.log('init');
+			return this;
+		}
+		jQuery.prototype.html = function(str){
+			console.log('html')
+			return this;
+		}
+		jQuery.prototype.css  = function(str){
+			console.log('css')
+			return this;
+		}
+		jQuery.prototype.init.prototype = jQuery.prototype;
+	}))
+</script>
+五.jQuery选择器的实现
+<script type="text/javascript">
+	// #id .calss div <div><div/> <div/>
+	// this dom $()
+	// 0/""/false/null/undefined
+	// {} [] 
+	// function(){}
+	$()	
+</script>
+</html>

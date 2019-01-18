@@ -1,0 +1,250 @@
+<meta charset="utf-8">
+<title>WebPack(模块化)</title>
+一.初始墨模块化的思维
+	<script type="text/javascript">
+		// 1.函数
+		function demo(a,b){
+			console.log(a+b);
+		}
+		
+		// 对象
+		var demo = {
+			value : "value";
+			add : function(a+b){
+				console.log(a+b);
+			}
+		}
+		demo.add(1,2);
+
+		// 匿名函数(闭包)
+		var demo = (function (){
+			var value = 0;
+			function add(a+b){
+				console.log(a+b);
+			}
+			return {
+				add:add
+			}
+		}())
+		demo.add(1,2);
+
+		// 依赖(jQuery的挂载实现)
+		(function (a,b){
+			b(a);
+		}(window,function(window){
+			window.jQuery = jQuery;
+			window.$ = jQuery;
+			function jQuery(){}
+		}))
+
+		// 模块化(给模块添加功能)
+		var module = (function(module){
+			module.add = function(a,b){
+				console.log(a+b);
+			}
+			return module;
+		}(window.module || {}))
+	</script>
+
+二.规范
+	1.Commonjs
+		①.Commonjs最初用在服务器端的node的
+		②.webpack是对webpack原生支持的
+		③.核心思想
+		1.通过 require 方法来 "同步" 加载所要依赖的其他模块
+		// demo.js
+		<script type="text/javascript">
+			var module = require("module.js");
+			module.add(1,2);
+		</script>
+		2.通过 exports 或者 module.exports 来导出需要暴露的接口
+		<script type="text/javascript">
+			module.exports = {
+				add : function(a,b){
+					console.log(a+b);
+				}
+			}
+		</script>
+		④.浏览器不兼容CommonJs，原因是浏览器缺少module、exports、require、global四个环境变量。如要使用需要工具转换
+		⑤.CommonJS采用同步加载不同模块文件，适用于服务器端的。因为模块文件都存放在服务器的各个硬盘上，读取加载时间快，适合服务器端，不适应浏览器。
+
+	2.AMD
+		①.AMD规范是异步加载模块，允许指定回调函数。等模块异步加载完成后即可调用回调函数。
+		②.AMD得意的产出就是require.js(AMD依赖前置，提前加载依赖)
+		③.AMD的核心思想就是通过define来定义一个模块，然后使用require来加载一个模块。
+		④.产物require.js，提前加载所有依赖，方可使用(定义主入口文件: data-main="main.js")
+		<script type="text/javascript" src="./js/require.js" data-main="main.js"></script>
+		模块加载
+		<script type="text/javascript">
+			// require.js 的基础配置
+			require.config({
+				baseURI : "./js",	// 配置基础路径(对所有require生效)
+				paths : 			// 配置映射文件路径(简称),不要(.js)
+				{
+					"jquery":"jquery",	
+					"math":"math",
+				}
+			})
+			require(['jquery','math'],function($,math){
+				console.log($());
+				console.log(math.add(1,2));
+			})
+		</script>
+		模块定义
+		math.js
+		<script type="text/javascript">
+			define(["data"],function(data){
+				console.log(data.value);
+				function add(a+b){
+					console.log(a+b);
+				}
+				return {
+					add : add;
+				}
+			});
+		</script>
+		data.js
+		<script type="text/javascript">
+			define(function(){
+				return {
+					value : "value",
+				}
+			});
+		</script>
+
+	3.CMD
+		①.CMD异步加载
+		②.跟AMD的主要区别在于，AMD依赖前置，提前加载依赖。而CMD就近加载，按需加载
+		③.CMD的核心思想就是通过define来定义一个模块，然后使用require来加载一个模块。
+		④.产物seaJs，跟requireJs使用有些相似
+		<script type="text/javascript" src="./js/sea.js"></script>
+		sea.config.js
+		<script type="text/javascript">
+			alias: 	// 配置模块文件路径
+			{						 
+				'math' : "./math.js",
+			}
+		</script>
+		demo.js
+		<script type="text/javascript">
+			// use 导入并执行 math.js
+			seajs.use("math.js");
+		</script>
+		math.js
+		<script type="text/javascript">
+			// require 用来导入模块
+			// exports 用来导出模块
+			define(function(require,exports,module){
+				var module = require("module_name.js");
+				console.log(module);
+			})
+		</script>
+		module_name.js
+		<script type="text/javascript">
+			define(function(require,exports,module){
+				var value = "value";
+				exports.module_name = value;
+			});
+		</script>
+
+	4.ES6
+		①.ES6自带模块化
+		②.通过babel将不被支持的import编译为当前受到广泛支持的 require。
+		③.使用 import 关键字引入模块
+		demo.js
+		<script type="text/javascript">
+			import jquery from './class.js';
+		</script>
+		④.通过 export 关键字导出模块
+		class.js
+		<script type="text/javascript">
+			export class show{
+				constructor(){
+					this.value = "value";
+				}
+				getValue(){
+					return this.value;
+				}
+			}
+		</script>
+	
+	5.UMD
+
+三.前端工程化
+	1.如何实现前端工程化?
+		A.开发 -> B.测试 -> C.部署(上线)
+	
+	2.怎样符合前端工程化方案的要求?
+		①.开发规范
+		②.模块化开发
+		③.组件化开发
+		④.组件仓库
+		⑤.性能优化
+		⑥.部署
+		⑦.开发流程
+		⑧.开发工具
+
+四.webpack
+	1.四个核心模块以及概念
+		①.入口(entry)
+		入口点是指 webpack 应该使用那个模块,来作为够哦见其每部依赖图的开始.进入起点后,webpack会找出那些模块和库是入口起点(直接和间接)依赖的.默认入口为 ./src/index.js
+		
+		②.输出(output)
+		告述webpack在哪里输出,它创建的bundles,以及如何命名这些文件,默认值为 ./dist 整个应用程序结构,都会被编译到你指定输出路径的文件夹中,默认出口为 ./dist/main.js
+		
+		③.loader
+		loader 让 webpack 能够区处理那些非 JavaScript 文件 (webpack 自身只理解 JavaScript ).loader 可以所有类型的文件转换为 webpack 能够处理的有效模块,然后你就可以利用webpack 的打包能力,对他们进行处理
+		
+		④.插件(plugins) 
+		插件的范围包括,从打包优化和压缩,一直到重新定义环境中的变量,插件接口功能及其强大,可以用来处理各种各样的任务.
+
+	2.项目的创建
+		①.默认项目
+		首先创建一个包含src文件夹以及src下的index.js文件的文件夹
+		project
+			src
+				index.js
+		然后初始化项目
+		npm init 生成package.json(项目说明书)文件
+		再安装项目插件到开发环境中
+		npm install webpack --save-dev
+		npm install webpack-cli --save-dev
+		生成 dode_modules 文件夹,packge-lock.json文件 
+		最后编译项目 运行 webpack 命令
+		生成 ./dist/main.js
+		
+		②.自定义项目
+		首先 npm init 初始化项目
+		然后 创建webpack.config.js 文件,并进行配置
+		再后 安装插件
+		npm install webpack --save-dev
+		npm install webpack-cli --save-dev
+		最后编译项目 运行 webpack 命令 
+	
+	3.webpack.config.js文件的配置
+	<script type="text/javascript">
+		module.exports = {
+			// entry : 配置项目入口文件的地方
+			// main  : 程序的入口文件
+			entry :{
+				main : './main/main.js'
+			},
+			// output : 配置项目的出口文件
+			// path   : 出口文件的路径
+			// filename : 出口文件的文件名
+			output : {
+				path:__dirname + '/out',
+				filename : 'demo.js'
+			},
+			// mode配置项目的模式
+			// development : 开发模式
+			// production  : 生产模式
+			mode:'development',
+		}
+	</script>
+
+五.前端自动化构建工具
+	1.webpack
+	2.gulp
+	3.grunt
+	4.fis3

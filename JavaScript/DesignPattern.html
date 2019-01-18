@@ -1,0 +1,36 @@
+<meta charset="utf-8">
+<title>DesignPattern(设计模式)</title>
+
+一.注册模式
+<script type="text/javascript">
+	var state = createStore({"type":"text","value":"all"});
+	function createStore(initState){
+		var state = initState || {},	// 状态
+			list = [];					// 函数数组
+
+		// 获取状态
+		function getState(){
+			return state;
+		}
+
+		// 修改状态
+		function dispatch(active){
+			return state[active["type"]] = active["value"];
+			list.forEach( function(value) {
+				value();
+			});
+		}
+
+		// 事件注册,当状态改变时,执行注册的事件
+		function subScribe(hander){
+			list.push[hander];
+		}
+
+		// 返回状态管理的接口
+		return {
+			getState  : getState,
+			dispatch  : dispatch,
+			subScribe : subScribe;
+		}
+	}
+</script>

@@ -1,0 +1,497 @@
+<meta charset="utf-8">
+<title>你不知道的js</title>
+<!-- 原理篇 -->
+一.bind
+	1.改变函数this指向.
+	2.bind不会直接执行,而是返回一个改变了this指针后的函数.
+	3.bind的传参.当原函数的参数需要固定时,在bind的第二位开始传入参数即可,在运行返回值函数时,只需要传入第三个函数即可.一旦参数进行固定便不可更改.
+	4.当以一个参数为null,那么this指向为window.
+	5.当你 new 这个返回,函数时,此返回函数和正常构造函数没什么区别,但是bind传入的参数还在.
+	<script type="text/javascript">
+		var val = 0;
+		var obj =  {"val":"val"}
+		function test(x,y) {
+			console.log(this.val);
+			console.log(x);
+			console.log(y);
+		}
+		test(10,20);	//执行结果: 0 10 20
+		var newTest = test.bind(obj);
+		newTest(10,20);	//执行结果: val 10 20
+		var newTest2 = test.bind(obj,"10");
+		newTest2(20);	//执行结果: val 10 20
+		newTest2(10,20);//执行结果: val 10 10
+		new newTest2();	//执行结果: undefined 10 undefined
+		var newTest3 = test.bind(obj,"10","20");
+		new newTest3();	//执行结果: undefined 10 20;
+	</script>
+	6.bind详解(复刻)
+	<!-- 不考虑new,与原型链 -->
+	<script type="text/javascript">
+		function.prototype.newBind = function(target){
+			//判断对方是否传入对象,如果没有这默认指向window,模拟传入null.
+			var target = target || window;
+			
+			//保存this,为调用当前函数的函数(对象).
+			var that = this;
+			
+			//保存原函数的参数列表.第0位为指针对象,所以从第一位开始截取.
+			var args = [].sclice.call(arguments, 1); 
+
+			//返回一个方法.bind默认返回的为重构this指向的函数.
+			return function(){
+
+				//获取调用时传入的参数列表
+				var arg = [].sclice.call(arguments,0);
+
+				//使用apply,因为它的参数为数组.
+				//使用count把闭包数据 args(调用bind时传入的不可更改参数,在前) 与 arg(返回值函数调用时传入的参数合并,在后) 传入到函数的参数处,实现了默认参数与默认参数的不可更改.
+				that.apply(target,args.concat(arg);
+			}
+		}
+	</script>
+	<!-- 完美方案 -->
+	<script type="text/javascript">
+		Function.prototype.newBind = function(target){
+			//判断对方是否传入对象,如果没有这默认指向window,模拟传入null.
+			var target = target || window;
+			
+			//保存this,为调用当前函数的函数(对象).
+			var that = this;
+			
+			//保存原函数的参数列表.第0位为指针对象,所以从第一位开始截取.
+			var args = [].slice.call(arguments, 1); 
+
+			//1.考虑到原型链的情况,当函数拥有原型链,返回值函数应该同样同样拥有原函数的原型链.避免修改新函数的原型时,修改到原来的原型.
+			 var origin = function(){}
+			 
+			//函数F为返回值函数.
+			var F =  function(){
+
+				//获取调用时传入的参数列表
+				var arg = [].slice.call(arguments,0);
+
+				//使用apply,因为它的参数为数组.
+				//使用count把闭包数据 args(调用bind时传入的不可更改参数,在前) 与 arg(返回值函数调用时传入的参数合并,在后) 传入到函数的参数处,实现了默认参数与默认参数的不可更改.
+				//判断返回值函数是否被new.
+				return  that.apply(this instanceof origin ? target : target ,args.concat(arg));
+			}
+			
+			//2.把调用bind函数的函数的原型取出来保存.并赋值给新的函数的原型.
+			//3.取出来的原型赋值给新函数的原型.
+			origin.prototype = that.prototype;
+			F.prototype = new origin();
+			 
+			return F;
+		}
+		// var newTest1 = test.newBind(obj,10,20);
+		// newTest1(1,2);	//执行结果: val 10 20
+		// var t1 = new newTest1();
+			
+		// 第一步执行,
+		// 里面的target = obj;
+		// 里面的var that = this的是test,
+		// args的值为[10,20]
+		// 并把函数F返回(这是一个闭包函数,函数内部用到了外部的 target,that和args).
+		
+		// 第二步执行,
+		// this instanceof that 
+		// 此时的this是window 所以结果为false ,
+		// 取到闭包参数target的值为obj.
+		// 然后执行that.apply()
+		// 得到的结果就是
+		// val取得是obj内val的值.
+		// x,y取得是闭包中的args里面的值10.20.
+		// 结果val 10 20 .
+		
+		// 第三步执行,newTest1()
+		// 此时的this指向为F函数.
+		// 在第一步执行时已经把F的原型指向test的原型.
+		// 所以this instanceof that是成立的.
+		// 此时的this指向F函数.
+		// F函数没有val所以.
+		// 执行结果val为undefined.
+		// 至于参数继续取,第一步闭包时存入的值. 
+	</script>
+二.浏览器线程
+	1.js引擎线程
+		①.解释执行js代码,用户输入,网络请求.
+	2.GUI线程
+		①.绘制用户界面,与js主线程是互斥的.
+	3.http网络请求线程(异步线程)
+		①.处理用户的get,post等请求,等返回结果后将回掉函数推入任务队列
+	4.定时触发器线程(异步线程)
+		①.setTimeut,setInterval等待时间结束后,把执行函数推入任务队列中
+	5.浏览器事件处理线程(异步线程)
+		①.将click,mouse等交互时间发生后,将这些事件放入事件队列中.
+	6.同步任务
+		①.代码没有执行的时候执行栈为空
+		②.foo函数执行时,创建了一帧,这帧中包含了形参、局部变量(预编译过程),然后把这一帧压入栈中.
+		③.然后执行foo函数内代码,执行bar函数
+		④.在执行bar函数之前,创建新的帧,同样有形参,局部变量,压入栈中(实际就是执行bar函数之前的预编译环节).
+		⑤.然后执行bar函数,bar函数执行完毕,弹出栈
+		⑥.foo函数执行完毕,弹出栈
+		⑦.执行栈为空
+		执行栈其实就相当于js主线程
+		<script type="text/javascript">
+			function foo(x){
+				console.log(x)
+				function bar(y){
+					console.log(y)
+				}
+				bar(20);
+			}
+			foo(10);
+		</script>
+	7.异步任务
+		①.Ajax 进入 Event Table,注册回掉函数success
+		②.执行consol.log("run");
+		③.ajax事件完成http网络请求线程把任务放入Event Queue中
+		④.主线程(调用栈)读取任务下执行success函数
+		<script type="text/javascript">
+			$.ajax({
+				url: '#',
+				data: {},
+				success:function(data){
+					console.log(data)
+				}
+			})
+			console.log('run')
+		</script>
+		⑤.setTimeout
+			setTimeout的等待时间结束后,并不是直接执行的而是先推入浏览器的一个任务队列,在同步队列结束后再依次调用任务队列中的任务.
+			setTimeout(function(){},0),js主线程中的执行栈为空时,0毫秒实际也达不到的,根据html标准,最低4毫秒
+		⑥.setInterval是每隔一段时间把任务放到Event Queue之中.
+		⑦.异步任务的详解
+			i. 		如setTimeout和setInterval,任务一开始时进入到Event Table中,当延迟(定时)时间结束后,把定义的function放入到Event Queue(js执行队列)中,当js栈(主线程)为空时,
+			按照队列先进先出的规则来执行.
+			ii. 	如ajax,当ajax任务被调用时,把ajax任务放入到Event Table中,进行http请求.当http请求结束,更具ajax返回相应的函数(success:function(){}||error:function(){}),
+			添加到Event Queue之中,当js栈(主线程)为空时,按照队列先进先出的规则来执行.
+			iii. 	如事件(click,mouse......),当dom元素进行事件注册时,把dom对应的事件函数放入Event Queue之中,当事件触发时,把事件函数放入到Event Queue中,当js栈(主线程)为空时,
+			按照队列先进先出的规则来执行.
+		⑧.Event Table,js主线程外的其它线程(浏览器事件处理线程,定时触发器线程,http网络请求线程).
+		⑨.
+三.call
+	<script type="text/javascript">
+		var obj = { val: "obj" };
+		var val = "window";
+		function demo(){
+			console.log(this.val);
+		}
+		// 这里调用domo的call方法改变demo的this指向为obj
+		// 等同于obj.demo(),obj调用demo方法,这时dome中的this就默认指向了obj.
+		demo.call(obj);
+		// 由此可以得到以下方法
+		Function.prototype.call = function (obj){
+			//不传入东西默认指向window.
+			var obj = obj || window,
+				arr = [];
+			
+			// 由于函数调用的call函数,所以这里的this就是调用函数,给obj函数一个fun属性,值为调用call函数的函数,再去执行obj对象的fun函数,
+			// 里面的this指向当然就是obj(传入对象)了.最后再删除fun函数,从而不去对obj对象产生影响.
+			obj.fun = this;
+
+			for(var i = 1 ;i<arguments.length;i++){
+				arr.push("arguments["+i+"]");
+			}
+			var val = eval("obj.fun("+arr.join(",")+")");
+			delete obj.fun;
+			return val;
+		}
+	</script>
+四.apply
+	<script type="text/javascript">
+		function apply(obj,arr){
+			var obj = obj || window,
+				val;
+			obj.fun = this;
+			if(!arr){
+				val = obj.fun();
+			}else{
+				var newArr = [];
+				for(var i = 0; i < arr.length ;i++){
+					newArr.push("arguments["+i+"]");
+				}
+				 = eval("obj.fun("+newArr.join(",")+")")
+			}
+			delete obj.fun;
+			return val;
+		}
+	</script>
+<!-- 函数编程篇 -->
+一.纯函数
+	1.定义:
+		①.不依赖与任何外部变量,
+		②.不影响任何外部变量.
+		③.一定拥有返回值
+	2.作用:
+		①.更好得管理全局变量,尽量得避免对全局变量的修改从而产生得bug.
+		②.更好得管理状态,使得可预测性增强,降低代码管理的难度.
+	3.应用:
+		①.考虑到引用值得存在,尽量使用深度克隆来处理数据.
+		②.数据得处理以及返回绝对不会影响到外部变量.
+二.函数记忆
+	1.概念:
+		①.记忆一个函数,当传入一个参数时得到的结果.当第二次调用这个函数时,假如传入参数相同于以往,直接获取结果.提高效益,牺牲内存.
+	2.实现
+		<script type="text/javascript">
+			function jc(x){
+				if(x==0 || x ==1){
+					return 1;
+				}
+				return x*jc(x-1);
+			}
+			// memorize [ˈmɛməˌraɪz] : 记忆存储
+			function memorizeFun(fun){
+				var cache = {};
+				return function(){
+					// arguments.length 					传入的参数的个数
+					// Array.prototype.join.call(arguments) 传入的参数列表组成的字符串
+					// 形成了为一标识key
+					var key = arguments.length + Array.prototype.join.call(arguments);
+					if(cache[key]){
+						return cache[key];
+					}else {
+						cache[key] = fun.apply(this,arguments);
+						return cache[key];
+					}
+				}
+			}
+		</script>
+三.柯里化
+	1.定义
+		①.在计算机科学中，柯里化（Currying）是一种将使用多个参数的一个函数,转换成一系列使用一个参数的函数的技术.
+	2.用途
+		①.简化代码结构,提高系统的维护性.
+		②.一个方法,只有一个参数,强制了功能的单一性,很自然就做到了功能内聚.降低耦合.
+	3.优点
+		①.降低代码重复,提高代码的适应性.
+	4.实现
+	<script type="text/javascript">
+		function demo(a,b,c,d){
+			return a+b+c+d;
+		}
+		// 固定参数的柯里化函数
+		function fixedParamsCurry(fun){
+			var _agrs = [].slice.call(arguments,1);
+			return function(){
+				var _arg = [].slice.call(arguments,0);
+				return fun.apply(this,_agrs.concat(_arg));
+			}
+		}
+		// 非固定参数的柯里化函数
+		function curry(fun,length){
+			// (函数名)fun.length 返回值为该函数的形参列表个数.
+			// 所以第一次 length 存储了柯里化函数之前的,函数的所需求的参数
+			// 之后则是传入的期望的所需求的参数的个数.
+			var length = length || fun.length;
+			// 返回进行处理后的柯里化函数
+			return function(){
+				// 判断当函数执行时，参数个数小于需求参数个数时，返回一个柯里化函数，让其可以继续传参调用，直到参数足够经行执行。
+				if(arguments.length < length ){
+					// 在参数个数不够的情况下,保留所有已经传入的参数(以前调用的和当前调用的).
+					// combined [kəmˈbaɪnd] : 结合
+					var combined = [fun].concat([].slice.call(arguments));
+					// 调用固定的参数柯里化函数,返回值为函数(存储了上次以前的所有参数),此函数可以直接调用.固定参数的柯里化函数,的返回补全剩余参数,
+					// 但非固定柯里化函数不用,接下来把此函数变为非固定柯里化函数,进行返回.
+					// 由此当参数不全时,返回值一直是非固定柯里化函数,参数足够时进行执行.
+					// 
+					// 这么说吧:当第一次执行柯里化函数的返回值参数后,fixedParamsCurry.apply(this,combined),length-arguments.length的返回值,
+					// 假设length = 4 ,第一次给了1个参数,那么固定函数的返回值就是一个4-1=3,需要3个函数的固定的平常函数了.
+					// 此时把这个函数再封装为非固定的柯里化函数进行返回,等待调用,如此返回,就实现了,函数的柯里化. 
+					return curry(fixedParamsCurry.apply(this,combined),length-arguments.length);
+				}
+				//  判断当函数执行时，原函数的所需求的参数等于或大于，所需求的参数时，执行该函数。
+				else 
+				{
+					fun.apply(this,arguments);
+				}
+			}
+		}
+	</script>
+四.数组扁平化
+	1.实现
+	<script type="text/javascript">
+		// flatten [ˈflætn:][ˈflætn:] : 变平
+		function flatten(arr){
+			var arr = arr || [],
+				len = arr.length;
+			for(var i =0;i<len.length;i++){
+				if(Array.prototype.tostring(arr[i]) == "[object Array]"){
+					arr = arr.concat(flatten(arr[i]));
+				}else{
+					arr.push[arr[i]];
+				}
+			}
+			return arr;
+		}
+		Array.prototype.flatten = function(){
+			var arr = [];					// 调用这个方法返回的也都是数组
+			this.forEach( function(val) {	// 对啊,能进入这个方法的都是数组.
+				Array.prototype.tostring(val) == "[object Array]" ? arr = arr.concat(var.flatten(val)): arr.push(val);
+			});
+			return arr;
+		}
+		function flatten(arr){
+			var arr = arr || [];
+			return arr.reduce(function(prev,next){
+				// array.concat(1); concat也可以拼接其它值到数组的最后一位.
+				return Object.prototype.toString.call(next) == "object Array" ? prev.concat(flatten(next)) : prev.concat(next);
+			},[])
+		}
+		const flatten = arr => arr.reduce((prev,next) => Object.prototype.toString.call(next) == "[object Array]" ? prev.concat(flatten(next)) : prev.concat(next), []);
+	</script>
+	2.arr.reduce(callback(previousValue,currentValue,index,array),[initialValue]);
+		callback （执行数组中每个值的函数，包含四个参数）
+			previousValue （上一次调用回调返回的值，或者是提供的初始值（initialValue））
+			currentValue （数组中当前被处理的元素）
+			index （当前元素在数组中的索引）
+			array （调用 reduce 的数组）
+		
+		initialValue （作为第一次调用 callback 的第一个参数。）
+五.惰性函数
+	1.用途
+		①.针对于优化频繁使用的函数.
+		②.函数库的编写,单例模式中
+	2.实现
+		①.当第一次调用后把,返回值存档,并把当前函数修改
+		②.使其直接返回存档值,当下次调用当前函数时,执行的是已经修改后的函数
+		③.但是由于闭包的原因.新的函数会使用闭包中已经存档号的值.
+		<script type="text/javascript">
+			function demo(){
+				var time = new Date().getTime();
+				demo = function(){
+					return time;
+				}
+				return time;
+			}
+		</script>
+		封装addEvent(事件绑定函数),使其成为一个可以记忆当前浏览器的函数,减少了if判断.
+		<script type="text/javascript">
+			function addEvent(dom , type ,handler){
+				if(dom.addEventListener){
+					dom.addEventListener(type ,handler,fasle);
+					addEvent = function(type ,handler,fasle){
+						dom.addEventListener(type ,handler,fasle);
+					}
+				}else{
+					dom.attachEvent("on"+type ,handler);
+					addEvent = function(type ,handler,fasle){
+						dom.attachEvent("on"+type ,handler);
+					}
+				}
+			}
+		</script>
+六.函数组合
+	1.左倾
+		<script type="text/javascript">
+			// 数据向左传递
+			function demo(x,y){
+				return function(z){
+					return x(y(z));
+				}
+			}
+			// 函数组合
+			function compose(){
+				// _args代表传入的函数.
+				// _len传入的函数参数个数
+				var _args = Array.prototype.slice.call(arguments),
+					_len  = _args.length-1;
+					// 返回值为函数,参数为这个函数组合要处理的数据.
+				return function(parames){
+					// resule 值存储了每次函数执行时的返回值
+					// 声明时,并赋值,为最后一个函数处理完该数据的值.
+					// _args[len]表示了从右向左的所有函数
+					// 每次把返回值赋值给result,并传递给下一个函数
+					var resule = _args[_len](parames);
+					while(_len--){
+						resule = _args[_len](resule);
+					}
+					return resule;
+				}
+			}
+			function compose(){
+				var _args = Array.prototype.slice.call(arguments);
+				return function(val){
+					// reduceRight代表逆序遍历
+					return _args.reduceRight(functio(prev,next){
+						return next(prev);
+					},val);
+				}
+			}
+			const compose = (...args) => x => _args.reduce( (prev,next) => next(prev) ,val);
+		</script>
+	2.通道
+		<script type="text/javascript">
+			function pipe(){
+				var _args = Array.prototype.slice.call(arguments);
+				return function(val){
+					// 正序遍历
+					return _args.reduce(functio(prev,next){
+						return next(prev);
+					},val);
+				}
+			}
+		</script>
+<!-- 实用篇 -->
+一.节流
+	1.定义:
+		①.预订一个函数只有在大于等于一个执行周期时才执行,周期内调用不执行(好像水滴攒到一定重量才会落下一样).
+	2.场景
+		①.窗口调整
+		②.页面滚动
+		③.抢购疯狂点击.
+	3.实现(时间节流)
+	<script type="text/javascript">
+		//  throttle : [ˈθrɑ:tl] 节流
+		function throttle(fun,time){
+			var lastTime = 0;
+			var nowTime;
+			return function(){
+				startTime = new Date().getTime();
+				if(nowTime - lastTime > time){
+					// arguments[0] 默认为事件对象
+					// 谁调用的函数默认this就是谁.
+					fun.apply(this,arguments);
+					lastTime = nowTime;
+				}
+			}
+		}
+		function shopping(e){
+			// 实现一次点击事件
+		}
+	</script>
+二.放抖
+	1.定义:
+		①.函数放抖就是在函数需要频繁触发情况时,只有足够空闲的事件.才会执行一次(好像公交司机等人都上站后才会出战一样).
+	2.场景
+		①.实时搜索
+		②.拖拽
+	3.实现:
+		<script type="text/javascript">
+			// debounce [dɪ'baʊns] : 放抖
+			// handler [ˈhændlɚ] : 处理程序
+			// delay [dɪˈle] : 延迟
+			function debounce(handler , delay){
+				var timer;
+				return function(){
+					cleraSetTime(timer);
+					// 当前函数,才是事件执行时的function
+					// 所以this才是事件处理对象的this
+					// arguments[0] 才是事件处理对象,而不是定时器内的.
+					// 把真正的this对象传给,和事件对象传递给执行函数
+					var _self = this,
+						_args = arguments;
+					timer = setTimeuot(function(){
+						// 这里的this时window.
+						handler.apply(_self,_args);
+					},delay);
+				}
+			}
+		</script>
+<!-- 数学篇 -->
+一.拖拽
+二.canvas(画布),扇形
+三.重叠
+四.鼠标位置判断
+

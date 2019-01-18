@@ -1,0 +1,378 @@
+<meta charset="utf-8">
+<title>Vue</title>
+一.数据绑定
+	1.vue dom挂载
+	<div id="id"></div>
+	<script type="text/javascript">
+		// new 一个vue对象 把 el(css表达式匹配到的dom元素) 挂载到vue上
+		// 此时的 id 为 id 的 div 就可以使用 vue 语法进行操作了 
+		new Vue({
+			el:"#id",
+			data：{
+				key ："value",
+			},
+			methods:{
+				fun_name(){},
+			}
+		})
+	</script>
+	2.数据绑定
+		①.{{}} 的数据绑定
+			{{}} 可以直接使用 vue data与methods属性对象上挂载的属性和函数
+			{{}} 可以进行一些简单的运算操作(加减乘除,三目，++，--等)
+			{{}} 内可以并切只可以使用vue对象上data与methods属性对象上挂载的属性和函数 
+			当vue.data.attr 属性值发生改变时，页面上与之对应值也会发生改变
+	3.v-on:click = "" / v-bind:attr = ""
+		""  === {{}}
+
+	4.每当页面被渲染一次，被vue挂载的dom就会重新执行一次
+
+
+二.指令
+	1.注册事件
+		①.事件注册(v-on:event="fun"  === @event="fun"  : 简写形式)
+			<!-- <input type="text" v-on:enent="fun_name" > -->
+			v-on:event="fun"	
+		②.事件对象
+			<!-- <input type="text" v-on:enent="fun_name($event)" > -->
+			v-on:event="fun($event)"	
+			vue 把 $event 作为事件对象的标记,不管放在哪一位作为参数,$event 都代表实参的当前dom事件对象
+		③.阻止 事件冒泡/默认事件 ( . 事件修饰符 )
+			v-on:event.stop.prevent
+		④.阻止默认事件
+			v-on:event.prevent
+		⑤.键盘输入事件修饰符(当用户按下 回车/空格/esc 时触发事件)
+			<!-- <input type="text" v-on:keyup.enter.space.esc = "fun" > -->
+			v-on:keyup.enter.space.esc = "fun" 
+		⑥.vue注册触发的事件,事件的this指向vue对象
+
+	2.定义只绑定一次(这里的value只会被赋一次值)
+		<!-- <p>{{value}}</p> -->
+		v-once				
+	
+	3.属性绑定(v-bind:href="link"  === :href="link"   : 简写形式)
+		<!-- <a v-bind:href="link" >baidu</a> -->
+		v-bind:href="link"	
+	
+	4.把属性值以innnerHEML的方式写到当前dom内
+		<!-- <p v-html="link-baidu"></p> -->
+		v-html="link-a"		
+
+	5.双向数据绑定(input值 与 vue 的 attr值 发生改变时会互相影响对方 )
+		<!-- <input type="text" v-model = "attr" > -->
+		v-model = "attr" 
+
+	6.隐藏显示dom元素(为真时显示此dom,为假时不显示此dom.不显示:即页面不纯在此dom结构,删除此dom结构)
+		v-else-if/v-else(找距离自己最近的if进行匹配执行)
+		<!-- <template></template> -->
+		template标签不会显示在dom结构中
+		<!-- <div v-if="boolean" ></div> -->
+		v-if="boolean"
+		<!-- <div v-else-if="boolean" ></div> -->
+		v-else-if="boolean"
+		<!-- <div v-else></div> -->
+		v-else
+		
+		像这种情况,在结构(dom元素)相同的情况下.
+		vue为了性能考虑,会复用dom,说以会出现,当输入完用户名,跳转到密码时,input输入值还存在.
+		要解决这种问题,需要给dom结构独一无二的key即可
+		<!-- <template v-if="show" >
+			<input type="text" placeholder="请输入用户名" key="username" >
+		</template>
+		<template v-else >
+			<input type="text" placeholder="密码" key="password">
+		</template> -->
+
+	7.隐藏显示dom元素(display:none 的方式显示和隐藏元素);
+		<!-- <div v-show="boolean"></div> -->
+
+	8.数据遍历
+		data:vue注册的数据
+		value:遍历的数据值
+		key:索引(下标)
+		index:当循环值为对象时index参数为下表
+		v-for="value in data"
+		<!--
+		<template v-for="value in list" >
+			{{value}}<p><span v-for="(val,key,index) in value">{{val}}({{key}})[{{index}}]</span></p>
+		</template>
+		
+		// 循环10次
+		<p  v-for="num in 10" ></p>
+
+		// 遍历字符串
+		<p  v-for="value in 'string'" ></p>
+		-->
+
+	9. v-model 指令来实现双向数据绑定
+		<!-- <input v-model="message"> -->
+
+
+三.Vue对象
+	1.el 		用于挂载dom元素
+		①.利用css选择器,选择dom,并且自会选中第一个
+	2.data 		用于注册vue属性
+		①.注册vue绑定的属性,vue把data上注册的属性挂载到vue上.
+	3.methods 	用于注册vue事件
+		①.注册vue绑定的函数,vue把methods上注册的函数挂载到vue上.
+		②.vue注册触发的事件,事件的this指向vue对象
+	4.computed 	用于注册计算属性的事件(偏向同步)
+		①.这里会注册一个智能的函数,vue会分析注册的函数,当函数内vue上挂载的变量值发生变化时,才会执行这个函数
+		②.与computed注册的函数不一样,当需在dom中做执行操作时,并不需要 函数执行符"()" ,{{fun}},写函数名即可.
+		③.在computed中的异步事件会执行一次,第二次不会执行(前提是要 计算/监听 的属性,在异步函数体内)
+		④.当computed中异步函数体外的 监听属性 ,值发生变化时,这个异步函数每次都会执行.
+		⑤.computed需要先注册,注册后才会生效.(注册一个监听事件)
+		⑥.computed只认this.attr.
+	5.watch 	监听属性:vue.data.attr(异步时可以生效)
+		①.当监听的属性发生变化时,执行后面的函数,后面的函数是不是异步都一样.
+		②.watch是触发事件,相当于触发器,值改变便执行.
+	6.template 	自定义模板
+		①.在 template 后写自定义模板
+		②.利用 vue 对象 vm.$mount("dom") 函数来替换页面上的dom
+		③.这里定义的 template 模板,在渲染时不遵循html的语法规范,即table内除了放tr还可以放div,不会被渲染到table外
+	7.beforeCreate() 	数据绑定前,对数据和函数进行初始化后
+	8.created() 		进行数据绑定后
+	9.beforeMount() 	页面渲染之前,(生成/创建/选择/关联)要编译的模板之后
+	10.mounted() 		把vue模板渲染到页面后
+	11.beforeUpdate() 	修改数据前
+	12.updated() 		修改数据后
+	13.beforeDestroy() 	解除数据绑定前
+	14.destroyed() 		解除数据绑定后
+	15.filters 			过滤器(被用作一些常见的文本格式化。由"管道符"指示)
+		<!-- 在两个大括号中 -->
+		<!-- {{ message | capitalize }} -->
+		<!-- 在 v-bind 指令中 -->
+		<!-- <div v-bind:id="rawId | formatId"></div> -->
+
+
+	<script type="text/javascript">
+		new Vue({
+			el:"#id",
+			template : "<div></div>",
+			data:{
+				attr:"value"
+			},
+			methods:{
+				fun(){}
+			},
+			computed:{
+				fun(){},
+				site: {
+			      // getter
+			      get: function () {
+			        return this.name + ' ' + this.url
+			      },
+			      // setter
+			      set: function (newValue) {
+			        var names = newValue.split(' ')
+			        this.name = names[0]
+			        this.url = names[names.length - 1]
+			      }
+			    }
+			},
+			watch{
+				attr:function(){},
+				attr(){}	
+			},
+			filters:{
+				capitalize(value){
+					if (!value) return ''
+			      	value = value.toString()
+			      	return value.charAt(0).toUpperCase() + value.slice(1)
+				}
+			}
+		});
+	</script>
+
+四.样式
+	1. :class
+		①.<!-- <div class="demo" :class="{className:boolean}" ></div> -->
+			:class 后跟对象,对象是class名 : 布尔值的格式,当布尔值为真,返回此class,拼接到dom上class后
+		②.<!-- <div class="demo" :class="attr" ></div> -->
+			直接使用vue上注册的属性值
+		③.<!-- <div class="demo" :class="[attr,{className:boolean}]" ></div> -->
+			可以是一个数组,添加多个样式
+	2. :style
+		①. <!-- <div :style="{'backgrount-color':'red'}" ></div> <div :style="{backgrountColor:'red'}" ></div> -->
+			值是key:value的形式,因为是js的形式,要以js的css样式书写,或者加上引号以css的形式写.
+		②.<!-- <div :style="{backgrountColor:red}" ></div> -->
+			他的值同样可以用vue定义的属性的值
+		③.<!-- <div :style="[attr,{backgrountColor:red}]" ></div> -->
+			同样可以是一个数组
+
+五.Vue的DOM对象vm
+	1.$refs
+		<!-- <button ref="mybutton" ></button> -->
+		①.利用 ref 来注册do元素
+		②.在 $refs 对象上获取注册的dom元素
+		③.相同的ref元素取最后一个	
+	2.$mount();
+		①.vm.$mount("dom"):在vue实例生成后挂载vue实例
+		<script type="text/javascript">
+			var vm = new Vue({});
+			vm.$mount("#id");
+		</script>
+六.Vue对象
+	1.Vue.component("",{}) 	组件
+	<script type="text/javascript">
+		// page 	css选择器
+		// template 组件模板的内容
+		// 定义了一个可以复用的组件
+		// <page><page>
+		// 组件自在挂载了vue的dom上才会生效
+		// 组件会完全替换被css选择器选择的dom元素
+		Vue.component("page",{
+			template:"<p></p>"
+		})	
+	</script>
+
+七.vue.cli是vue的命令行工具用来初始化一个模板项目
+	1.安装 vue.cli ( nmp install -g vue-cli ) 
+	2.初始化vue项目
+		vue init Template projectname
+		Template 有三种类型
+		①.官方模板 		
+			(
+			1.webpack 				一个功能齐全的Webpack + vue-loader设置，具有热重载，linting，测试和css提取功能。
+			2.webpack-simple 		一个简单的Webpack + vue-loader设置，用于快速原型设计
+			3.browserify 			全功能Browserify + vueify设置用热重装载，掉毛＆单元测试。
+			4.browserify-simple  	一个简单的Browserify + vueify设置，用于快速原型设计。
+			5.pwa 					基于webpack模板的vue-cli的PWA模板
+			6.simple 				单个HTML文件中最简单的Vue设置
+			)
+		②.github模板	(github项目地址/username/repo)
+		③.本地模板		(本地项目路径 | ~/fs/path/to-custom-template)
+
+八.组件
+	1.全局组件
+	全局主键只有在vue实例内在会生效
+	<script type="text/javascript">
+		// 定义/创建一个全局组件
+		// my-page : 标记名-组件名
+		Vue.component("my-page",{
+			template:"<div><p>demo</p></div>",
+			data(){
+				return {}
+			},
+		})
+	</script>
+	2.局部组件
+	只在当前vue实例内才会生效
+	<script type="text/javascript">
+		new Vue({
+			el:"#app",
+			cpmponents:{
+				"my-page":{
+					template:"<div><p>demo</p></div>"
+				}
+			}
+		})
+	</script>
+	3.单文件组件
+	<script type="text/javascript">
+		
+	</script>
+	4.模板语法
+		1.全局组件与局部组件都会遵循html的语法格式(例:table中不能直接放div)
+		2.is 把标签(dom元素)替换为指定的模板( <div is="my-page"></div> ),跳过html语法规则.
+		3.模板中的data是一个函数,返回值为一个对象(返回的对象即vue实例的data),这样可以做到数据的隔离
+		<script type="text/javascript">
+			Vue.component("my-page",{
+				template:"<div><p>demo</p></div>",
+				data(){ return {} },
+			})
+			// 假设返回的对象是一个公共的对象数据便会公共,当值发生改变会同时进行改变
+			var obj = {};
+			Vue.component("my-page",{
+				template:"<div><p>demo</p></div>",
+				data(){ return obj; },
+			})
+		</script>
+		4.props 自定义属性
+		相当于函数的参数
+		如下定义即可给模板的title赋值为 "标题" 在模板中使用{{title}}即可获取传入的值
+		传入的参数值不可修改,即使修改成功,修改后也会报错,且下次页面刷新值会还原(因为刷新后重新执行了赋值的语法)
+		假如想去改变这个值,最好把这个值赋值给当前vue组件的另一个属性,然后去用这个属性.
+		传入的参数要使用时,最好都把值在当前vue上存一下,使用这个被存过的.
+		入参可以定义输入参的数据类型
+		<!-- <my-page title="标题" ></my-page> -->
+		<script type="text/javascript">
+			Vue.component("my-page",{
+				template:"<div><p>{{title}}</p></div>",
+				data(){
+					return {
+						title_ : this.title;
+					}
+				},
+				props : ["title"],
+				props : {
+					title:{
+						// 字符类型
+						type:String,
+						// 默认值
+						default:"标题",
+						// 是否必填
+						required:true
+					},
+					age:{
+						type:Number,
+						default:0
+					}
+				}
+			})
+		</script>		
+
+.注意事项
+	1.当{{}}读取的值是一个数组时(当这个数组内的值发生变化,并不会触发vue的渲染,因为监听不到数值索引对应值发生了变化)
+	
+	2.for循环也会出现模板复用的问题
+	
+	3.Vue核心,数据绑定依赖于Object.defineProperty()
+	<script type="text/javascript">
+		var obj = {};
+		Object.defineProperty(obj, "key", {
+		  enumerable: false,
+		  configurable: false,
+		  writable: false,
+		  value: "static"
+		});
+		// configurable 
+		// 当且仅当该属性值为true时,该属性描述符才能够被改变,同时该属性也能从对应的对象上被删除.默认为false.
+		// 
+		// enumerable
+		// 当且仅当该属性值为true时,该属性才能够出现在对象的枚举属性中.默认为false.
+		// 
+		// value
+		// 该属性对应的值.可以是任何有效的JavaScript值(数值,对象,函数等),默认为 undefined.
+		// 
+		// writable
+		// 当且仅当该属性的writable为true时,value才能被赋值运算符改变.默认为false.
+		// 
+		// 存取描述符同时具有以下可选键值
+		// get
+		// 一个给属性提供 getter 的方法，如果没有 getter 则为 undefined.
+		// 当访问该属性时,该方法会被执行,方法执行时没有参数传入,但是会传入this对象
+		// (由于继承关系,这里的this并不一定是定义该属性的对象).
+		// 默认为 undefined。
+		// 
+		// set
+		// 一个给属性提供 setter 的方法，如果没有 setter 则为 undefined.
+		// 当属性值修改时,触发执行该方法.该方法将接受唯一参数,即该属性新的参数值.
+		// 默认为 undefined.
+		// 
+	</script>
+	创建vue
+	初始化数据和函数
+	初始化数据和函数后,数据绑定前 beforeCreate
+	数据绑定
+	数据绑定后,模板绑定前 created
+	模板绑定(模板绑定优先级 el> template/mount)
+	模板绑定后,页面渲染前 beforeMount
+	页面渲染
+	页面渲染后 mounted
+	数据修改前 beforeUpdate
+	数据修改
+	数据修改后 update
+	解除数据绑定前 beforeDestroy
+	接触数据绑定
+	解除数据绑定后 destroy

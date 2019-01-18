@@ -1,0 +1,332 @@
+<meta charset="utf-8">
+<title>正则表达式</title>
+一. \ 反斜杠
+	1. \ 会强制把字符串后面的字符强制转换为字符串
+	2. \ 配合其他字母拥有特别的含义(\n:换行,\r:行结束,\t:制表符)
+	3. \ 在编程时通过\来实现字符串的换行,他会把字符串换行进行转译
+
+二.正则表达式创建方式
+	1.字面量
+		①./abc/	abc字符片段
+		<script type="text/javascript">
+			var reg = /abc/;
+			// reg.test(str) 判断str中是否有正则reg的片段
+			reg.test("abcd") // true;
+			reg.test("abdd") // true;
+		</script>
+		②.i(忽略大小写)
+		<script type="text/javascript">
+			var reg = //i : ignreCase (忽略大小写);
+		</script>
+		③.(全局匹配)
+		<script type="text/javascript">
+			// 不加g永远自会匹配到第一个
+			var reg = //g : global (全局匹配);
+		</script>
+		④.(多行匹配)
+		<script type="text/javascript">
+			var reg = //m : multiline(多行匹配);
+			var reg = /^a/gm;
+			var str = "asdwdd\nasd";
+			str.match(reg); // ["a", "a"]
+		</script>
+	2.new 
+		①.var reg = new RegExp("abc","igm");
+		<script type="text/javascript">
+			// abc : 表示要匹配的正则内容
+			// img : 表示正则匹配规则
+			var reg = new RegExp("abc","igm")
+		</script>
+		②.new 与 不new
+		<script type="text/javascript">
+			var reg = /abc/;
+			// reg 与 reg1 是两个不同对象
+			var reg1 = new RegExp(reg);
+			// reg 与 reg2 本质是一个对象
+			var reg2 = RegExp(reg);
+			// reg 与 reg3 是两个不同对象
+			var reg3 = RegExp(reg,"i");
+		</script>
+三.表达式
+	1.[] : 一个方括号表示一位
+	<script type="text/javascript">
+		// 全局匹配 一位数字
+		var reg = /[0-9]/g;
+		// 这一位为[]内部定义的集合中的一个
+		var reg = /[0123]/g;
+	</script>
+	2.[^]:在表达式内 ^ 代表非
+	<script type="text/javascript">
+		
+	</script>
+	3.()
+		①.() 表达式
+		②.| 或则
+
+四.元字符
+	1. . 单个字符,除了换行和行结束符
+	2. \w === [0-9A_z_]  === [0-9A_Za_z_]  === [\dA_Za_z_] 
+	3. \W === [^0-9A_z_] 
+	4. \d === [0-9]
+	5. \D === [^0-9]
+	6. \s(空白字符) === [\t\r\n\v\f ] : 最后有一个空格 (\v:垂直制表符)(\f:换页符)
+	7. \S === [^\t\r\n\v\f ]
+	8. \b(单词边界)    ("abc def gh" 这个字符串有6个单词边界)
+	<script type="text/javascript">
+		// 匹配abc 并且abc左边为单词边界.
+		var reg = /\babc/;
+		// 匹配abc 并且abc左右两边为单词边界.
+		var reg1 = /\babc\b/;
+	</script>
+	9. \B(非单词边界)
+	10. \u unicode
+		①.unicode编码是分层的
+		<script type="text/javascript">
+			// \u010000 - \u01ffff
+			// \u020000 - \u02ffff
+			// ......
+			// \u010000 - \u01ffff
+			// 一共16层
+			// 第一层默认忽略01(\u0000 - \uffff)
+		</script>
+五.量词(默认贪婪的)
+	1. + === {1,Infienty} : 至少一个到多个字符
+		①.n+ : 一到多个n字符
+	2. * === {0,Infienty} : 0到多个字符
+		①.n* : 0到多个n字符
+		<script type="text/javascript">
+			var reg = /\w*/g;
+			var reg1 = /\d*/g;
+			var str = "abc";
+			// 由于g是全局匹配,所以并不会匹配一次
+			// 当abc匹配完成后,在逻辑上并未结束,把*代表0次(即空)
+			// 所以会再匹配一个空并返回
+			str.match(reg);  // ["abc", ""]
+
+			str.match(reg1);  // ["", "","",""]
+		</script>
+	3. ? === {0,1} : 0到一个字符 
+		①.n? : 0到一个n字符
+	4.{x} : 固定x个字符
+		①.n{10} 十个n字符
+	5.{x,y} : x到y之间的个数的字符
+		①.n{5,10} 5到10个n字符(默认贪婪匹配:尽可能的匹配多)
+	6.{x,} : 最少x个字符
+		①.n{5,} 最少5个字符,最多没有上限
+	7.n$ 以n结尾的字符
+		①.$ : 代表结尾限定符
+	8.^n 以n开头的字符
+		①.^ : 代表开头限定符
+	9.?=n 匹配任何其后紧接指定字符串 n 的字符串
+		①.?=[a] 匹配后面紧跟为a的字符串
+	10.?!n 匹配任何其后没有紧接指定字符串 n 的字符串
+		①.?![a]  匹配后面紧接字符串不是a的字符串
+	11.量词只会作用于量词前面的一个字符/表达式
+
+六.RegExp函数
+	1.RegExp.test();
+
+	2.RegExp.exec();
+		<script type="text/javascript">
+			var reg = /ab/g;
+			var str = "ababababababa";
+
+			// console.log(reg.exec(str))的值
+			// ["ab", index: 0, input: "ababababababa"]
+			// "ab" 表示表达式匹配到的字符串
+			// index: 0 表示当前匹配到的字符串的首个字符的位置
+			// input : 正在进行匹配的字符串
+			// reg.lastindex 表示当前游标的位置,
+			// 当reg为全局的时,当执行完exec()
+			// lastindex位置会移到当前匹配到的字符串的最后一个字符的位置.
+			// 当匹配为null的时候会把lastindex移到0的位置上
+			// 非全局正则永远匹配第一个,lastindex不会变
+			reg.exec(str);
+
+			// console.log(reg.exec(str)) 
+			// 结果
+			// ["aabb", "a", "b", index: 0, input: "aabb"]
+			// "a" 代表第一个自表达式匹配的内容
+			// "b" 表示第二个子表达式匹配的内容
+			reg = /(\w)\1(\w)\2/;
+			str = "aabb";
+		</script>
+	3.string.match();
+		<script type="text/javascript">
+			var str = "aabb";
+			var reg = /(\w)\1(\w)\2/;
+			// 不加 g 结果(类似于exec)
+			// ["aabb", "a", "b", index: 0, input: "aabb"]
+			// 加 g 结果
+			// ["aabb"]
+			// 不在拥有累赘信息
+			console.log(str.match(reg));
+		</script>
+	
+	4.string.searec();	返回匹配到的字符串的位置,匹配不到返回-1
+	<script type="text/javascript">
+		var str = "ab";
+		var reg = /ab/;
+		var reg1 = /ab1/;
+		// 0 : 找到了位置为0
+		console.log(str.search(reg));
+		// -1 : 找不到
+		console.log(str.search(reg1));
+	</script>
+
+	5.string.split();
+	<script type="text/javascript">
+		var str = "asdddasdasdaaad";
+		var reg = /(\w)\1\1/;
+		// 返回值
+		// ["as", "d", "asdasd", "a", "d"]
+		// 当用到子表达式时,会在截断点返回子表达式中的内容. 
+		
+		console.log(str.split(reg));
+		str = "asdddasdasdaaad";
+		reg = /s/;
+		// 返回值
+		// ["a", "ddda", "da", "daaad"]
+		// 没有用到子表达式时,正常截断返回
+		console.log(str.split(reg));
+	</script>
+
+	6.string.replace();
+	<script type="text/javascript">
+		var str = "aa";
+		// 结果 : ba
+		// 字符串是不带全局匹配功能的.
+		console.log(str.replace("a","b"));
+
+		var str = "aa";
+		var reg = /a/;
+		// 结果 : ba
+		// 字符串是不带全局匹配功能的.
+		console.log(str.replace(reg,"b"));
+
+		var str = "aa";
+		var reg = /a/g;
+		// 结果 : bb
+		// 字符串是不带全局匹配功能的.
+		console.log(str.replace(reg,"b"));
+
+		var str = "caabb";
+		var reg = /(\w)\1(\w)\2/g;
+		// 结果 : cbbaaaa
+		// $ : 用来引用表达式中匹配到的值
+		// 把reg匹配到的值,替换为"$2$2$1$1$1$1"这里的值
+		// 假如想在$2$2$1$1$1$1这里写$的话 需要这样写 $$
+		// 两个$$在一起时前面的$代表转意的意思.
+		console.log(str.replace(reg,"$2$2$1$1$1$1"));
+
+		var str = "caabb";
+		var reg = /(\w)\1(\w)\2/g;
+		// $ : 第一个参数$,表示正则匹配到的值
+		// $1 : 第二个参数$1,表示第一个子表达式匹配到的值
+		// $2 : 第三个参数$2,表示第一个子表达式匹配到的值
+		// ... 依次类推
+		// 这个表达式的效果与上面相同
+		console.log(
+			str.replace(reg,function($,$1,$2){
+				return $2+$2+$1+$1;
+			})
+		);
+
+
+	</script>
+		
+
+七.反向引用
+	1.\1
+	<script type="text/javascript">
+		// \x x代表反向引用第几个表达式
+
+		// \1 == (\w)
+		var reg = /(\w)\1/;
+		// \1 == 第一个(\w)  \2 == 第二个(\w) 
+		var reg = /(\w)\1(\w)\2/;
+	</script>
+
+八.正向预查( ?= ?! )
+	<script type="text/javascript">
+		// 选择后面紧接着 b 字符的 a 字符
+		var reg = /a(?=b)/g;
+		var str1 = "a";
+		var str2 = "ab";
+		// null
+		console.log(str1.match(reg));
+		// ["a"]
+		console.log(str2.match(reg));
+	</script>	
+
+九.贪婪匹配/非贪婪匹配
+	1.贪婪匹配   : 尽可能的匹配的多(往多了匹配)
+	2.非贪婪匹配 : 尽可能的匹配的少(往少了匹配)
+	<script type="text/javascript">
+		var str = "aaaa";
+		// 在量词的后面添加 ? , 更改其匹配规则
+		var reg = /a+?/g;
+		// ["a", "a", "a", "a"]
+		str.match(reg);
+
+		var str = "aaaa";
+		// 在{}的后面添加 ? , 更改其匹配规则 
+		var reg = /a{1,}?/g;
+		// ["a", "a", "a", "a"]
+		str.match(reg);
+
+		var str = "aaaa";
+		// 在?的后面添加 ? , 更改其匹配规则
+		// 第一个代表量词,第二个代表贪婪匹配 
+		var reg = /a??/g;
+		// ["", "", "", "", ""]
+		str.match(reg);
+	</script>
+	3.默认匹配规则是贪婪匹配.
+
+十.需要在正则中转译的字符
+	1. ? + . { } ( ) \ / 
+	2. 当需要在正则中匹配这些字符时前面需要加 \ 转译
+
+
+
+拓展.
+	<script type="text/javascript">
+		// 判断一个字符串的首尾是否含有数字(首或者尾)
+		var reg = /^\d|\d$/g;
+		
+		// 判断一个字符串的首尾是否都含有数字
+		var reg = /^\d[\d\D]*\d$/g;
+		
+		// 在字符串字符串中,把 -小写字母 替换为 大写字母
+		var str = "the-frist-name";
+		var reg = /-(\w)/g;
+		str.replace(reg,function($,$1){
+			return $1.toUpperCase();
+		});
+
+		// 字符串去重
+		var str = "aaaaaabbbbbbbbccccccccc";
+		var reg = /(\w)\1*/g;
+		// abc
+		console.log(str.replace(reg,"$1"));
+
+		// 把 1000000000 进行 1.000.000.000 的记数法
+		var str = "1000000000";
+		// $ 结尾限定符,从结尾开始限定前面的表达式.
+		// ?=(\d{3})+ 一个后面有3个数字的空.
+		// (\B) 限定这个空不是单词边界
+		var reg = /(?=(\B)(\d{3})+$)/g;
+		str.replace(reg,".");
+
+		// 匹配a前面的空
+		var str = "cab";
+		var reg = /(?=a)/g;
+		str.replace(reg,".");
+
+		// 身份证第3位到倒数第三位
+		var str = "45879619970924464x"
+		var reg = /(\d{14})(?=\d[\dXx]$)/g;
+		console.log(str.replace(reg,"******"));
+
+	</script>

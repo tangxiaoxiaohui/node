@@ -1,0 +1,157 @@
+<meta charset="utf-8">
+<title>network(Internet)</title>
+一.网络请求
+	1.发送请求 www.baidu.com
+	2.浏览器进行 DNS解析
+	3.对真正的物理 ip(115.239.210.27) 地址进行到服务器的请求
+	4.进行3次沟通,握手
+	5.四次挥手
+
+二.封装 ajax  
+	1.Asynchronous( [e'sɪŋkrənəs] ) Javascript And XML(异步 Javascript 和 xml:用 Javascript 以异步的形式 操作 xml/json)
+	2.js 实现ajax
+	get
+	<script type="text/javascript">
+		// 1.获取一个ajax对象
+		var ajax = null;
+		// ajax对象兼容处理
+		if(window.XMLHttpRequest){
+			// 谷歌等浏览器
+			ajax = new new XMLHttpRequest(); 
+		}else {
+			// 兼容IE
+			ajax = new ActiveXObject('Microsoft.XMLHttp');
+		}
+		// 2.设置请求方式,地址,是否异步
+		// get 请求方式
+		// www.baidu.com 请求地址
+		// true 异步请求
+		ajax.open("get","www.baidu.com",true);
+		// 3.发送请求
+		ajax.send();
+		// 4.监听jajx的请求状态
+		// onreadystatechange 每当请求状态发生改变执行一次后面的函数
+		ajax.onreadystatechange = function(){
+			// readyState ajax请求状态
+			// readyState == 0  未初始化,未调用send方法.
+			// readyState == 1 	读取中,以掉send正在发送请求
+			// readyState == 2 	已读取,send方法执行完成,接收到全部响应内容
+			// readyState == 3 	交互中,正在解析响应内容
+			// readyState == 4 	完成,响应内容解析完成
+			if(ajax.readyState == 4){
+				// 服务器返回的状态吗
+				// 404	文件未找到
+				// 200	成功
+				// 500	服务器内部错误
+				// 304	资源未被修改
+				if(ajax.status == 200){
+					// responseText 服务器以字符串形式响应的数据
+					console.log(JSON.parse(ajax.responseText))
+					// responseXML 服务器以XML形式响应的数据
+					console.log(JSON.parse(ajax.responseXML))
+				}
+				// 服务器返回的状态文本信息
+				console.log(JSON.parse(ajax.statusText))
+			}
+		}
+	</script>
+	post
+	<script type="text/javascript">
+		var ajax = null;
+		if(window.XMLHttpRequest){
+			ajax = new new XMLHttpRequest(); 
+		}else {
+			ajax = new ActiveXObject('Microsoft.XMLHttp');
+		}
+		ajax.open("post","www.baidu.com",true);
+		// post 必须设置请求头
+		ajax.setRequestHeader("Content-type", 'application/x-www-form-urlemcoded')
+		// post 请求在这里进行数据的添加/传入/拼接
+		ajax.send('name=xiaohui&age=18');
+		ajax.onreadystatechange = function(){
+			if(ajax.readyState == 4){
+				if(ajax.status == 200){
+					console.log(JSON.parse(ajax.responseText))
+				}
+			}
+		}
+	</script>
+	
+
+三.同源策略
+	1.浏览器有一个很总要的概念--同源策略(same-Origin Policy).所谓同源是指,域名,协议,端口相同.不同的客户端脚本(javascript,ActionScript)在没明确授权的情况下,不能读写对方的资源.(简单来说,浏览器不允许包含在腾讯页面的脚本访问阿里巴巴页面的数据资源,会受到同源策略的限制)
+	2.协议(http/https)
+	3.域名(www.baidu.com)
+	4.端口(http:80/8080/https:443)
+	5.域名
+		①. .com 顶级域名
+		②. baidu.com (一)二级域名
+		③. zhidao.baidu,com (二)三级域名
+		④. www 二级域名前缀 表示万维网维护的
+		⑤. www.baidu.com 属于特殊的三级域名
+		⑥. zhidao.baidu.com 属于 百度自己维护的网络地址
+	6.域名解析(倒着解析)
+		①.先 .com
+		②.然后 baidu
+		③.最后 www
+
+四.实现跨域
+	1.Flash(不做讨论)	domain
+	2.服务器代理中转 : 	发请求到同源服务器,由同源服务器向其它服务器进行数据的获取并进行返回(例子,请求到服务器php,服务器php到其它服务器php).
+	3.document.domain(针对基础域名相同的情况) : 在各自域名的脚本下写入以下脚本 
+		bj.58.com  document.domain = '58.com'
+		tj.58.com  document.domain = '58.com'
+ 
+	4.jsonp :	拥有"src"这个属性的标签都拥有跨域的能力( <img src="" alt=""/> <script src="" ></script> ),这种请求为get请求.
+	<script type="text/javascript">
+		var objScript = document.createElement("javascript");
+		objScript.src = "https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd=胡歌&cb=jsonp";
+		document.getElementsByTagName("head")[0].appendChild('objScript');
+		function jsonp(){
+
+		}
+
+	</script>
+
+五.标记用户
+	1.标记用户身份的 http 请求首部
+		①.form : e-mail	邮箱,记录用户的邮箱
+		②.user-agen : 	浏览器,记录了浏览器的一些信息
+		③.referer : 	跳转链接,记录了你从那个网址跳转过来的.
+	2.IP 地址
+	3.用户登陆
+	4.胖URL(URL重置)
+	5.cookie(本地文件)
+		①.临时的cookie
+		②.永久的cookie
+
+六.域名解析
+	查看浏览器dns缓存 chrome://net-internals/#dns
+	1.浏览器搜索自身DNS缓存(没找到缓存或缓存已经失效,当前解析结束)
+	2.搜索操作系统自身DNS缓存(没找到当前解析结束)
+	3.读取本地的HOST文件(没找到当前解析结束)
+	4.浏览器发起一个DNS的系统调用(发起一个域名解析请求)
+		1.宽带运营商服务器查看本身缓存,找到对应条目,没过期则返回,如果没找到或者已过期
+		2.运营商服务器[代替浏览器]发起一个迭代DNS解析的请求
+			1.首先去寻找 根域 的 DNS IP 地址
+			2.根域的ip服务器会把顶级域(com,cn,net等等)的IP地址返回给运营商服务器
+			3.然后营商服务器再去问顶级域的DNS服务器,baidu.com的IP地址是多少,顶级域DNS服务器会把 baidu.com 对应域的DNS服务器的IP地址给到运营商服务器(这个服务器由域名注册商提供的,万网,新网等)
+			4.运营商服务器再去问域名注册商服务器baidu.com这个域名的IP地址是多少,假如查到,则返回给运营商服务器
+			5.运营商服务器拿到结果先放一份缓存在自己的服务器上,再返回给操作系统内核
+			6.系统内核,把从运营商服务器拿到的ip地址返回给浏览器
+	5.最终浏览器拿到了www.iommc.com对应的IP地址
+
+七.状态码
+	1XX	表示请求已经接收继续处理
+	2XX	成功,请求已经成功,并处理掉了
+		200 OK
+	3XX	重定向
+	4XX	客户端错误
+		400 客户端请求语法错误,服务器不能理解
+		401 请求没有经过授权
+		403 服务器接收到请求,拒绝提供服务,没有权限等等
+		404 没找到,不存在
+	5XX	服务端错误
+		500 服务器发生了一个不可预期的错误
+		503 服务器当前还不能处理这个客户端请求
+

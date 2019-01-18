@@ -1,0 +1,451 @@
+<meta charset="utf-8">
+<title>HTML</title>
+hyperText markup language!!!
+超文本标记语言
+
+一.基础标签
+	<!-- 根标签 -->
+	<!-- lang : 语言 -->
+	<!-- en   : 代表英文,同时告述搜索引擎爬虫,我们的网站是什么内容的. -->
+	<!-- SEO  : 搜索引擎优化技术 -->
+	<html lang="en">
+		<!-- 结构化标签 -->
+		<!-- 给浏览器看的 -->
+		<head>
+			<!-- gb2312 : 包含简体中文 -->
+			<!-- gbk : 简体中文+繁体中文 -->
+			<!-- unicode : 万国码 -->
+			<!-- utf-8 : 万国码 -->
+			<meta charset="utf-8" />
+			<!-- 网站关键字 -->
+			<meta content="服饰" name="keyworlds" >
+			<!-- 网站得描述信息 -->
+			<meta content="好看的衣服" name="description" >
+			<!-- 网页标题,页脚标 -->
+			<title></title>
+		</head> 
+		<!-- 给用户看的 -->
+		<head>
+			<!-- 段落标签 -->
+			<p></p>
+			<!-- 标题标签 1.独占一行成段展示 2.调整字体大小 3.调整字体粗细 -->
+			<h1></h1>
+			<h2></h2>
+			<h3></h3>
+			<h4></h4>
+			<h5></h5>
+			<h6></h6>
+			<!-- 加粗 -->
+			<strong></strong>
+			<!-- 斜体 -->
+			<em></em>
+			<!-- 中划线标签 -->
+			<del></del>
+			<!-- 地址标签 1.成段展示 2.独占一行 -->
+			<address></address>
+			<!-- 块级元素 容器 1.结构化 2.绑定化操作 -->
+			<div></div>
+			<!-- 行级元素 容器 1.结构化 2.绑定化操作 -->
+			<span></span>
+			<!-- " "(空格) 英文单词分隔符 -->
+			<!-- html编码 -->
+			<!-- " " &nbsp; -->
+			<!-- "<" &lt; -->
+			<!-- ">" &gt; -->
+			<!-- 换行 -->
+			<br>
+			<!-- 水平线 -->
+			<hr>
+		</head> 
+	</html>
+
+二.高级标签
+	<!-- 有序标签 -->
+	<!-- type 1.1 2.a 3.A 4.I 5.i -->
+	<!-- reversed : 倒序 -->
+	<!-- start : 告述它从 "第几个" 开始排序 c代表3-->
+	<ol type="1" reversed="reversed" start="2">
+		<li></li>
+	</ol>
+	
+	<!-- 无序标签(父子结构) -->
+	<!-- type : 标题样式 -->
+	<ul type="" >
+		<li></li>
+	</ul>
+	
+	<!-- 图片标签 -->
+	<!-- src : source 资源 -->
+	<!-- src : 路径 -->
+	<!-- 1.网上url -->
+	<!-- 2.本地绝对路径 -->
+	<!-- 2.本地相对路径 -->
+	<!-- alt(图片占位符) : 当图片不能展示,展示alt内文字 -->
+	<!-- title(图片提示符) : 用于描述图片 -->
+	<img src="" alt="图片加载失败" title="这是图片">
+
+	<!-- herf : hyperText reference : 超文本引用 -->
+	<!-- herf:"#id" 跳转到指定锚点id的位置  -->
+	<!-- target : 打开方式 -->
+	<!-- 锚点 : 利用锚点实现跳转到指定位置,把锚点绝对定位-->
+	<!-- 1.链接 -->
+	<!-- 2.email -->
+	<!-- 3.打电话 -->
+	<!-- 4.锚点 -->
+	<!-- 5.协议限定符 href="javascript:" 运行javascript代码-->
+	<a href="" target="_blank"></a>
+	
+	<!-- action提交的地址 -->
+	<!-- method提交方式 -->
+	<!-- accept-charset数据字符集 -->
+	<form action="www.baidu.com" method="get" accept-charset="utf-8">
+		<input type="text"     >
+		<input type="password" >
+		<input type="submit"   >
+		<!-- 当value属性有值时,select的值是option标签value里value的值,否则取标签内的值 -->
+		<select name="" multiple>
+			<option value="" ></option>
+		</select>
+	</form>
+	
+三.css基础属性
+	<!-- css(cascading style sheet) : 层叠样式表 -->
+	<!-- 引入css -->
+	<!-- 1.行间样式 -->
+	<!-- 2.页面css -->
+	<!-- 3.外部css -->
+	<style>
+		*{
+			/*浏览器默认字体大小16px,16是字体的高*/
+			font-size: 16px;
+			
+			/*字体能不能更加粗,取决于字体包有没有更粗的样式*/
+			font-weight: 900;
+			
+			/*字体样式*/
+			font-style: italic;
+			
+			/*字体种类 arial(互联网通用字体) 乔布斯发明*/
+			font-family: arial;
+			
+			/*字体颜色*/
+			/*1.纯英文单词 black*/
+			/*2.颜色代码   #ffffff*/
+			/*3.rgb        rgb(255,255,255)*/
+			/*3.rgba       rgba(255,255,255,0.5)*/
+			color: rgba(255,255,255,0.5);
+			
+			/*边框*/
+			/*border-width border-style border-color*/
+			border:1px solid red;
+			
+			/*对齐方式*/
+			text-align:center; 
+
+			/* "文字" 的行高 ,默认是1.2倍行高(line-height为1.2em),当前font-size 1.2 倍的高度 */
+			/*em表示当前容器的font-zize的值  1em = 1 font-size = 16px*/
+			line-height: 1.2em; 
+
+			/*首行缩进*/
+			text-indent: 2em;
+
+			/*文本样式*/
+			text-decoration: none;
+
+			/*光标(样式)*/
+			cursor: default;
+		}
+		
+		body{
+			/*浏览器默认body有margin8px的样式*/
+			margin: 8px;
+		}
+		
+		/*三角形*/
+		div{
+			width: 0;
+			height: 0;
+			border:20px solid red;
+			border-left-color: blue;
+			border-right-color: yellow;
+			/*transparent : 透明色*/
+			border-bottom-color: transparent;
+		}
+		
+		/*单行文本水平垂直居中*/
+		.class{
+			width: 100px;
+			height: 100px;
+			line-height: 100px;
+			text-align: center;
+		}
+
+		/*伪类选择器*/
+		/*hover : 当鼠标移上去*/
+		a:hover{}
+	</style>
+
+四.标签
+	1.行级元素(display:inline)
+		①.内容决定元素所占位置
+		②.不可以通过css改变宽高
+		③.span a em strong  del
+	2.块级元素(display:block)
+		①.独占一行
+		②.可以通过css改变宽高
+		③.div p ul ol li form address
+	3.行级块元素(display:inline-block)
+		①.内容决定大小
+		②.可以改变宽高
+		③.img 
+	4.inline
+		①.凡是带有的元素都拥有文字特性(带有inline属性的元素和文字性质相同)
+		②.五个img因为是带有inline,所以会被浏览器进行文字分割.头尾不花行即可
+			<img 
+			src="" alt=""><img 
+			src="" alt=""><img 
+			src="" alt=""><img 
+			src="" alt="">
+
+五.基础选择器
+	<style>
+		/*id选择器*/
+		#id{}
+		/*class选择器*/
+		.class{}
+		/*标签选择器*/
+		/*自定义标签.让标签初始化为自定义标签*/
+		div{}
+		/*通配符*/
+		*{}
+		/*属性选择器*/
+		[attr]{}
+	</style>
+
+六.复杂选择器
+	<style>
+		/*父子(派生)选择器*/
+		/*浏览器css渲染,遍历父子选择器自右向左*/
+		div ul li a em span{}
+		
+		/*直接子选择器*/
+		div>span{}
+		
+		/*并列选择器,既是又是*/
+		div.class{}
+		
+		/*分组选择器*/
+		.class,
+		div,
+		[attr]{}
+	</style>
+
+七.选择器权重(256进制)
+	!improtant 			infinity
+	行间样式 			1000
+	id					100
+	.class 属性 伪类	10
+	属性 伪元素			1
+	通配符				0
+
+八.盒子模型
+	1.盒子
+		①. 盒子壁		border
+		②. 内边距		padding
+		③. 盒子内容		width + hight
+	
+	2.盒子模型
+		①. margin + border + padding + content (width * height)
+	
+	3.定位(position)
+		①.absolute(绝对定位)
+			i:脱离原来位置进行定位(释放自己的位置)
+			ii:相对于最近的有定位的父级进行定位,如果没用相对于文档定位
+			iii:z-index(代表层级)
+		②.relative(相对定位)
+			i:保留当前位置进行定位(不释放自己的位置)
+			ii:相对于自己原来的位置进行定位
+		③.用relative作为参照物,用absolute经行定位.
+		④.fixet
+			i:对于屏幕而言进行定位
+			ii:上下左右居中(left:50%;top50%;margin-left:-(1/2 * width);margin-top:-(1/2 * height))
+	
+	4.布局
+		①.两大布局
+		<style>
+			.lrft{
+				height: 100px;
+				margin-right: 100px;
+			}
+			.right{
+				position: absolute;
+				right: 0px;
+				width: 100px;
+				height: 100px;
+			}
+		</style>
+		<div class="right" ></div>
+		<div class="left" ></div>
+		②.居中布局(必须,父子都是块元素)
+		<style>
+			/* 外部 */
+			.wrapper{
+				height: 30px;
+				background-color: black;
+			}
+			/* 内容 */
+			.content{
+				/* 上下边距为0,左右自适应 */
+				margin: 0 auto;
+				width: 1000px;
+				height: 30px;
+				background-color: red;
+				text-align: conter;
+			}
+		</style>
+<img src="" alt="">
+九.层级模型
+
+十.margin问题
+	1.margin塌陷(垂直方向的margin,父子元素公共同一个margin,取最大值.)
+		①.border-top:1px solid black;
+	2.margin合并(兄弟元素垂直方向的margin,进行合并.)
+
+十一.浮动模型
+	1.浮动元素产生了浮动流
+	2.所有产生了浮动流的元素,块级元素看不到他们
+	3.产生了bfc的元素和文本类型(inline,inline-block)元素以及文本都能看到浮动元素
+	4.浮动元素能看到浮动元素.
+	5.父级保住浮动元素
+		①.clear:both(清除左右浮动,只认块级元素)
+		②.父元素的伪元素,来实现;
+		<style>
+			father::after{
+				content: "";
+				display:block;
+				clear: both;
+			}
+		</style>
+
+十二.bfc (block format context / 块级格式化上下文)
+	1.bfc是指一个环境(以下四种方式,可以触发bfc,利用bfc可以解决margin塌陷).
+		①.position:absolute;
+		②.display:inline-block;
+		③.float:left/right;
+		④.overflow:hidden;
+
+十三.默认转换
+	1.凡是设置了
+		①.position:absolute;
+		②.float:left/right;
+		的元素,浏览器会默认把该元素设置为inline-block元素.
+
+十四.文字溢出
+	1.单行文本
+		<style>
+			span{
+				/*文本不换行*/
+				white-space: nowrap;
+				/*超出部分隐藏*/
+				overflow: hidden;
+				/*超出部分样式为 ... */
+				text-overflow: ellipsis;
+			}
+		</style>
+	2.多行文本
+		容器高度为行高的倍数,多出部分隐藏.
+		<style>
+			div{
+				width: 300px;
+				height: 40px;
+				line-height: 20px;
+				overflow: hidden;
+			}
+		</style>
+
+十五.图片背景
+	<style>
+		div{
+			width: 100px;
+			height: 100px;
+			
+			/* 背景图片地址 */
+			background-image: url(img.png);
+			
+			/* 设置背景图片大小 */
+			background-size: 50px 50px ;
+			
+			/* 填充模式 */
+			/* repeat : 默认填充铺满 */
+			/* no-repeat : 不进行填充 */
+			/* repeat-x : 横向铺满 */
+			/* repeat-y : 纵向铺满; */
+			background-repeat:repeat; 
+			
+			/* 图片位置 */
+			/* 10px 10px 背景图片位置为 left:10px top:10px; */
+			/* cinter cinter === 50% 50%  */
+			/* cinter 中间 */
+			background-position: 
+		}
+	</style>
+	1. a标签的高级应用(文字与img背景共存)
+		①.
+		<style>
+			a{
+				display: inline-block;
+				/* 上中下划线 */
+				text-decoration: none;
+				height: 100px;
+				width: 100px;
+
+				background-image: url(img.png);
+				background-size: 100px 100px;
+
+				/* 文本首行缩进宽度大于等于标签(容器)宽度 */
+				text-indent: 100px;
+				/* 文本换行 nowrap(不换行) */
+				white-space: nowrap;
+				/* 超出部分隐藏 */
+				overflow: hidden;
+			}
+		</style>
+		②.
+		<style>
+			a{
+				display: inline-block;
+				text-decoration: none;
+				background-image: url(img.png);
+				background-size: 100px 100px;
+				height: 0px;
+				width: 100px;
+				/* 利用padding来撑开容器.显示背景图片 */
+				padding-top: 100px;
+				overflow: hidden;
+			}
+		</style>
+
+十六.嵌套规则
+	1.行级元素只能嵌套行级元素
+	2.块级元素可以嵌套任何元素
+	3.p标签不能嵌套块级元素
+	4.a标签不能嵌套a标签
+
+十七.对齐方式
+	1.文本对齐方式,默认是底对齐.
+	2.块级元素和文本元素默认也是底对齐.
+	3.当块元素内部有文本时,外部文本默认与块元素内部文本底对齐.
+	<style>
+		*{
+			/* 调整对齐线 */
+			/* middle 中对齐 */
+			vertical-align: 1px;
+		}
+	</style>
+
+十八.伪元素
+
+十九.伪类
+
+
+

@@ -1,0 +1,718 @@
+<meta charset="utf-8">
+<title>JQuery</title>
+<script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+一.简介
+	1.一款优秀的js库
+	2.1.8之前版本的jquery兼容IE6
+	3.在移动端有一款zepto从jQuer演变而来.
+	4.zepto精简了jQuer.
+	5.jquery的代码基本都是函数式的写法.
+
+实例方法(定义在原型上)
+一.选择器 $() === jquery()
+	1.$(str)的选择方式为css选择器的选择方式
+	<script type="text/javascript">
+		// 选择ul下的第一个li
+		$("ul>li:first")
+		// 选择ul下的最后一个li
+		$("ul>li:last")
+		// 选择ul下的第二个li
+		$("ul>li:eq(2)")
+		// 选择ul下索引是奇数的li
+		// odd  [ɑ:d] : 奇数的 
+		$("ul>li:odd")
+		// 选择ul下索引是偶数的li
+		// even [ˈivən]: 偶数的
+		$("ul>li:even")
+	</script>
+	
+	2.$(ele)可以是原生的dom对象
+	
+	3.$($("a"))可以是jQuery对象
+	
+	4.$(null) 返回值为一个空的jQ对象
+	
+	5.$(function(){}) 会把这个函数执行一下
+	
+	6.$('p','#demo') 两个参数 : 寻找 #demo 里面的 p元素
+	
+	7.标签的创建
+		①.全标签的形式 	$("<div class="className" ></div>")
+		②.单标签的形式	$("<div class="className" >") $("<div class="className" />")
+	
+	8.$ === jquery 即 : jquery("p") 所以jQuery中有一个函数 function jquery(){}
+	
+	9.sizzle.js
+		①.jquery查找dom元素的一种方式
+		②.sizzle可以单独下载使用.	
+	
+	10.$() jQuery的第二个参数
+	<script type="text/javascript">
+		// <div class="class" my_attr="attr_value" style="color: red;">html_content</div>
+		$("<div/>",{html:"html_content",css:{color:"red"},class:"class","my_attr":"attr_value"})
+	</script>
+
+二.筛选器
+	1.$("div").filter(".class") 筛选
+		<script type="text/javascript">
+			// 赛选,选到的div,为指定 "筛选器" 的div,即同时满足前后两个条件(同级)
+			$("div").filter(".class");
+			// 当所有返回为true时全部选中
+			// index 为索引
+			// el 当前循环的每一个元素
+			// el === this
+			$("div").filter(function(index,el){ return true; });
+		</script>
+	
+	2.$("div").not(".class") 排除功能与filter相反.查找第一个选择器选素内,不含第二个选择器元素的元素.
+	
+	3.$("div").has("p")	查找里面有p的div
+		<script type="text/javascript">
+			// 查找div , 但是这个div里面必须包含
+			// has选择器选择出来的元素.
+			$("div").has("p");
+		</script>
+	
+	4.$("div").find("p") 查找div元素下面的p元素
+	
+	5.$("div").eq(); 查找$("div")找到的元素数组的第几个元素
+	
+	6.$("p").next() 下一个兄弟节点
+	
+	7.$("p").prev() 上一个兄弟节点
+
+	8.$("p").parent("div") 接受参数
+		①.返回值为$("p")的直接父级,返回值仅仅一个
+		②."div" 可以不写,当写了就表示,筛选当前父级是不是"div"筛选出来的这个元素,假如是,则返回,不是则不返回.
+
+	9.$("p").parents() 接受参数
+		①.返回值为$("p")的所有祖先元素,直到html
+	
+	10.$("p").offsetParent()的直接有定位的父级元素,返回值仅仅一个,不接受参数
+		①.返回值 离 $("p") 最近的有定位的父级元素,直到html
+		②.offsetParent()不能够进行筛选
+	
+	11.$("p").closest("div") 必须有参数,查找离自己最近的节点
+		①.返回值 "查找"离 $("p") 最近的div节点
+		②."div" 为必填内容,如果不填则什么都不会返回
+		③.可以把自己筛选出来	
+	
+	12.siblings() 	当前元素节点的所有兄弟节点
+ 	
+ 	13.prevAll() 	当前元素节点的所有上面的兄弟节点
+ 	
+ 	14.nextAll() 	当前元素节点的所有下面的兄弟节点
+ 	
+ 	15.prevUntil() 
+ 		①.返回当前元素到上面的指定元素之间的所有元素
+ 		②.不包含当前元素和指定元素 
+ 		③.传jq或者dom对象
+ 	
+ 	16.nextUntil() 
+ 		①.返回当前元素到下面的指定元素之间的所有元素
+ 		②.不包含当前元素和指定元素
+ 		③.传jq或者dom对象
+
+三.css函数
+	1.css()
+		①.取值 $("li").css('width');
+		②.赋值 $("li").css('width','100px').css('height','100px');
+		③.赋值 $("li").css({width:100,height:100});
+		④.赋值 $("li").css({width:'100px',height:'100px'});
+	2.addClass(str) str为class名,不加点
+	<script type="text/javascript">
+		// 字符串形式,修改所有选中的元素的calss
+		$("div").addClass('className');
+		// index代表选中的元素的索引
+		// 所以每个索引都会调用一次这个方法
+		// retuen值为calssName 类名
+		// 实际就是遍历选择器选择器选择出来的索引,进行操作.那些要进行操作,那些不进行操作
+		$("div").addClass(function(index){
+			// this : 这里假设使用this ,应该是当前遍历的dom或者jq元素对象
+			if(index){
+				return "className"	
+			}
+		});
+	</script>
+	3.remove()
+	<script type="text/javascript">
+		// 删除选定元素的指定calss
+		$("div").removeClass('');
+		// 删除选定元素的指定calss,以函数形式进行筛选操作
+		$("div").removeClass(function(index){
+
+		});
+		// 删除选定元素的所有calss
+		$("div").removeClass();
+	</script>
+	<!-- toggle  [ˈtɑ:gl]  : 切换 -->
+	4.toggleClass() 删除或者添加class
+		①.当选择元素没有这个class则添加class
+		②.当选择元素有这个class则删除class
+
+四.属性和文本
+	1.html()
+		①.取值 $("li").text();
+		②.赋值 $("li").text("123");
+	2.text()
+		①.取值 $("li").html();
+		②.赋值 $("li").html("<p>123</p>");
+	3.$("input:eq(0)").val() 
+	①.返回 $("input:eq(0)") 元素的value值
+
+	4.prop() 基于js原生的对象属性获取和设置的 document.getElementById().id="id"
+		①.$("li").prop("mytype","val") js默认dom上没有,设置不上
+		②. 	取值 $("li").prop("mytype")
+			赋值 $("li").prop("mytype","val")
+	
+	5.attr()基于getAttrbute() 和 setAttrbute() 
+		①.$("li").prop("mytype","val"); 能够设置的上
+		②. 	取值 $("li").attr("mytype");
+			赋值 $("li").attr("mytype","");
+	
+	6.jquery认为 
+		①.attrbute的checked,selected,disabled就是表示该属性初始状态的值
+		②.property的checked,selected,disabled才表示该属性的实时状态的值(值为true或false)
+		③.例子
+		<input type="checkbox" checked>
+		<input type="checkbox" checked="checked">
+		<script type="text/javascript">
+			$("input").attr("checked"); 	// checked
+			$("input").prop("checked"); 	// true			
+		</script>
+
+		<input type="checkbox" >
+		<script type="text/javascript">
+			$("input").attr("checked"); 	// undefined
+			$("input").prop("checked"); 	// false(默认为操作状态)				
+		</script>
+		④. 	checked 	checkbox/radio 是否被选中
+			selected 	select列表的option是否被默认选中
+			disabled	input是否可输入
+	
+	7.$("div").innerWidth() / $("div").innerHeight()
+		①.返回值为所选元素的(padding + conteht)区域宽高
+	<script type="text/javascript">
+		$("div").innerWidth();
+		$("div").innerHeight();
+	</script>
+	
+	8.$("div").outerWidth() / $("div").outerHeight()
+		①.返回值为所选元素的(border+padding + conteht)区域宽高
+		②.这里的返回值为js中获取的元素的真实宽高
+	<script type="text/javascript">
+		$("div").outerWidth();
+		$("div").outerHeight();
+	</script>
+	
+	9.$("div").outerWidth(true) / $("div").outerHeight(true)
+		①.返回值为所选元素的(margin+border+padding + conteht)区域宽高
+	<script type="text/javascript">
+		$("div").outerWidth(true)
+		$("div").outerHeight(true)
+	</script>
+	
+	10.$("div").width() / $("div").height()
+		①.返回值为所选元素的(conteht)区域宽高
+	<script type="text/javascript">
+		$("div").width() 
+		$("div").height()
+	</script>
+	
+	11.offset().left/top 
+		①.offset() == {top:"",left:""}
+		②.返回相对于文档的位置
+	
+	12.position().left/top 
+		①.position() == {top:"",left:""}
+		②.返回相对于有定位的父级的位置
+
+五.设置,删除,添加
+	1.$(a).insertBefore($(b)) 	
+		①.剪切 $(a) 插入到 $(b) 的前面
+		②.返回值为 $(a)
+	
+	2.$(a).before($(b))
+		①.剪切 $(b) 插入到 $(a) 的前面
+		②.返回值为$(a)
+	
+	3.$(a).insertAfter($(b)) 	
+		①.剪切 $(a) 插入到 $(b) 的后面
+		②.返回值为 $(a)
+	
+	4.$(a).after($(b))
+		①.剪切 $(b) 插入到 $(a) 的后面
+		②.返回值为$(a)
+
+	5.$(a).AppendTo($(b))
+		①.剪切 $(a) 插入到 $(b) 里面
+		②.返回值为$(a)
+	
+	6.$(a).append($(b))
+		①.剪切 $(b) 插入到 $(a) 的里面
+		②.返回值为$(a)
+	
+	7.$(a).prependTo($(b))
+		①.剪切 $(a) 插入到 $(b) 里面的第一位
+		②.返回值为$(a)
+	
+	8.$(a).prepend($(b))
+		①.剪切 $(b) 插入到 $(a) 里面的第一位
+		②.返回值为$(a)
+	
+	9.$(a).remove()
+		①.$(a).remove() 删除 $(a) 元素并返回 $(a) 元素
+		②.remove() 返回值不包含原对象的事件
+	
+	10.$(a).detach()
+		①.$(a).detach() 删除 $(a) 元素并返回 $(a) 元素
+		②.detach() 返回值包含原对象的事件
+
+	11.wrap() 
+		①.把选中元素的外面包裹一层元素
+		<script type="text/javascript">
+			// 新建一个元素进行包裹
+			$("p").wrap('<div>')
+			// 选择一个元素进行克隆包裹(原先的还在)
+			// 切包裹元素内有内容会一起过去,
+			// 包裹元素的内容在最上面
+			$("p").wrap($("div"))
+			// 利用函数进行包裹
+			$("p").wrap(function(index){})
+		</script>
+	
+	12.wrapInner()
+		①.把选中元素的里面包裹一层元素
+		②.并且把当前所有的元素内容,放入到新的元素的里面
+		<script type="text/javascript">
+			$("p").wrapInner('span')
+			// 利用函数进行包裹
+			$("p").wrap(function(index){})
+		</script>
+	
+	13.wrapAll()
+		①.包裹选中的所有元素,会破坏结构
+		②.以找到的元素的第一个元素为基准,其它所有元素都会剪切到选中的以第一个元素的下面,然后对第一个到最后一个元素进行包裹.
+		在这些选中元素中间的其它元素,会剪切到最后一个元素的后面面.
+	
+	14.unwrap() 
+		①.删除(解除)指定元素的父级元素.返回值为选中元素
+		②.结构化标签不可删除(head,body,html)
+
+六.jq(Element)对象的其它函数
+	1.$("div").is() 	判断前面的选择器选择的内容是不是我is选择器限定的的内容,返回值为true/false;
+	
+	2.$("div").index() 	当前元素在兄弟节点中的索引值
+	
+	3.$("div").each();
+		<script type="text/javascript">
+			// index 索引
+			// el 当前循环的每一个元素
+			// el === this
+			$("div").each(function(index, el) {
+				
+			});
+		</script>
+ 	
+ 	4.$("div").eq(1).css("width","100px").end() 回退筛选
+ 		①.$("div").end() 元素的end()操作,会返回当前元素上次调用,jquery筛选器时所得到的结果.
+ 		②.end() === proveobject
+ 		<script type="text/javascript">
+ 			// 返回值为$("div")
+ 			// 注意css()是没有调用筛选器的.
+ 			$("div").eq(1).css("width","100px").end();
+
+ 			// $("div").proveobject
+ 			// jq对象的proveobject属性中存储了上次选择器选择出来的jq完整对象(所以上次的jq对象也可能拥有proveobject属性),
+ 			// 第一次选择出来的jq对象的proveobject属性中是一个document对象
+ 			// document上面是没有proveobject的,即到了document就到头了
+ 			$("div");
+ 		</script>
+
+ 	5.clone() 克隆节点
+		①.$("p").clone(false) 默认参数为fasle不克隆事件 
+		②.$("p").clone(true) 参数为true克隆原来元素的事件
+	
+	6.add() 对jq选择器元素进行拼接
+		<script type="text/javascript">
+			// 进行集合操作
+			$("div:eq(1)").add($("div:eq(2)"));
+		</script>
+
+	7.slice() 对jq元素集进行截取操作
+		<script type="text/javascript">
+			// 取头不取尾
+			//筛选索引0和1的元素
+			$("div").slice(0,2);
+		</script>
+
+	8.empty() 清空元素
+	<script type="text/javascript">
+		// 清空选择器元素的内容
+		// $("div").empty() == $("div").html("")  
+		$("div").empty();
+		$("div").html("");
+	</script>
+
+	9.$("form").serialize() / serializeArray()
+		①.serialize() 串联表单数据把数据以name:value的形式进行串联
+		②.serializeArray() 以数组的形式经行数据封装
+
+七.事件
+	1.bind() 以废弃 由 on() 代替
+	
+	2.on() 事件绑定
+		①.进行事件绑定
+		<script type="text/javascript">
+			$('div').on("click",function(){})
+		</script>
+		②.进行数据传递
+		<script type="text/javascript">
+			// {name:"name"} 是第三位参数
+			$('div').on("click",{name:"name"},function(e){
+				// 事件对象e可以取到传进来的对象值
+				// e.data 值放在事件对象的data属性中
+				e.data;
+			})
+		</script>
+		③.进行事件的预绑定
+		<script type="text/javascript">
+			// 给 div 下面的 p 元素进行预绑定事件
+			// 即,即使 p 元素最开始不存在, 当 p 生成后
+			// p也拥有这个事件
+			$("div").on("click","p",{name:name},function(e){
+
+			});
+		</script>
+	
+	3.off() 接触绑定
+		<script type="text/javascript">
+			// 解除 $("div") 的 click 事件
+			$("div").off("click");
+			// 解除 div 下的 p 的 cilck 事件
+			$("div").off("click","p");
+			// 解除 div 下的 绑定函数为 fun 的 p 元素的 cilck 事件
+			$("div").off("click","p",demo);
+		</script>
+	
+	4.one() 只生效一次的事件
+		<script type="text/javascript">
+			// 这个绑定事件只会执行一次
+			$("div").one("click","p",demo);
+		</script>	
+
+	5.$(window).scrollTop() / $(window).scrollLeft()
+		<script type="text/javascript">
+			// 给 window 对象绑定滚动事件 
+			$(window).scroll(function(){
+				// 滚轮位置距离上边的位置
+				$(window).scrollTop();
+				// 滚轮位置距离左边的位置
+				$(window).scrollLeft();
+			})
+		</script>
+
+八.事件对象 e.attr
+	1.e.pageX/Y 相对于文档(文档是有滚动条距离的)而言距离左/右边的距离
+	
+	2.e.clientX/Y 相对于浏览器窗口而言,距离左/右边的距离
+	
+	3.e.screenX/Y 相对于屏幕而言,距离左/右边的距离
+	
+	4.e.which 
+		①.判断你按下的是哪一个按键,并不判断你取的是那个值
+		②.判断你按下的是那个鼠标键(1:左键,2:滚轮,3:右键)
+	
+	5.e.button
+		①.判断你鼠标是按下的那个键(0:左键,1:滚轮,2:右键)
+
+九.运动
+	1.animate() 动画插件
+		①.target 		属性,属性值
+		
+		②.durition 		动画时间(毫秒)
+		
+		③.速度变化方式 	速率	jquery.easing.js jquery速度变化效果插件
+		
+		④.回调函数		动画完成后调用
+		
+		⑤.stop(true,false) 	停止
+			<script type="text/javascript">
+				// 第一个参数控制是否停止后续运动
+				// 默认 false 	不停止后续运动 
+				// 		true 	停止后续运动
+				// 
+				// 第二个参数控制是否立刻到达当前目标点
+				// 默认 false 	不立刻到达当前目标点
+				// 		true 	立刻到达当前目标点
+				$("#div").stop(true||false,true||false);
+			</script>
+		
+		⑥.finish() 	完结
+		
+		⑦.delay() 	延迟,参数,延迟时间
+			<script type="text/javascript">
+				// {left:"300px"} 属性值
+				// 
+				$("#div").animate(
+					{left:"300px"},
+					1000
+				);		
+
+			</script>
+		
+		⑧.链式调用
+			<script type="text/javascript">
+				// 把div右移300px后,再下移300px,再延迟1000毫秒再左移300px
+				$("#div").animate({left:"300px"},1000)..animate({top:"300px"},1000).delay(1000).animate({left:"0px"},1000);
+			</script>
+
+	2.滑动隐藏,显示元素
+		①.slideToggel(speed,callback) 通过滑动的效果隐藏和显示被选元素
+		<script type="text/javascript">
+			
+		</script>
+		②.slideUp(speed,callback)
+		通过滑动效果,隐藏备选元素
+		<script type="text/javascript">
+			
+		</script>
+		③.slideDown()
+		通过滑动效果显示被隐藏的元素
+		<script type="text/javascript">
+			
+		</script>
+		④.以上方法被调用都可以不传参
+
+	3.淡入淡出元素
+		1.fadeIn() 		以淡入的方式显示该元素
+		2.fadeOut() 	以淡出的方式隐藏该元素
+		3.fadeToggel() 	给指定元素进行淡入,淡出动画.
+
+十.trigger 触发自定义事件
+	<script type="text/javascript">
+		// 给元素定义自定义事件
+		$("div").on('eat',function(){
+
+		})
+		// 通过 trigger() 函数来触发这个自定义事件
+		$("div").trigger('eat');
+
+		// 只要是通过on注册的事件都可以通过trigger来触发
+		$("div").trigger('click');		
+
+		// trigger还可以传参,传递的参数在触发事件函数的第二个
+		// 当事件需要传参时,就可以通过trigger来触发事件.
+		$("div").trigger('click',{name:"name"});
+		$("div").on('click',function(event,data){
+			// event 第一位默认为事件函数
+			// data 当利用trigger传参时,第二位为trigger传的参数
+		})
+
+		// trigger 触发的事件是可以进行冒泡的(自定义事件不参与冒泡).
+	</script>
+
+工具方法(顶定义在函数上面).
+一.$.tepe() / $.trim() / proxy() / $.onConflict() / parseJSON()
+	<script type="text/javascript">
+		function jQuery(){}
+		// 定义在函数上的方法
+		jQuery.type = function(){}
+	</script>
+	
+	1.$.tepe() 传入元素.判断数据类型
+	<script type="text/javascript">
+		// 获取子窗口
+		var mywindow = document.getElementsByTagName('iframe')[0].contentWindow;
+		// 获取子窗口的属性
+		// arr在子窗口中定义为 var arr = [1,2,3,4,5];
+		// 但是在此时获取到后,他的 constructor 不是 Array 了.
+		var arr = mywindow.arr;
+	</script>
+	
+	2.trim() 消除字符串两边的空格
+	
+	3.proxy() 改变this指针的方向
+	<script type="text/javascript">
+		var obj = {domo:"demo"}
+		function demo(a,b){
+			console.log(this);
+			console.log(a);
+			console.log(b);
+		}
+		// demo 要被改变的this指针的函数
+		// obj 	代替函数this指针的对象
+		// newDome 返回已经改变了this指针的函数
+		var newDome = $.proxy(demo,obj);
+		newDome(1,2);
+
+		// 传值方式(类似柯里化,初始化 固定参数)
+		$.proxy(demo,obj,1)(2);
+		$.proxy(demo,obj)(1,2);
+		$.proxy(demo,obj,1,2)();
+	</script>
+	
+	4.$.onConflict() 移交权限
+	<script type="text/javascript">
+		// 把jq权限交给myQuery对象
+		// 接着 $ 将会失效,myQuery代替$
+		// 可用于解决多个版本jQuery引入的问题
+		var myQuery = $.onConflict();
+		myQuery("")
+	</script>
+	
+	5.$.parseJSON() 把字符串转为json格式
+	<script type="text/javascript">
+		var obj = {'name':'小慧','age':'20','lile':'study'};
+		// 把对象转换为json字符串
+		var objJsonStr = JSON.srtingify(obj);
+		var newObj = $.parseJSON(objJsonStr);
+	</script>
+	
+	6.makeArray() 把类数组转换为数组
+
+二.extend() 给jQuery扩展一个新的工具方法/实例方法
+	1.$.extend() 定义在函数上面
+	<script type="text/javascript">
+		// 利用extend直接添加组件
+		$.extend({
+			add : function(){
+				console.log('add');
+			}
+		});
+		// 调用自定义的新增主键
+		$.add();
+	</script>
+
+	2.$.fn.extend() === $.prototype.extetend() 定义在原型上
+	<script type="text/javascript">
+		$.fn.extend({
+			add : function(){
+				console.log('add')
+			}
+		})
+		$('div').add();
+	</script>
+
+	3.$.fn.extend() 合并对象
+	<script type="text/javascript">
+	var porsen1 = {
+		'student1':{
+			'name' : 'xiaohui',
+			'age' : '20',
+			'sex' : 'gril',
+		},
+		'lable' : '0',
+	};
+	var porsen2 = {
+		'student2':{
+			'name' : 'xiaohui',
+			'age' : '20',
+			'sex' : 'gril',
+		},
+		'lable' : '1',
+	};
+
+	// 把porsen2合并到porsen1里面,改变了porsen1的值
+	// val 返回值是已经改变了后的porsen1
+	// $.fn.extend() 与 $.extend() 合并效果相同
+	// 相同属性情况下,porsen2会覆盖porsen1的对应值
+	// 这是一个浅拷贝操作.
+	var val = $.fn.extend(porsen1,porsen2);
+	console.log(val);
+	console.log(porsen1);
+	console.log(porsen2);
+	// 深拷贝
+	var val = $.fn.extend(true,porsen1,porsen2);
+	</script>
+	4.extend() 实际就是合并的意思,只有一个对象参数是
+		①.当只有一个参数时,合并对象就是jQuery/jQuery.prototype
+		②.当拥有两个参数时,就是把后面的对象合并到前面的对象中
+		③.当第一个参数为true是就是深度合并,否则都是欠度合并
+
+三.$.callbacks() 回掉函数
+	<script type="text/javascript">
+		// hd 返回的回掉函数对象
+		// "" == once 只执行一次fire()方法
+		// "" == unique add(aa,aa) 相同函数只会执行一次
+		// "" == memory 记忆
+		// "" == stopOnFalse 当add的函数返回值为false时终止回掉函数链的执行
+		// 多个添加方式 "once unique"
+		var hd = $.callbacks("once unique");
+		function f1(){console.log('1')};
+		function f2(){console.log('2')};
+		function f3(){console.log('3')};
+		function f4(){console.log('4')};
+		function f5(){console.log('5')};
+		// 在回掉函数队列中添加回掉队列
+		// 在局部作用域里,用hd.add()函数 也会触发
+		hd.add(f1,f2,f3,f4);
+		hd.add([f1,f2,f3,f4]);
+		// 执行回掉函数队列中的函数
+		// 重复frie也会重复执行
+		hd.frie();
+		// 当callbacks 添加 记忆(memory) 后
+		// 在 frie() 执行函数后面add和函数
+		// 也会被添加到hd中进行执行
+		hd.add(f5);
+	</script>
+
+四.$.Deferred() / when()
+	1.$.Deferred() 延迟对象,相当于有状态的callbacks();
+	<script type="text/javascript">
+		// dtd 返回的延迟对象,可以监听对象的状态
+		var dtd = $.Deferred();	
+		function demo(){
+			// 给对象添加成功状态
+			dtd.resolve();
+			// 给对象添加失败状态
+			dtd.reject();
+			// 给对象添加正在执行中状态
+			// 正在执行中状态,可以改变为,成功或者失败章台
+			// 但是成功或者失败状态,一旦添加,便不可更改
+			// 正在执行中状态也是可以多次调用的.
+			dtd.notify();
+		}
+
+		// 这里是给相应的状态注册相应的事件.
+		// 当dtd调用状态函数时执行,这里注册的"状态"函数.
+		// 当dtd状态调用resolve()成功状态函数时,执行done内的函数
+		dtd.done(function(){
+			console.log('ok');
+		});
+		// 当dtd状态调用reject()失败状态函数时,执行fail内的函数	
+		dtd.fail(function(){
+			console.log('error');
+		});
+		// 当dtd状态调用notify()执行栈状态函数时,执行progress内的函数
+		dtd.progress(function(){
+			console.log('doing...');
+		});
+	</script>
+	2.when() 
+		①.传入Deferred的对象
+		②.返回Deferred的对象
+		③.当延迟对象全部触发done的时候最后会触发when返回延迟对象的done函数
+	3.Deferred延迟对象
+		①.延迟对象作用控制关键点,做链式运动的效果
+		②.$.jaax这种有状态的异步操作核心是deferred
+		③.when当发生多个java请求的时候,因为都是异步的,我们可以使用多个deferred,每当ajax成功后我们发出一个,最后全部成功我们可以在when后一并处理.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
