@@ -479,5 +479,282 @@
 八.Symbol(第七种数据类型)
 	1.symbol 的值
 	<script type="text/javascript">
+		// Symbol()
+		let str = Symbol();
+		// Symbol(1)
+		let str1 = Symbol('1');
 		
+		// Symbol(2)
+		// 传入对象自动调用toString方法
+		let str2 = Symbol({toString(){
+			return '2'
+		}});
+		// 当没有指定
+		// Symbol([object Object])
+		let str2 = Symbol({});
+		
+		// 相同参数的Symbol不相等
+		let a = Symbol('1'),b = Symbol('1');
+		// false
+		a === b;
+	</script>
+	2.symbol 的转换
+	<script type="text/javascript">
+		// Symbol 值不能与其他类型的值进行运算，会报错。
+		let sym = Symbol('My symbol');
+		"your symbol is " + sym
+		// TypeError: can't convert symbol to string
+		`your symbol is ${sym}`
+		// TypeError: can't convert symbol to string
+		
+		// Symbol 值可以显式转为字符串。
+		let sym = Symbol('My symbol');
+		String(sym) // 'Symbol(My symbol)'
+		sym.toString() // 'Symbol(My symbol)'
+
+		// 另外，Symbol 值也可以转为布尔值，但是不能转为数值。
+		let sym = Symbol();
+		Boolean(sym) // true
+		!sym  // false
+
+		if (sym) {
+		  // ...
+		}
+
+		Number(sym) // TypeError
+		sym + 2 // TypeError
+	</script>
+	3.作为属性名的Symbol
+	<script type="text/javascript">
+		let symbolA = Symbol('a'),
+			symbolB = Symbol('a');
+		
+		// symbolA: "symbolA_false"
+		// Symbol(a): "symbolA_true"
+		// Symbol(a): "symbolB_true"
+		let obj = {
+			symbolA: 'symbolA_false',
+			[symbolA]: 'symbolA_true',
+			[symbolB]: 'symbolB_true',
+		}
+
+		// "symbolA_false"
+		obj.symbolA;
+		// "symbolA_true"
+		obj[symbolA];
+		// "symbolB_true"
+		obj[symbolB];
+
+		// Symbol 作为属性名，该属性不会出现在for...in、for...of循环中
+		// for...in、for...of 也遍历不出 key 为 Symbol 的属性及值
+		// ["symbolA"]
+		Object.keys(obj);
+		// ["symbolA"]
+		Object.getOwnPropertyNames(obj);
+		// "{"symbolA":"symbolA_false"}"
+		JSON.stringify(obj);
+
+
+		// 获取对象中Symbol属性名的 集合/数组
+		// [Symbol(a), Symbol(a)]
+		Object.getOwnPropertySymbols(obj);
+
+		// Reflect.ownKeys 返回所有类型的键名(返回所有类型的键名)
+		// ["symbolA", Symbol(a), Symbol(a)]
+		Reflect.ownKeys(obj);
+	</script>
+	4.Symbol.for(), Symbol.keyFor(), Symbol.keyFor();
+	<script type="text/javascript">
+		// Symbol.for() 获取已经创建的Symbol.for()
+		// 当不存在时新建一个,存在时获取以创建的
+		// Symbol.for() 会在全局进行登记操作 (可以在不同的 iframe 或 service worker 中取到同一个值);
+		let a = Symbol('foo');
+		let b = Symbol.for('foo');
+		let c = Symbol.for('foo');
+		a === b; // false
+		b === c; // true
+
+		// Symbol.keyFor() 返回一个已登记的 Symbol 类型值的 key,没有则返回undefined
+		Symbol.keyFor(a);	// undefined
+		Symbol.keyFor(b);	// foo
+	</script>
+	5.Symbol.hasInstance
+	<script type="text/javascript">
+		// 当Symbol.hasInstance 为对象的一个属性值时
+		// 这个属性值对应的函数会重写当前属性对应对象的 instanceof 指令
+		class Even {
+		  static [Symbol.hasInstance](obj) {
+		    return Number(obj) % 2 === 0;
+		  }
+		}
+		// 等同于
+		const Even = {
+		  [Symbol.hasInstance](obj) {
+		    return Number(obj) % 2 === 0;
+		  }
+		};
+
+		1 instanceof Even; 		// false
+		2 instanceof Even; 		// true
+		12345 instanceof Even; 	// false
+	</script>
+	6.Symbol.isConcatSpreadable
+	<script type="text/javascript">
+		// 定义当前 对象/数组 作为concat的参数时,是否可展开.
+		// 数组
+		let arr1 = ['c', 'd'];
+		['a', 'b'].concat(arr1, 'e') // ['a', 'b', 'c', 'd', 'e']
+		arr1[Symbol.isConcatSpreadable] // undefined
+
+		let arr2 = ['c', 'd'];
+		arr2[Symbol.isConcatSpreadable] = false;
+		['a', 'b'].concat(arr2, 'e') // ['a', 'b', ['c','d'], 'e']
+
+		// 对象
+		let obj = {length: 2, 0: 'c', 1: 'd'};
+		['a', 'b'].concat(obj, 'e') // ['a', 'b', obj, 'e']
+
+		obj[Symbol.isConcatSpreadable] = true;
+		['a', 'b'].concat(obj, 'e') // ['a', 'b', 'c', 'd', 'e']
+	</script>
+	7.Symbol.species
+	<script type="text/javascript">
+		// 重写衍生对象的 instanceof/自身构造函数 的指向
+		// Symbol.species的作用在于，实例对象在运行过程中，需要再次调用自身的构造函数时，会调用该属性指定的构造函数
+		class MyArray extends Array {
+		}
+		const a = new MyArray(1, 2, 3);
+		const b = a.map(x => x);
+		const c = a.filter(x => x > 1);
+
+		a instanceof MyArray; // true
+		b instanceof MyArray; // true
+		c instanceof MyArray; // true
+
+		class ItArray extends Array {
+		  static get [Symbol.species]() { return Array; }
+		}
+		const e = new ItArray(1, 2, 3);
+		const f = e.map(x => x);
+		const g = e.filter(x => x > 1);
+
+		e instanceof ItArray; // true
+		f instanceof ItArray;	// false
+		g instanceof ItArray;	// false
+	</script>
+	8.Symbol.match
+	<script type="text/javascript">
+		// 当前对象作为match的函数的参数时 重写match函数
+		
+
+		String.prototype.match(regexp);
+		// 等同于
+		regexp[Symbol.match](this);
+
+		// RegExp 中拥有 Symbol.match 函数的的实现
+		// /a/g[Symbol.match]('abc') 调用 /a/g 的 Symbol.match 函数
+		'abc'.match(/a/g) === /a/g[Symbol.match]('abc');
+
+		class MyMatcher {
+		  [Symbol.match](string) {
+		    return 'hello world'.indexOf(string);
+		  }
+		}
+
+		'e'.match(new MyMatcher()) // 1
+	</script>
+	9.Symbol.replace
+	<script type="text/javascript">
+		// 指向一个方法，当该对象被 String.prototype.replace 方法调用时，会返回该方法的返回值
+		// 重写replace函数
+		String.prototype.replace(searchValue, replaceValue);
+		// 等同于
+		searchValue[Symbol.replace](this, replaceValue);
+
+		const x = {
+			[Symbol.replace](...s){
+				console.log(s);
+			}
+		};
+		'Hello'.replace(x, 'World') // ["Hello", "World"]
+	</script>
+	10.Symbol.search
+	<script type="text/javascript">
+		// 当该对象被String.prototype.search方法调用时，会返回该方法的返回值
+		// 重写search函数
+		String.prototype.search(regexp)
+		// 等同于
+		regexp[Symbol.search](this)
+
+		class MySearch {
+		  constructor(value) {
+		    this.value = value;
+		  }
+		  [Symbol.search](string) {
+		    return string.indexOf(this.value);
+		  }
+		}
+		'foobar'.search(new MySearch('foo')) // 0
+	</script>
+	11.Symbol.split
+	<script type="text/javascript">
+		// 重写split函数
+		String.prototype.split(separator, limit)
+		// 等同于
+		separator[Symbol.split](this, limit)
+		class MySplitter {
+		  constructor(value) {
+		    this.value = value;
+		  }
+		  [Symbol.split](string) {
+		    let index = string.indexOf(this.value);
+		    if (index === -1) {
+		      return string;
+		    }
+		    return [
+		      string.substr(0, index),
+		      string.substr(index + this.value.length)
+		    ];
+		  }
+		}
+
+		'foobar'.split(new MySplitter('foo'))
+		// ['', 'bar']
+
+		'foobar'.split(new MySplitter('bar'))
+		// ['foo', '']
+
+		'foobar'.split(new MySplitter('baz'))
+		// 'foobar'
+	</script>
+	12.Symbol.iterator
+	<script type="text/javascript">
+		// 重写默认遍历器方法( for...of )
+		const myIterable = {};
+		myIterable[Symbol.iterator] = function* () {
+		  yield 1;
+		  yield 2;
+		  yield 3;
+		};
+
+		[...myIterable] // [1, 2, 3]
+		class Collection {
+		  *[Symbol.iterator]() {
+		    let i = 0;
+		    while(this[i] !== undefined) {
+		      yield this[i];
+		      ++i;
+		    }
+		  }
+		}
+
+		let myCollection = new Collection();
+		myCollection[0] = 1;
+		myCollection[1] = 2;
+
+		for(let value of myCollection) {
+		  console.log(value);
+		}
+		// 1
+		// 2
 	</script>
