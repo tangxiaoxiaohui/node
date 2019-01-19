@@ -5,25 +5,25 @@
 三.命令
 	1.git init
 		初始化当前项目/文件夹
-	
+
 	2.ssh-keygen
 		初始化密钥
-		①.密钥默认路径(大多数情况下) 
+		①.密钥默认路径(大多数情况下)
 			/c/Users/Administrator.WIN-4MALUEOU2GV/.ssh/id_rsa
 		②.密钥作用(本地 git 与 服务器 git 进行密钥关联)
 			用于关联 github 服务器项目密钥
-			关联方法 
+			关联方法
 					github -> Settings -> New SSH key
 					Title 	: 随意设置
 					Key		: 生成的密钥
 					Add SSH key(点击完成)
-	
+
 	3.git config --global(配置本地环境)
 		git config --global user.name
 		git config --global user.name "tangxioahui"
 		git config --global user.email
 		git config --global user.email "tangxiaoxiaohui@163.com"
-	
+
 	4.git remote add origin(别名) https://github.com/tangxiaoxiaohui/study.git(我的项目地址)
 		https://github.com/tangxiaoxiaohui/study.git
 		(我的项目地址:Your  -> Popular repositories -> Clone or download)
@@ -40,20 +40,20 @@
 	8.git status
 		查看工作区状态
 
-	9.git add index.html 
+	9.git add index.html
 		将 index.html 文件建立起跟踪
 
-	10.git push 
+	10.git push
 		将本地文件上传到服务器
 
 	11.git log
 		查看修改日志/版本号
-	
+
 	12.git reset --hard 577b5fd0e8d706433ea032dbc72600dafbf7e52a
 		根据日子的 commit 把项目还原到 这个commit 的时间点
-	
+
 	13.git reflog
 		列出当前版本之前的版本号
 
 	14.git打包某次commit
-	git diff-tree -r --no-commit-id --name-only f4710c4a32975904b00609f3145c709f31392140 | xargs tar -rf update_201800001.tar
+	git diff-tree -r --no-commit-id --name-only f4710c4a32 | xargs tar -rf update_201800001.tar
