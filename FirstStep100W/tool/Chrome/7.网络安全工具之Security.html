@@ -1,0 +1,27 @@
+<title>Security</title>
+简介
+	通过该面板你可以去调试当前网页的安全和认证等问题并确保您已经在你的网站上正确地实现HTTPS。
+HTTPS（Hyper Text Transfer Protocol over Secure Socket Layer），
+	是以安全为目标的HTTP通道，简单讲是HTTP的安全版。
+	即HTTP下加入SSL层，HTTPS的安全基础是SSL，因此加密的详细内容就需要SSL。 
+	它是一个URI scheme（抽象标识符体系），句法类同http:体系。用于安全的HTTP数据传输。
+	https:URL表明它使用了HTTP，但HTTPS存在不同于HTTP的默认端口及一个加密/身份验证层（在HTTP与TCP之间）。
+
+HTTPS和HTTP的区别主要为以下四点：
+	① https协议需要到CA申请证书，一般免费证书很少，需要交费。
+	② http是超文本传输协议，信息是明文传输，https则是具有安全性的ssl加密传输协议。
+	③ http和https使用的是完全不同的连接方式，用的端口也不一样，前者是80，后者是443。
+	④ http的连接很简单，是无状态的；HTTPS协议是由SSL+HTTP协议构建的可进行加密传输、身份认证的网络协议，比http协议安全。
+
+简介
+	如果网页是安全的，则会显示这样一条消息：This page is secure (valid HTTPS).。	
+		通过点击View certificate可以查看main origin的服务器证书信息。
+	
+	如果网页是不安全的，则会显示：This page is not secure.。
+		该面板可以区分两种类型的不安全的页面：
+			如果被请求的页面通过HTTP提供服务，那么这个主源就会被标记为不安全。
+			如果被请求的页面是通过HTTPS获取的，但这个页面接着通过HTTP继续从其他来源检索内容，那么这个页面仍然被标记为不安全。
+			这就是所谓的混合内容页面,混合内容页面只是部分受到保护,因为HTTP内容(非加密的内容)可以被嗅探者入侵,容易受到中间人攻击。
+			点击左侧则提供一个跳转到Network面板视图的链接信息。
+		中间人攻击(Man-in-the-Middle Attack,"MITM攻击")是一种“间接”的入侵攻击，
+			这种攻击模式是通过各种技术手段将受入侵者控制的一台计算机虚拟放置在网络连接中的两台通信计算机之间，这台计算机就称为“中间人”。

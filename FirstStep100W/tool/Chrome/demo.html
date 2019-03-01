@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title></title>
+</head>
+<body>
+<button id="btn"> click me</button>
+<script type="text/javascript">
+function aaaaaaaa() {
+	console.log('hello world');
+}
+
+function bbbbbbbb() {
+	aaaaaaaa();
+}
+
+function cccccccc() {
+	bbbbbbbb();
+}
+
+document.getElementById('btn').addEventListener('click', cccccccc, true);
+</script>
+</body>
+</html>

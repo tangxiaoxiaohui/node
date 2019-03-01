@@ -1,11 +1,66 @@
 <title>Sources</title>
-input[val $='a']{ backgroundImage:url('xxxx.xx?a')}
+脚本资源模块
+	Page/Sources
+		项目资源(css,js)
+		不同域名下放置当前域名的相关资源
+	Content scripts
+		一些插件和浏览器本身的资源和文件
+	Snippets
+		自定义编写的测试js片段
+	Filesystem
+		本地文件
+	overrider
+		本地文件重写(等同于打开指定文件进行编辑)
 
+脚本内容展示模块
+	当选中文件和文件时,进行资源的展示
+	当选中为js脚本,可进行断点调试
+	当脚本为压缩mini脚本,点击 {} 可格式化脚本
 
+断点管理模块
+	断点调试指令
+		||	|>
+			停止	开始断点调试
+		↘.
+			不跳入函数中去，继续执行下一行代码（F10）
+		↓.
+			跳入函数中去（F11）
+		↑.	
+			从执行的函数中跳出
+	　	→.　
+			
+		→/
+			禁用所有的断点，不做任何调试
+		⚪||
+			程序运行时遇到异常时是否中断的开关
+	其他
+		pause on caught exceptions
+			在捕获异常时暂停
+		Call Stack(调用栈)
+			当前断点调用的函数
+		Breakpoints(断点)
+			打的断点
+		XHR(XmlHttpRequset)/fetch(获取) Breakpoints
+			点击+ 并输入 URL 包含的字符串即可监听该 URL 的 Ajax 请求，输入内容就相当于 URL 的过滤器。
+			如果什么都不填，那么就监听所有 XHR 请求。一旦 XHR 调用触发时就会在 request.send() 的地方中断。
+		Dom Breakpoints(同Element中的Dom Breakpoints工具)
+			
+		Global Listeners(全局监听)
+			全局监听的事件列表
+		Event Listeners Breakpoints(事件监听)
+			为网页添加各种类型的断点信息。如选中了Mouse中的某一项（click），当你在网页上出发这个动作（单击网页任意地方），你浏览器就是立刻断点监控该事件。
+	
+当前断点的变量详情
+	Watch(监听)/Watch Expressions
+		为当前断点添加表达式
+		使得每次断点往下走一步都会执行你写下的js代码
+		为了避免你的调试代码重复执行，我们可以在调试时直接在console控制台上一次性地输出当前断点处的信息（推荐这样做）。为了验证我们在console面板中拥有的是当前断点环境，我门可以对比断点执行前后的this值变化。
+	Scope(范围)/Scope Variables
+		断点处私有和公有的变量信息
 
-
-
-<?xml version="1.0"?> <msg> <location x="31.087429" y="121.510513" scale="16" label="爱登堡大厦(上海市闵行区恒西路88号)" maptype="0" poiname="[位置]" poiid="" /> </msg>
-
-
-<location x="31.087429" y="121.510513" scale="16" label="爱登堡大厦(上海市闵行区恒西路88号)" maptype="0" poiname="[位置]" poiid="" />
+快捷键
+	Ctrl+G
+		快速定位到文件某一行
+	Ctrl+F
+		快速查找文本,匹配到的文本会被高亮
+	
