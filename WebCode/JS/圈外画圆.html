@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<style type="text/css">
+		body{
+			width: 100VW;
+			height: 100VH;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			overflow: hidden;
+		}
+		.middle_block{
+			width: 100px;
+			height: 100px;
+			border-radius: 50%;
+			background-color: red;
+			position: relative;
+			position: absolute;
+		}
+		.middle_block .out_block_wrap{
+			position: relative;
+			border-radius: 50%;
+		}
+		.middle_block .out_block_wrap .out_block{
+			position: absolute;
+			width: 100%;
+			height: 100%;
+			background-color: blue;
+			border-radius: 50%;
+		}
+	</style>
+</head>
+<body>
+	<div class="middle_block"></div>
+	<script type="text/javascript">
+		function initCircle(out_block_number,out_block_r,a_circle_count,interval_distance){
+			// 设定圈圈的数量
+			out_block_number = out_block_number || 10;
+			// 外圈小圆圈的直径
+			out_block_r = out_block_r || 20;
+			// 每圈显示的数量
+			a_circle_count = a_circle_count || 10;
+			// 每圈间隔距离
+			interval_distance = interval_distance || 0;
+
+			// 中间大圆
+			let middle_block = document.querySelector("body > .middle_block");
+			let middle_block_left = middle_block.offsetLeft;			// 中间大圆距离左侧距离
+			let middle_block_top = middle_block.offsetTop;				// 中间大圆距离顶部距离
+			let middle_block_height = middle_block.offsetHeight;	// 中间大圆高度
+			let middle_block_width = middle_block.offsetWidth;		// 宽度
+			
+			// 存储每圈的小圆
+			let out_block_wrap = null;
+			let Layer_number = 1;
+			// 开始写入小圆
+			for(let i = 1;i<=out_block_number;i++){
+				if(!out_block_wrap){
+					out_block_wrap = document.createElement("span");
+					out_block_wrap.className = "out_block_wrap";
+					out_block_wrap.style = `top: -${out_block_r+(parseInt((i-1)/a_circle_count)*out_block_r)+Layer_number*interval_distance}px;left:${(middle_block_height-out_block_r)/2}px;width:${out_block_r}px;height:${out_block_r}px;`;
+				}
+				let out_block = document.createElement("span");
+				out_block.className = "out_block";
+				out_block.style = `width:${out_block_r}px;height:${out_block_r}px;transform: rotate(${(i-1)*(360/a_circle_count)}deg);transform-origin:${out_block_r/2}px ${(middle_block_height/2)+(parseInt((i-1)/a_circle_count)+1)*out_block_r+Layer_number*interval_distance}px`;
+				out_block_wrap.appendChild(out_block);
+
+				if(i%a_circle_count === 0){
+					Layer_number++;
+					middle_block.appendChild(out_block_wrap);
+					out_block_wrap = null;
+				}
+			}
+			if(out_block_wrap){
+				middle_block.appendChild(out_block_wrap);
+			}
+		}
+		// initCircle();
+		// initCircle(4,30,4);
+		// initCircle(5,40,5);
+		// initCircle(6,50,6);
+		// initCircle(7,60,7);
+		initCircle(60,30,10,10);
+	</script>
+</body>
+</html>

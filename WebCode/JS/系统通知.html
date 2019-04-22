@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>系统通知</title>
+</head>
+<body>
+	<h1>Hello World !</h1>
+	<script type="text/javascript">
+		// 修改当前文档标题
+		function upsetDocumentTitle(value){
+			document.title =  value; 
+		}
+
+		// 调用系统通知
+		function sendNotification(value){
+			if (window.Notification) {
+		    let notification = new Notification('小慧', {
+		    	// 默认值是auto, 可以是ltr或rtl，有点类似direction属性。表示提示主体内容的水平书写顺序。
+		    	dir: 'auto',
+		    	
+		    	// lang	提示的语言。没看出来有什么用。大家可以忽略之~
+		    	// lang: 'lang',
+		      
+		      // 提示主体内容。
+		      body: `啦啦啦啦啦啦啦.`,
+
+					// 标记当前通知的标签。
+		      tag: '123456',
+
+		     	// 布尔值。新通知出现的时候是否替换之前的。如果设为true，则表示替换，表示当前标记的通知只会出现一个。
+		      // 注意都这里“当前标记”没？没错，true参数要想其作用，必须tag需要设置属性值。然后，通知就会覆盖。
+		      renotify: true,
+		      
+		      // 通知面板左侧那个图标地址
+		      icon: `https://www.baidu.com/img/dong_5af13a1a6fd9fb2c587e68ca5038a3c8.gif`,
+		      
+		      // 任意类型和通知相关联的数据
+		      data: {
+		        message:{'id':1,'content':'哈哈哈哈哈'},
+		      },
+
+		      // 通知显示时候，设备震动硬件需要的振动模式。所谓振动模式，指的是一个描述交替时间的数组，分别表示振动和不振动的毫秒数，一直交替下去。
+		      // 例如[200, 100, 200]表示设备振动200毫秒，然后停止100毫秒，再振动200毫秒。
+		      vibrate: [200, 100, 200],
+
+		      // 布尔值。通知出现的时候，是否要有声音。默认false, 表示无声。
+		      silent: false,
+
+		      // 字符串。音频地址。表示通知出现要播放的声音资源。
+		      sound: '',
+
+		      // 布尔值。是否不再屏幕上显示通知信息。默认false, 表示要在屏幕上显示通知内容。
+		      noscreen: false,
+
+		      // 布尔值。是否通知具有粘性，这样用户不太容易清除通知。默认false, 表示没有粘性。根据我自己的猜测，应该和position的sticky属性值类似。
+		      sticky: false,
+		    });
+
+		    // 关闭Notification(如果你放着不管，一段时间后就会自动隐藏)
+		    notification.close();
+
+		    // 点击通知的事件
+		    notification.onclick = function () {
+		      let userAgent = navigator.userAgent.toLowerCase();
+		      let data = notification.data;
+					let message = notification.data.message;
+					console.log(data,message);
+	        var tempA = document.createElement("a");
+	        tempA.href = `https://www.baidu.com/`;
+	        tempA.click();
+		      window.focus();
+		      notification.close();
+		    }
+
+		    // 通知显示异常
+		    Notification.onerror = () => {}
+
+		    // 通知关闭后 
+				Notification.onclose = () => {}
+
+				// 通知显示的时候
+				Notification.onshow = () => {}
+
+		  }
+		}
+		
+	</script>
+</body>
+</html>
