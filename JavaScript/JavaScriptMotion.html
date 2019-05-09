@@ -280,88 +280,88 @@
 	</script>
 
 七.重力场拖拽
-<script type="text/javascript">
-	var div = document.getElementsByClassName("demo")[0];
-	
-	div.onmousedown = function(e){
-		var lastX = div.offsetLeft;
-		var lastY = div.offsetTop;
-		var e = e || window.event;
-		var thatX =  e.clientX - this.offsetLeft;
-		var thatY =  e.clientY - this.offsetTop;
-		var that = this;
-		var speedX,speedY,newleft,newtop;
-		clearInterval(that.timer);
-		document.onmousemove = function(e){
-			newleft = e.clientX - thatX;
-			newtop  = e.clientY - thatY;
-			that.style.left = newleft + "px";
-			that.style.top  = newtop  + "px";
-			speedX = newleft - lastX;
-			speedY = newtop  - lastY;
-			lastX = newleft;
-			lastY = newtop;
+	<script type="text/javascript">
+		var div = document.getElementsByClassName("demo")[0];
+		
+		div.onmousedown = function(e){
+			var lastX = div.offsetLeft;
+			var lastY = div.offsetTop;
+			var e = e || window.event;
+			var thatX =  e.clientX - this.offsetLeft;
+			var thatY =  e.clientY - this.offsetTop;
+			var that = this;
+			var speedX,speedY,newleft,newtop;
+			clearInterval(that.timer);
+			document.onmousemove = function(e){
+				newleft = e.clientX - thatX;
+				newtop  = e.clientY - thatY;
+				that.style.left = newleft + "px";
+				that.style.top  = newtop  + "px";
+				speedX = newleft - lastX;
+				speedY = newtop  - lastY;
+				lastX = newleft;
+				lastY = newtop;
+			}
+			document.onmouseup = function(){
+				move(that,speedX? speedX :0,speedY? speedY :0);
+				document.onmousemove = null;
+				document.onmouseup = null;
+			}
 		}
-		document.onmouseup = function(){
-			move(that,speedX? speedX :0,speedY? speedY :0);
-			document.onmousemove = null;
-			document.onmouseup = null;
+		
+		function move(that,speedX,speedY){
+			clearInterval(that.timer);
+			var nowSpeedX,
+				nowSpeedY,
+				nowAddSpeedY = 3,
+				windowWidth,
+				windowHeight,
+				thatWidth,
+				thatHeigth;
+			that.timer = setInterval(function(){
+				windowWidth = document.documentElement.clientWidth;
+				windowHeight = document.documentElement.clientHeight;
+				thatWidth  = that.offsetWidth;
+				thatHeigth = that.offsetHeight; 
+				speedY += nowAddSpeedY;
+				nowSpeedX = that.offsetLeft + speedX;
+				nowSpeedY = that.offsetTop + speedY;
+	//			console.log(speedX +" - "+speedY)
+				if(nowSpeedX > windowWidth - thatWidth){
+					speedX *= -1;
+					speedX *= 0.95;
+					speedY *= 0.95;
+					nowSpeedX = windowWidth - thatWidth;
+				}
+				
+				if(nowSpeedY > windowHeight - thatHeigth){
+					speedY *= -1; 
+					speedX *= 0.95;
+					speedY *= 0.95;
+					nowSpeedY = windowHeight - thatHeigth;
+				}
+				
+				if(nowSpeedX < 0){
+					speedX *= -1; 
+					speedX *= 0.95;
+					speedY *= 0.95;
+					nowSpeedX = 0;
+				}
+				
+				if(nowSpeedY < 0){
+					speedY *= -1; 
+					speedX *= 0.95;
+					speedY *= 0.95;
+					nowSpeedY = 0;
+				}
+				
+				if(Math.abs(speedX) < 1 && Math.abs(nowSpeedY) && nowSpeedY == windowHeight - thatHeigth ){
+					clearInterval(that.timer);
+				}
+				
+				that.style.left	= nowSpeedX + "px";
+				that.style.top  = nowSpeedY + "px";
+			},50);
+			 
 		}
-	}
-	
-	function move(that,speedX,speedY){
-		clearInterval(that.timer);
-		var nowSpeedX,
-			nowSpeedY,
-			nowAddSpeedY = 3,
-			windowWidth,
-			windowHeight,
-			thatWidth,
-			thatHeigth;
-		that.timer = setInterval(function(){
-			windowWidth = document.documentElement.clientWidth;
-			windowHeight = document.documentElement.clientHeight;
-			thatWidth  = that.offsetWidth;
-			thatHeigth = that.offsetHeight; 
-			speedY += nowAddSpeedY;
-			nowSpeedX = that.offsetLeft + speedX;
-			nowSpeedY = that.offsetTop + speedY;
-//			console.log(speedX +" - "+speedY)
-			if(nowSpeedX > windowWidth - thatWidth){
-				speedX *= -1;
-				speedX *= 0.95;
-				speedY *= 0.95;
-				nowSpeedX = windowWidth - thatWidth;
-			}
-			
-			if(nowSpeedY > windowHeight - thatHeigth){
-				speedY *= -1; 
-				speedX *= 0.95;
-				speedY *= 0.95;
-				nowSpeedY = windowHeight - thatHeigth;
-			}
-			
-			if(nowSpeedX < 0){
-				speedX *= -1; 
-				speedX *= 0.95;
-				speedY *= 0.95;
-				nowSpeedX = 0;
-			}
-			
-			if(nowSpeedY < 0){
-				speedY *= -1; 
-				speedX *= 0.95;
-				speedY *= 0.95;
-				nowSpeedY = 0;
-			}
-			
-			if(Math.abs(speedX) < 1 && Math.abs(nowSpeedY) && nowSpeedY == windowHeight - thatHeigth ){
-				clearInterval(that.timer);
-			}
-			
-			that.style.left	= nowSpeedX + "px";
-			that.style.top  = nowSpeedY + "px";
-		},50);
-		 
-	}
-</script>
+	</script>

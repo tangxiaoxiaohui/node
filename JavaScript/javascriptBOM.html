@@ -10,24 +10,24 @@ BOM(browser:浏览器 object:对象 modle:模型) 浏览器对象模型
 
 二.BOM对象的内容
 	1.Window 对象		JavaScript层级中的顶层对象,表示浏览器窗口
-	2.Navigator 对象	包含客户端浏览器信息
+	2.Navigator 对象		包含客户端浏览器信息
 	3.History 对象		包含了浏览器窗口访问过的url
 	4.Location 对象		包含了当前url的信息
 	5.Screen 对象		包含了客户端显示屏的信息
 
 三.window对象
 	1.open(url,name,features,replace);
-		①.url代表新的window的地址
-		②.name表示当前window的标识,如果浏览器不存在当前表示,则新创建一个窗口(window),如果浏览器(DOM)存在当前标识,则替换掉相同表示的窗口(window).
-		③.features参数可以用来设置浏览器的各种样式(宽高,位置,是否显示url等等)
-		④.replace表示是否替换当前文档(不好用).
-		⑤.window.open(),会有一个返回值,返回值为open的窗口对象,可以利用这个window对象来操作窗口(移动:window.moveTo(100(单位默认不用写),100),关闭:window.close()).
+		①.url 			代表新的window的地址
+		②.name 			表示当前window的标识,如果浏览器不存在当前表示,则新创建一个窗口(window),如果浏览器(DOM)存在当前标识,则替换掉相同表示的窗口(window).
+		③.features 		参数可以用来设置浏览器的各种样式(宽高,位置,是否显示url等等)
+		④.replace 		表示是否替换当前文档(不好用).
+		⑤.window.open() 会有一个返回值,返回值为open的窗口对象,可以利用这个window对象来操作窗口(移动:window.moveTo(100(单位默认不用写),100),关闭:window.close()).
 	2.三大弹出框
 		①.alert();		警告框,只有取消按钮.
 		②.confirm();	确认框,拥有取消和确定两个按钮.返回true.false
 		③.prompt();		弹出输入框,拥有取消和确定两个按钮,可以获取用户的输入住,返回用户输入的内容
 	3.属性 window.
-		①.closed 返回当前窗口是否被关闭.
+		①.closed 		返回当前窗口是否被关闭.
 		②.innerheight 	返回当前文档显示区域的高度.
 		③.innerwidth 	返回当前文档显示区域的宽度.
 		④.length 		设置或返回窗口中的框架数量,当前window内部的windiw的个数.
