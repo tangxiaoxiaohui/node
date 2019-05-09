@@ -1,0 +1,49 @@
+一.安装虚拟机
+	1.VMware
+	2.VirtualBox
+		新建
+			本间夹:	自定义
+			类型:	linux
+			版本:	Other Linux(64-bit)/centOS
+		设置
+			存储:	光盘选择centOS系统盘
+			网络:	桥接网卡
+
+二.开启cpu虚拟化
+	1.重新启动页面
+	2.开机时按F2、F12、DEL、ESC等键就可以进入到BIOS，
+	3.找到Configuration选项或者Security选项
+	4.后选择Virtualization，或者Intel Virtual Technology
+	5.回车，将其值设置成：设置为Enabled。
+	6.保存BIOS设置，重启计算机。
+	7.https://jingyan.baidu.com/article/ab0b56305f2882c15afa7dda.html
+
+三.安装centOS系统
+	1.回车键进行安装
+	2.SYSTEM => INSTALLATION DESTINATION(盘片) => ATA VBOX HARDDISK(为选中选中状态)
+	3.done 返回上一步 ,没有异常,点击 Begin installaction(开始安装)
+	4.点击钥匙,设置密码(设置完毕,点击done(返回))
+	5.Reboot重启
+
+四.网络设置
+	1.查看IP地址 
+		=>ip addr 
+	2.查看网络是否正常
+		=>ping www.baidu.com
+	3.设置网络
+		=>cd /ect
+		=>cd sysconfig/
+		=>cd network-scripts/
+		=>vi ifcfg-enp0s3
+
+5.安装weget
+	=>yum install wget
+	=>y
+	=>y
+
+6.安装node
+	=>wget file:///C:/Users/alang/Downloads/node-v10.15.3-linux-x64.tar.xz
+	=>xz ***.tar.xz
+	=>tar -xf ***.tar
+	=>ln -s ~node-v10.15.3-linux-x64/bin/dode /usr/bin/node
+

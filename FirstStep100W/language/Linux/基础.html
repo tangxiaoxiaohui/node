@@ -1,0 +1,52 @@
+一.FHS(文件系统层次标准)协议(https://www.cnblogs.com/lifeinsmile/p/4280223.html)
+	/(根目录)
+		与开机系统有关
+	/usr(unix software resource)
+		与软件安装执行有关
+	/var(variable)
+		与系统运作过程有关.
+	/bin => /usr/bin
+		可执行的指令
+	/sbin => /usr/sbin
+		可执行的指令,只允许管理员进行访问
+	/boot:
+		和系统开机相关的
+	/dev
+		硬件挂载
+	/etc
+		存放配置文件
+	/home
+		用户目录
+	/root
+		主用户
+	~
+		当前用户的主目录
+	opt
+		存放第三方软件目录
+	srv
+		存放用户主动成产出来的数据
+	/proc
+		虚拟文件系统不在硬盘中存储
+		存储在内存中,关机后就没了
+	/sys
+		虚拟文件系统(和系统开机相关的)
+	/lost+found
+		ext2/ext3 文件系统下会产生的目录,当文件系统发生错误,会把文件碎片纯放在这个目录下
+	/lib -> /usr/lib
+	/lib64 -> /usr/lib64
+		linux的函数库(linux下的包,驱动)
+	media
+		存放可删除设备(U盘,光盘...)
+	mnt
+		与media类似
+
+二.文件权限
+	第一个字符
+		d:dir
+		l:link
+		-:file
+	分三组(r:read,w:write,x:eXecute(执行))
+		rwx:421
+		第一组:当前所属用户权限
+		第一组:当前所属组权限
+		第一组:其他用户权限
