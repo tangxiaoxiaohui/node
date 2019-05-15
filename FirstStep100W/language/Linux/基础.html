@@ -50,3 +50,26 @@
 		第一组:当前所属用户权限
 		第一组:当前所属组权限
 		第一组:其他用户权限
+
+三.用户
+	相关文件
+	   /etc/passwd 			- 使 用 者 帐 号 资 讯，可以查看用户信息
+       /etc/shadow 			- 使 用 者 帐 号 资 讯 加 密
+       /etc/group 			- 群 组 资 讯
+       /etc/default/useradd - 定 义 资 讯
+       /etc/login.defs 		- 系 统 广 义 设 定
+       /etc/skel 			- 内 含 定 义 档 的 目 录
+	/etc/password 文件详解
+		root:x:0:0:root:/root:/bin/bash
+		root		:	x		:	0		:	0		: root 			:	/root 		: /bin/bash
+		[用户名] 	:	[密码] 	:	[UID] 	:	[GID] 	: [身份描述] 	:	[主目录] 	: [登录shell] 
+									用户ID		组ID	
+		[UID]和[GID]小于1000/500的一般都是系统自己保留，不做普通用户和组的标识的，所以新增加的用户和组一般都是UID和GID大于1000/500的
+	
+	用户
+		用户至少属于一个用户组(主要用户组)
+	用户组
+
+四.防火墙
+	关闭防火墙
+	systemctl disable firewalld

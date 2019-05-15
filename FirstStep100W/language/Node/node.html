@@ -1,0 +1,37 @@
+模块,引入,导出
+	模块
+		NodeJS的模块是运行在一个函数当中的
+		function module(exports,require,module,__filename,__dirname){
+			// module.js
+			return module.exports
+		}
+	引入
+		require("http")			// 系统模块的引入
+		require("./demo.js")	// 自定义模块的引入
+
+	导出
+		默认导出 module.exports
+		module.exports 默认值为 {}
+		简写 exports
+		module.exports 与  的区别
+			module.exports 与 exports 最开始指向同一个对象
+			导出的永远都是 module.exports
+			永远都用 module.exports
+
+	案例
+		let data = require("./demo.js");
+		
+		// demo.js
+		没有 module.exports 
+		data 值默认为 {}
+
+		// demo.js
+		module.exports = null;		
+		data 值为 null
+
+		// demo.js
+		module.exports.a = 1;
+		module.exports.b = 2;
+		data 值为 {a:1,b:2}
+
+

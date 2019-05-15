@@ -1,0 +1,80 @@
+必要设置
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+	width viewport 宽度(数值/device-width)
+	height viewport 高度(数值/device-height)
+	initial-scale 初始缩放比例
+	maximum-scale 最大缩放比例
+	minimum-scale 最小缩放比例
+	user-scalable 是否允许用户缩放(yes/no)
+	minimal-ui iOS 7.1 beta 2 中新增属性（注意：iOS8 中已经删除），可以在页面加载时最小化上下状态栏。
+
+根据iPhone6设计稿动态计算rem值
+	<script type="text/javascript">
+		/**
+		 * [以iPhone6的设计稿为例js动态设置文档 rem 值]
+		 * @param  {[type]} currClientWidth [当前客户端的宽度]
+		 * @param  {[type]} fontValue [计算后的 fontvalue值]
+		 * @return {[type]} [description]
+		 */
+	    var currClientWidth, fontValue,originWidth;
+	    //originWidth用来设置设计稿原型的屏幕宽度（这里是以 Iphone 6为原型的设计稿）
+	    originWidth=375;
+	    __resize();
+
+	    //注册 resize事件
+	    window.addEventListener('resize', __resize, false);
+
+	    function __resize() {
+	        currClientWidth = document.documentElement.clientWidth;
+	        //这里是设置屏幕的最大和最小值时候给一个默认值
+	        if (currClientWidth > 640) currClientWidth = 640;
+	        if (currClientWidth < 320) currClientWidth = 320;
+	        //
+	        fontValue = ((62.5 * currClientWidth) /originWidth).toFixed(2);
+	        document.documentElement.style.fontSize = fontValue + '%';
+	    }
+	</script>
+
+去掉 a，input 在移动端浏览器中的默认样式
+	<style type="text/css">
+		/* .禁止 a 标签背景 */
+		/* 在移动端使用 a标签做按钮的时候，点按会出现一个“暗色”的背景，去掉该背景的方法如下 */
+		a,button,input,optgroup,select,textarea {
+		    -webkit-tap-highlight-color:rgba(0,0,0,0); /*去掉a、input和button点击时的蓝色外边框和灰色半透明背景*/
+		}
+
+		/* 禁止长按 a，img 标签长按出现菜单栏 */
+		/* 使用 a标签的时候，移动端长按会出现一个 菜单栏，这个时候禁止呼出菜单栏的方法如下 */
+		a, img {
+		    -webkit-touch-callout: none; /*禁止长按链接与图片弹出菜单*/
+		}
+
+		/* 流畅滚动 */
+		body{
+		    -webkit-overflow-scrolling:touch;
+		}
+
+	</style>
+CSS 截断字符串
+	<style type="text/css">
+		{
+		    /*指定字符串的宽度*/
+		    width:300px;   
+		    overflow: hidden;  
+		    /* 当字符串超过规定长度，显示省略符*/ 
+		    text-overflow:ellipsis;  
+		    white-space: nowrap;   
+		}				
+	</style>
+
+
+
+#formbox {
+  width:  130px;
+  /*加厂商前缀，操作符（+，-，*，/）两边要有空格）*/               
+  width:  -moz-calc(100% / 6);   
+  width:  -webkit-calc(100% / 6);   
+  width:  calc(100% / 6);   
+  border: 1px solid black;
+  padding: 4px;
+}

@@ -116,8 +116,22 @@ URI/URL/URN的区别
 	Cache-Control
 		Cache-Control指定请求和响应遵循的缓存机制。
 		在请求消息或响应消息中设置Cache-Control并不会修改另一个消息处理过程中的缓存处理过程。
-		请求时的缓存指令包括no-cache、no-store、max-age、max-stale、min-fresh、only-if-cached,
-		响应消息中的指令包括public、private、no-cache、no-store、no-transform、must-revalidate、proxy-revalidate、max-age。
+		请求时的缓存指令包括
+			no-cache、
+			no-store、
+			max-age(最大缓存周期(单位是秒))、
+			max-stale(表示客户端愿意接收一个过期的资源,但是响应不能超过设置的过期时间)、
+			min-fresh(表示客户端希望在指定的时间内获取最新的消息)、
+			only-if-cached(只要有缓存就不要请求服务器),
+		响应消息中的指令包括
+			public(可以被任何中间层缓存,包括服务器,代理服务器等等)、
+			private(只能被一个东西缓存,服务器可以缓存(代理服务器不能缓存))、
+			no-cache(使用缓存前要向服务器验证)、
+			no-store(不使用缓存)、
+			no-transform(不许对缓存资源进行转换,或者转码)、
+			must-revalidate(在使用缓存之前验证资源的状态,如果资源过期则不能使用)、
+			proxy-revalidate(和上面作用相同,适用于共享缓存(比如代理服务器))、
+			max-age。
 	Date
 		Date头域表示消息发送的时间,时间的描述格式由rfc822定义
 		例如,Date:Mon,31Dec200104:25:57GMT。Date描述的时间表示世界标准时,换算成本地时间,需要知道用户所在的时区。

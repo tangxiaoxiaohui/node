@@ -361,6 +361,8 @@
 		// 默认为 undefined.
 		// 
 	</script>
+
+生命周期
 	创建vue
 	初始化数据和函数
 	初始化数据和函数后,数据绑定前 beforeCreate
@@ -376,3 +378,105 @@
 	解除数据绑定前 beforeDestroy
 	接触数据绑定
 	解除数据绑定后 destroy
+
+冷知识
+	1.动态参数
+		data = {
+			attributeName:href,
+			eventName:focus,
+		}
+		<a v-bind:[attributeName]="www.baidu</a.com"></a>
+		<a :[attributeName]="www.baidu.com"></a>
+		<a :href="www.baidu.com"></a>
+
+		<a v-on:[eventName]="doSomething"></a>
+		<a @[eventName]="doSomething"></a>
+		<a @focus="doSomething"></a>
+		如果你在 DOM 中使用模板 (直接在一个 HTML 文件里撰写模板)，需要留意浏览器会把特性名全部强制转为小写.
+		<!-- 在 DOM 中使用模板时这段代码会被转换为 `v-bind:[someattr]` -->
+		<a v-bind:[someAttr]="value"> ... </a>
+
+	2.计算属性的 setter
+		运行 vm.fullName = 'John Doe' 时，setter 会被调用，vm.firstName 和 vm.lastName 也会相应地被更新。
+		computed: {
+		  fullName: {
+		    // getter
+		    get: function () {
+		      return this.firstName + ' ' + this.lastName
+		    },
+		    // setter
+		    set: function (newValue) {
+		      var names = newValue.split(' ')
+		      this.firstName = names[0]
+		      this.lastName = names[names.length - 1]
+		    }
+		  }
+		}	
+
+	3.v-for
+		可以便利对象
+		与v-if一起使用时v-for的优先级更高
+	
+	4.全局通用组件
+	<script type="text/javascript">
+		import Vue from 'vue'
+		import upperFirst from 'lodash/upperFirst'
+		import camelCase from 'lodash/camelCase'
+
+		const requireComponent = require.context(
+		  '.',
+		  false,
+		  /_base-[\w-]+\.vue$/
+		)
+
+		requireComponent.keys().forEach((fileName) => {
+		  const componentConfig = requireComponent(fileName)
+		  const componentName = upperFirst(
+		    camelCase(
+		      fileName
+		        .replace(/^\.\/_/, '')
+		        .replace(/\.\w+$/, '')
+		    )
+		  )
+		  Vue.component(componentName, componentConfig.default || componentConfig)
+		})		
+	</script>
+	<script type="text/javascript">
+		import Vue from 'vue'
+		import upperFirst from 'lodash/upperFirst'
+		import camelCase from 'lodash/camelCase'
+
+		const requireComponent = require.context(
+		  // 其组件目录的相对路径
+		  './components',
+		  // 是否查询其子目录
+		  false,
+		  // 匹配基础组件文件名的正则表达式
+		  /Base[A-Z]\w+\.(vue|js)$/
+		)
+
+		requireComponent.keys().forEach(fileName => {
+		  // 获取组件配置
+		  const componentConfig = requireComponent(fileName)
+
+		  // 获取组件的 PascalCase 命名
+		  const componentName = upperFirst(
+		    camelCase(
+		      // 获取和目录深度无关的文件名
+		      fileName
+		        .split('/')
+		        .pop()
+		        .replace(/\.\w+$/, '')
+		    )
+		  )
+
+		  // 全局注册组件
+		  Vue.component(
+		    componentName,
+		    // 如果这个组件选项是通过 `export default` 导出的，
+		    // 那么就会优先使用 `.default`，
+		    // 否则回退到使用模块的根。
+		    componentConfig.default || componentConfig
+		  )
+		})		
+	</script>
