@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<title></title>
+读取文件
+<script type="text/javascript">
+	let fs = require('fs')
+	// 同步读取文件
+	try{
+		let data = fs.readFileSync('../node.html');
+		console.log(data.toString());
+	}catch(){
+		console.log('找不到文件.');
+	}
+</script>

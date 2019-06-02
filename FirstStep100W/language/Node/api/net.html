@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<title></title>
+net
+<script type="text/javascript">
+	let net = require('net');
+	// 服务端
+	// server.js
+	let server = net.createServer()
+	server.listen(12306,'127.0.0.1')；
+	server.on('listening',function (){
+		console.log('服务已启动')
+	})
+	// 参数为socket
+	server.on('connection',function (socket){
+		console.log('有新的连接');
+		socket.on('data',function(data){
+			console.log(data.toString);
+			socket.write('hello client !');
+		})
+		socket.on('close',function (data){
+			console.log('客户端已关闭');
+			server.close();
+		})
+
+	})
+	server.on('close',function (){
+		console.log('服务已关闭')
+	})
+	server.on('erroe',function (){
+		console.log('服务报错')
+	})
+
+
+	// 客户端
+	// client.js
+	let socket = net.connect(12306,'127.0.0.1');
+	socket.on('connect',function (socket){
+		console.log('已连接到服务器')
+		console.log(remoteAddress);
+		console.log(remotePort);
+		console.log(localAddress);
+		console.log(localPort);
+	})
+	socket.on('data',function (data){
+		console.log(data.toString);
+		socket.end();
+	})
+	socket.on('close',function (data){
+		console.log('socket已关闭');
+	})
+	socket.on('setTimeout',function (){
+		console.log('socket请求超时');
+	})
+
+	socket.write('hello server !');
+	socket.setTimeout(2000);
+</script>
+
+
+
+Socket
+	事件
+		connect: 连接到服务器触发
+		data: 是否有数据
+		close: socket关闭触发
+		timeout: socket请求超时触发
+		error: socket报错触发
+	属性
+		remoteAddress: 远端地址
+		remotePort: 远端端口
+		localAddress: 本地地址
+		localPort: 本地端口
+	方法
+		setTimeout: 设置超时事件
+		write: socket进行数据写入
+		setEncoding
+		end: 关闭socket连接
+
+Server
+	事件
+		listening: 服务已启动触发
+		connection: 有新的socket链接触发
+		close: 服务关闭触发
+		error: 服务报错触发
+	方法
+		listen:　监听指定ＩＰ的指定端口
+		close：　关闭服务
+		address： 获取当前IP,端口,协议(在事件(回调)中调用才能拿到值)
