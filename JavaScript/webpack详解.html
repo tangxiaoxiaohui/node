@@ -1,0 +1,228 @@
+entry(输入)
+	<script type="text/javascript">
+		// 单个入口（简写）语法
+		const config = {
+		  entry: './path/to/my/entry/file.js'
+		};
+
+		// 对象语法
+		const config = {
+		  entry: {
+		    app: './src/app.js',
+		    vendors: './src/vendors.js'
+		  }
+		};
+
+		// 多页面应用程序
+		const config = {
+		  entry: {
+		    pageOne: './src/pageOne/index.js',
+		    pageTwo: './src/pageTwo/index.js',
+		    pageThree: './src/pageThree/index.js'
+		  }
+		};
+		module.exports = config;	
+	</script>
+output(输入)
+	<script type="text/javascript">
+		// 单个入口起点
+		const config = {
+		  output: {
+		    filename: 'bundle.js',
+		    path: '/home/proj/public/assets'
+		  }
+		};
+
+		// 多个入口起点
+		const config = {
+		  entry: {
+		    app: './src/app.js',
+		    search: './src/search.js'
+		  },
+		  output: {
+		    filename: '[name].js',
+		    path: __dirname + '/dist'
+		  }
+		};
+
+		// 高级进阶
+		// 以下是使用 CDN 和资源 hash 的复杂示例：
+		output: {
+		  path: "/home/proj/cdn/assets/[hash]",
+		  publicPath: "http://cdn.example.com/assets/[hash]/"
+		}
+
+		// 在编译时不知道最终输出文件的 publicPath 的情况下，publicPath 可以留空，并且在入口起点文件运行时动态设置。
+		// 如果你在编译时不知道 publicPath，你可以先忽略它，并且在入口起点设置 __webpack_public_path__。
+		__webpack_public_path__ = myRuntimePublicPath
+
+		module.exports = config;
+	</script>
+mode(模式)
+	<script type="text/javascript">
+		
+	</script>
+loader > module(模块)
+	<script type="text/javascript">
+		// 配置[Configuration]
+	  module: {
+	    rules: [
+	      {
+	        test: /\.css$/,
+	        use: [
+	          { loader: 'style-loader' },
+	          {
+	            loader: 'css-loader',
+	            options: {
+	              modules: true
+	            }
+	          }
+	        ]
+	      }
+	    ]
+	  }	
+
+	  // 内联
+	  import Styles from 'style-loader!css-loader?modules!./styles.css';
+
+	  // CLI
+	  webpack --module-bind jade-loader --module-bind 'css=style-loader!css-loader'
+
+	  // loader 特性
+	  loader 支持链式传递。能够对资源使用流水线(pipeline)。一组链式的 loader 将按照相反的顺序执行。loader 链中的第一个 loader 返回值给下一个 loader。在最后一个 loader，返回 webpack 所预期的 JavaScript。
+		loader 可以是同步的，也可以是异步的。
+		loader 运行在 Node.js 中，并且能够执行任何可能的操作。
+		loader 接收查询参数。用于对 loader 传递配置。
+		loader 也能够使用 options 对象进行配置。
+		除了使用 package.json 常见的 main 属性，还可以将普通的 npm 模块导出为 loader，做法是在 package.json 里定义一个 loader 字段。
+		插件(plugin)可以为 loader 带来更多特性。
+		loader 能够产生额外的任意文件。	
+
+		// 解析 loader
+		loader 遵循标准的模块解析。多数情况下，loader 将从模块路径（通常将模块路径认为是 npm install, node_modules）解析。
+		loader 模块需要导出为一个函数，并且使用 Node.js 兼容的 JavaScript 编写。通常使用 npm 进行管理，但是也可以将自定义 loader 作为应用程序中的文件。按照约定，loader 通常被命名为 xxx-loader（例如 json-loader）。
+	</script>
+plugins(插件)
+	<script type="text/javascript">
+	// 定义
+	插件是 webpack 的支柱功能。webpack 自身也是构建于，你在 webpack 配置中用到的相同的插件系统之上！
+	插件目的在于解决 loader 无法实现的其他事。
+
+	// 剖析
+	webpack 插件是一个具有 apply 属性的 JavaScript 对象。apply 属性会被 webpack compiler 调用，并且 compiler 对象可在整个编译生命周期访问。
+
+	// 配置
+	const HtmlWebpackPlugin = require('html-webpack-plugin'); //通过 npm 安装
+	const webpack = require('webpack'); //访问内置的插件
+	const path = require('path');
+
+	const config = {
+	  entry: './path/to/my/entry/file.js',
+	  output: {
+	    filename: 'my-first-webpack.bundle.js',
+	    path: path.resolve(__dirname, 'dist')
+	  },
+	  module: {
+	    rules: [
+	      {
+	        test: /\.(js|jsx)$/,
+	        use: 'babel-loader'
+	      }
+	    ]
+	  },
+	  plugins: [
+	    new webpack.optimize.UglifyJsPlugin(),
+	    new HtmlWebpackPlugin({template: './src/index.html'})
+	  ]
+	};
+
+	// Node API
+  const webpack = require('webpack'); //访问 webpack 运行时(runtime)
+  const configuration = require('./webpack.config.js');
+
+  let compiler = webpack(configuration);
+  compiler.apply(new webpack.ProgressPlugin());
+
+  compiler.run(function(err, stats) {
+    // ...
+  });		
+
+	module.exports = config;		
+	</script>
+configuration(配置)
+	<script type="text/javascript">
+	// 简介
+	你可能已经注意到，很少有 webpack 配置看起来很完全相同。这是因为 webpack 的配置文件，是导出一个对象的 JavaScript 文件。此对象，由 webpack 根据对象定义的属性进行解析。
+
+	// 因为 webpack 配置是标准的 Node.js CommonJS 模块，你可以做到以下事情：
+	通过 require(...) 导入其他文件
+	通过 require(...) 使用 npm 的工具函数
+	使用 JavaScript 控制流表达式，例如 ?: 操作符
+	对常用值使用常量或变量
+	编写并执行函数来生成部分配置
+	请在合适的时机使用这些特性。
+
+	// 虽然技术上可行，但应避免以下做法：
+	在使用 webpack 命令行接口(CLI)（应该编写自己的命令行接口(CLI)，或使用 --env）时，访问命令行接口(CLI)参数
+	导出不确定的值（调用 webpack 两次应该产生同样的输出文件）
+	编写很长的配置（应该将配置拆分为多个文件）
+
+	// 注意
+	你需要从这份文档中收获最大的点，就是你的 webpack 配置，可以有很多种的格式和风格。但为了你和你的团队能够易于理解和维护，你们要始终采取同一种用法、格式和风格。
+	</script>
+modules(模块)
+	<script type="text/javascript">
+	// 什么是 webpack 模块
+	// 对比 Node.js 模块，webpack 模块能够以各种方式表达它们的依赖关系，几个例子如下：
+	ES2015 import 语句
+	CommonJS require() 语句
+	AMD define 和 require 语句
+	css/sass/less 文件中的 @import 语句。
+	样式(url(...))或 HTML 文件(<img src=...>)中的图片链接(image url)
+
+	// 支持的模块类型
+	webpack 通过 loader 可以支持各种语言和预处理器编写模块。
+	loader 描述了 webpack 如何处理 非 JavaScript(non-JavaScript) _模块_，并且在 bundle 中引入这些依赖。 
+
+	// webpack 社区已经为各种流行语言和语言处理器构建了 loader，包括：
+	CoffeeScript
+	TypeScript
+	ESNext (Babel)
+	Sass
+	Less
+	Stylus
+	</script>
+module resolution(模块解析)
+	<script type="text/javascript">
+	</script>
+targets(构建目标)
+	<script type="text/javascript">
+		// 用法
+		module.exports = {
+		  target: 'node'
+		};
+
+		// 多个 Target
+		// 尽管 webpack 不支持向 target 传入多个字符串，你可以通过打包两份分离的配置来创建同构的库：
+		// 下面的例子将在你的 dist 文件夹下创建 lib.js 和 lib.node.js 文件。
+		var path = require('path');
+		var serverConfig = {
+		  target: 'node',
+		  output: {
+		    path: path.resolve(__dirname, 'dist'),
+		    filename: 'lib.node.js'
+		  }
+		  //…
+		};
+
+		var clientConfig = {
+		  target: 'web', // <=== 默认是 'web'，可省略
+		  output: {
+		    path: path.resolve(__dirname, 'dist'),
+		    filename: 'lib.js'
+		  }
+		  //…
+		};
+
+		module.exports = [ serverConfig, clientConfig ];
+	</script>
