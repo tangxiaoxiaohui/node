@@ -1,0 +1,344 @@
+<meta charset="utf-8">
+<title>media</title>
+媒体类型
+	screen         计算机屏幕（默认值）    
+	tty            电传打字机以及使用等宽字符网格的类似媒介
+	tv             电视类型设备（低分辨率、有限的屏幕翻滚能力）
+	projection     放映机
+	handheld       手持设备（小屏幕、有限的带宽）
+	print          打印预览模式 / 打印页
+	braille        盲人用点字法反馈设备
+	aural          语音合成器
+	all            适合所有设备
+
+	在CSS2中,媒体查询只使用于<style></style>和<link>标签中,以media属性存在
+	<style media="screen"></style>
+
+媒体属性
+	 width(宽,浏览器可视宽度)			
+	 	min-width(最小可视宽度) | max-width(最大可宽度)
+　　		宽度描述了输出设备渲染区域的宽度
+　　		向宽度大于800px的可视区域的设备应用样式表
+		@media (min-width:800px) {
+		    .box{ height: 100px;width: 100px; background-color: lightgreen;}       
+		}
+     height(高,浏览器可视高度)
+     	min-height(最小可视高度度) | max-height(最大可视高度)
+     　	高度描述了输出设备渲染区域（如可视区域的高度或打印机纸盒的高度）的高度
+　　		向高度大于800px的可视区域的设备应用样式表
+		@media (min-height:800px) {
+		    .box{ height: 100px; width: 100px;background-color: lightgreen; }       
+		}
+     device-width(设备宽度,设备屏幕的宽度)
+     	min-device-width(设备最小宽度) | max-device-width(设备最大宽度)
+　　		设备高度描述了输出设备的高度
+　　		向显示在最小高度1000px的屏幕上的文档应用样式表
+		@media (min-device-height: 1000px) {
+		    .box{ height: 100px;width: 100px; background-color: pink;}       
+		}
+
+     device-height(设备高度,设备屏幕的高度)
+     	min-device-height(设备最小高度) | max-device-height(设备最大高度)
+		设备宽度描述了输出设备的宽度
+　　		向显示在最小宽度1000px的屏幕上的文档应用样式表
+		@media (min-device-width: 1000px) {
+		    .box{ height: 100px; width: 100px;background-color: lightblue; }       
+		}
+
+     aspect-ratio(宽高比,检测浏览器可视宽度和高度的比例(例如：aspect-ratio:16/9))
+     	min-aspect-ratio(最小宽高比:当横轴宽度/竖轴高度 > 最小宽高比) | max-aspect-ratio(最大宽高比:当横轴宽度/竖轴高度 < 最大宽高比)
+     	宽高比描述了输出设备目标显示区域的宽高比。该值包含两个以“/”分隔的正整数。代表了水平像素数（第一个值）与垂直像素数（第二个值）的比例
+　　		向可视区域是正方形或者是宽屏的设备应用样式表
+		@media (min-aspect-ratio: 1/1) {
+		    .box{height: 100px;width: 100px; background-color: lightgreen; }       
+		}
+
+     device-aspect-ratio(设备宽高比,检测设备的宽度和高度的比例)
+     	min-device-aspect-ratio(最小宽高比:当横轴宽度/竖轴高度 > 最小宽高比) | max-device-aspect-ratio(最大宽高比:当横轴宽度/竖轴高度 < 最大宽高比)
+		设备宽高比描述了输出设备的宽高比。该值包含两个以“/”分隔的正整数。代表了水平像素数（第一个值）与垂直像素数（第二个值）的比例
+　　		向宽高比为16:9的特殊宽屏设备应用样式表
+		@media (device-aspect-ratio:16/9) {
+		    .box{ height: 100px;width: 100px; background-color: pink;}       
+		}
+     
+     orientation(方向,检测设备目前处于横向还是纵向状态)
+     	landscape(横屏) | portrait(竖屏)
+     　	方向指定了设备处于横屏（宽度大于宽度）模式还是竖屏（高度大于宽度）模式
+　　		向竖屏设备应用样式表
+		@media (orientation: portrait) {
+		    .box{height: 100px;width: 100px;background-color: lightgreen; }       
+		}
+
+     resolution(分辨率,检测屏幕或打印机的分辨率(例如：min-resolution:300dpi或min-resolution:118dpcm))
+     	min-resolution | max-resolution
+     　	分辨率指定输出设备的分辨率（像素密度）。分辨率可以用每英寸（dpi）或每厘米（dpcm）的点数来表示
+　　		[注意]关于屏幕三要素(屏幕尺寸、分辨率、像素密度)的相关内容移步至此
+　　		向每英寸至少90点的设备应用样式
+		@media (min-resolution: 90dpi) {
+		    .box{height: 100px;width: 100px; background-color: lightgreen; }       
+		}
+
+     scan(扫描) 
+     	progressive | interlace
+		扫描描述了电视输出设备的扫描过程
+　　		媒体查询包含了一个CSS2已有的媒介类型(或称为媒体类型)和CSS3新增的包含一个或多个表达式的媒体属性，这些媒体属性会被解析成真或假
+　　		当媒体查询为真时，相关的样式表或样式规则就会按照正常的级联规则被应用。即使媒体查询返回假， <link> 标签上带有媒体查询的样式表仍将被下载（只不过不会被应用）
+		<link rel="stylesheet" href="style.css" media="print">
+     
+     grid(网格,检测输出的设备是网格的还是位图设备)
+     	网格判断输出设备是网格设备还是位图设备。如果设备是基于网格的（例如电传打字机终端或只能显示一种字形的电话），该值为1，否则为0　　
+　　		向非网格设备应用样式表
+		@media (grid:0) {
+		    .box{height: 100px;width: 100px; background-color: lightgreen;}       
+		}
+
+     color(颜色,检测颜色的位数（例如：min-color:32就会检测设备是否拥有32位颜色）)
+     	min-color | max-color
+     	指定输出设备每个像素单元的比特值。如果设备不支持输出颜色，则该值为0
+　　		向所有能显示颜色的设备应用样式表
+		@media (color){
+		    .box{height: 100px;width: 100px;background-color: lightblue;}   
+		}
+
+     color-index(颜色索引,检查设备颜色索引表中的颜色（他的值不能是负数）)
+     	min-color-index | max-color-index
+     	颜色索引指定了输出设备中颜色查询表中的条目数量，如果没有使用颜色查询表，则值等于0
+　　		向所有使用至少256个索引颜色的设备应用样式表(下列代码无显示，说明返回值为0)
+		@media (min-color-index: 256){
+		    .box{height: 100px; width: 100px;background-color: lightgreen;}   
+		}
+     
+     monochrome(黑白,检测单色楨缓冲区域中的每个像素的位数（这个太高级，估计咱很少会用的到）)
+     	min-monochrome | max-monochrome
+     　	黑白指定了一个黑白（灰度）设备每个像素的比特数。如果不是黑白设备，值为0
+　　		向非黑白设备应用样式表
+		@media (monochrome:0) {
+		    .box{height: 100px; width: 100px; background-color: lightgreen;}       
+		}
+
+逻辑操作符
+	操作符not、and、only和or(,)可以用来构建复杂的媒体查询
+
+	and
+		@media all and (min-width: 700px) and (orientation: landscape) { ... }
+		@media (min-width: 700px) and (orientation: landscape) { ... }
+
+	or
+		@media (min-width: 700px), handheld and (orientation: landscape) { ... }
+
+	not
+	　　not操作符用来对一条媒体查询的结果进行取反.[注意]not关键字仅能应用于整个查询，而不能单独应用于一个独立的查询
+
+	only
+		only操作符表示仅在媒体查询匹配成功时应用指定样式。可以通过它让选中的样式在老式浏览器中不被应用
+		
+		media="only screen and (max-width:1000px)"{...}
+		上面这行代码，在老式浏览器中被解析为media="only"，因为没有一个叫only的设备，所以实际上老式浏览器不会应用样式
+		
+		media="screen and (max-width:1000px)"{...}
+		上面这行代码，在老式浏览器中被解析为media="screen"，它把后面的逻辑表达式忽略了。所以老式浏览器会应用样式
+		所以，在使用媒体查询时，only最好不要忽略
+
+	@media
+	@media all
+	@media screen
+	@media screen and (){}
+	@media screen and () and print{}
+	@media screen and () and (){}
+	@media screen and (),screen and (),screen and (){}
+
+方法
+　　window.matchMedia()方法用来检查CSS的mediaQuery语句
+　　[注意]IE9-浏览器不支持，可以使用第三方函数库matchMedia.js
+
+	属性
+　　		window.matchMedia()方法接受一个mediaQuery语句的字符串作为参数，返回一个MediaQueryList对象。该对象有media和matches两个属性
+		media：返回所查询的mediaQuery语句字符串
+		matches：返回一个布尔值，表示当前环境是否匹配查询语句
+		var result = window.matchMedia('(min-width: 600px)');
+		console.log(result.media); //'(min-width: 600px)'
+		console.log(result.matches); // true
+
+	可以根据matchMedia()方法的matches属性的不同结果，进行对应的设置
+		var result = window.matchMedia('(min-width: 600px)');
+		if (result.matches) {
+		  //
+		}else{
+		 //
+		}
+
+	[注意]如果window.matchMedia无法解析mediaQuery参数，matches属性返回的总是false，而不是报错
+		var result = window.matchMedia('123');
+		console.log(result.matches);//false
+
+	事件
+		window.matchMedia方法返回的MediaQueryList对象有两个方法，用来监听事件：addListener方法和removeListener方法
+		// 指定回调函数
+		mql.addListener(mqCallback);
+		// 撤销回调函数
+		mql.removeListener(mqCallback);
+
+		注意，只有mediaQuery查询结果发生变化时，才调用指定的回调函数
+　　		所以，如果想要mediaQuery查询未变化时，就显示相应效果，需要提前调用一次函数
+　　		下面这个例子是当页面宽度小于1000px时，页面背景颜色为品红色；否则为淡蓝色
+		var mql = window.matchMedia("(min-width: 1000px)");
+		mqCallback(mql);
+		mql.addListener(mqCallback);
+		function mqCallback(mql) {
+		  if (mql.matches) {
+		    document.body.background = 'pink';
+		  }else{
+		      document.body.background = 'lightblue';
+		  }
+		}
+
+打印样式
+	媒体查询的一个常用功能是打印样式的设置，主要是背景清除、字体颜色变黑等
+	@media print{
+	    *,*:before,*:after{
+	        background:transparent!important;
+	        color:#000 !important;
+	        box-shadow: none !important;
+	        text-shadow: none !important;
+	    }
+	    a,a:visited{
+	        text-decoration: underline;
+	    }
+	    a[href]:after{
+	        content:"(" attr(href) ")";
+	    }
+	    abbr[title]:after{
+	        content:"(" attr(title) ")";
+	    }
+	    a[href^="#"]:after,a[href^="javascript:;"]:after{
+	        content:"";
+	    }
+	    pre,blockquote{
+	        border: 1px solid #999;
+	        /*只有opera浏览器起作用，避免在元素内部插入分页符*/
+	        page-break-inside:avoid;
+	    }
+	    thead{
+	        display:table-header-group;
+	    }
+	    tr,img{
+	        page-break-inside:avoid;
+	    }
+	    img{
+	        max-width:100%!important;
+	    }
+	    p,h2,h3{
+	        /*元素内部发生分页时，最少保留3行*/
+	        orphans:3;
+	        /*元素内部发生分页时，元素顶部最少保留3行*/
+	        windows:3;
+	    }
+	    h2,h3{
+	        /*避免在元素后面插入一个分页符*/
+	        page-break-after:avoid;
+	    }
+	}	
+
+相对单位
+	如果媒体查询@media使用的是相对单位，如rem，这里有一个坑需要着重强调一下
+　　一般而言，rem是相对于HTML的字体大小的。但是，由于媒体查询的级别非常高，它并不是HTML的子元素，不是相对于HTML，而是相对于浏览器的，而浏览器的默认字体大小是16px
+		如果HTML设置字体大小为12px，设置如下媒体查询
+		media="only screen and (max-width:1rem)"
+		实际上，max-width等于16px，而不是12px
+　　		而正是由于媒体查询是相对于浏览器的， 所以使用rem就没有必要，完全可以使用em来替代
+		media="only screen and (max-width:1em)"
+
+媒体查询多用于响应式网页中。
+	1.初始化设置：
+		在HTML文件中，网页顶部<head></head>标签中插入一句话：
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		这句话在于对响应式网页做一个初始化设置，主要包括：
+		name="viewport"：		标记显示设备为视口；
+		width = device-width：	宽度等于当前设备的宽度；
+		initial-scale：			初始的缩放比例（默认设置为1.0）；
+		minimum-scale：			允许用户缩放到的最小比例（默认设置为1.0）；
+		maximum-scale：			允许用户缩放到的最大比例（默认设置为1.0）；   
+		user-scalable：			用户是否可以手动缩放（默认设置为no，因为我们不希望用户放大缩小页面）。
+
+
+	2.解决IE浏览器的兼容性问题：
+		因为IE浏览器(IE8)不支持HTML5和CSS3中的media，所以要加载用于解决IE浏览器兼容性问题的JS文件：
+		<!--[if lt IE 9]>
+			<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+			<script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+		<![endif]-->
+		两个<script></script>标签中的src属性所指向的文件链接地址为固定地址中的文件，直接异地引用就好，不用下载到本地引用。
+
+	3.设置IE的渲染方式为最高：
+		现在有很多人的IE浏览器都升级到IE9以上，这个时候会有很多诡异的事情发生，
+		例如现在是IE9的浏览器，但是浏览器的文档模式却是IE8，为了防止这种情况，我们需要下面这段代码来让IE的文档模式永远都是最新：
+		<meta http-equiv="X-UA-Compatible"content="IE=edge">
+		当然还有一个更给力的写法：
+		<meta http-equiv="X-UA-Compatible"content="IE=Edge，chrome=1">
+		这段代码后面加了一个chrome=1，这是由于Google Chrome Frame（谷歌内嵌浏览器框架GCF），
+		如果用户电脑安装这个chrome插件，就可让电脑内的IE浏览器规避版本因素，使用Webkit引擎及V8引擎进行排版及运算。
+		当然如果用户没装这个插件，这段代码就会让IE浏览器以最高的文档模式展现效果。
+
+	4.CSS3 media 媒体查询的写法：
+		@media screen and (max-width: 960px){
+			body{
+				background:#000;
+			}
+		}
+		这是一个media的标准写法，在CSS文件中，意为：当页面小于960px时执行以下CSS代码，具体内容暂不用管。
+		对于上述代码中的screen，意为在告知设备在打印页面时使用衬线字体，在屏幕上显示时用无衬线字体。
+		目前很多网站都会直接省略screen,从而不需要考虑用户打印网页的需求，所以又有这种写法：
+		@media (max-width: 960px){
+			body{
+				background:#000;
+			}
+		}
+		本着思维严谨的原则，个人不会采用这种写法。
+
+	5.CSS3媒体查询主体代码组合：
+		在响应式网页布局中需要持续运用媒体查询代码组合，主要作用在于判断所适配屏幕的宽度，并根据各种宽度条件套用不同的CSS样式。
+		
+		如当屏幕宽度等于960px时，将网页背景色变为红色：
+		@media screen and (max-device-width:960px){
+			body{
+				background:red;
+			}
+		}
+
+		如当屏幕宽度最大为960px（小于960px）时，将网页背景色变为黑色：
+		@media screen and (max-width: 960px){
+		     body{
+		        background:#000;
+		    }
+
+		}  
+		
+		如当屏幕宽度最小为960px（大于960px）时，将网页背景色变为桔色：
+		@media screen and (min-width:960px){
+		    body{
+		        background:orange;
+		    }
+		} 
+		
+		更为常见的是混合使用，如当屏幕宽度介于960px和1200px之间时，将网页背景色变为黄色：
+		@media screen and (min-width:960px) and(max-width:1200px){
+			body{
+				background:yellow;
+		　　}
+		}
+
+	6.总体开发思路：
+		使用CSS3中媒体查询的大致思路就是判断网页在不同设备中所处的宽度范围，
+		这样的范围可能有三种（PC、平板、手机），
+		也可能有四种（PC、平板、中大屏手机、小屏手机），
+		当然也可能只需要两种（平板、手机，PC端单独开发一版时可不作为CSS3媒体查询的使用对象），
+		并为各种宽度范围情况下的所需页面元素套用不同的CSS样式，从而适配各种设备。
+	
+	7.响应式网页开发中的宽度问题：
+		在实际开发中，通常需要设置响应式网页宽度的最大值，一旦忽略最大宽度，臃肿或零散的网页布局都会造成视觉洪灾，也就是我们常说的看起来很low。
+		另外谈谈目前显示设备中的网页宽度问题（由于篇幅问题，就不从工业革命开始扯了），
+		目前最为常见的宽度基本上都是：
+			大于或等于960px的PC端（1920px、1600px、1440px、1280px、1140px、960px）、
+			960px至640px之间的平板端（768px、640px）
+			以及640px以下的手机端（480px、320px），
+			以上宽度存在已久，且显示设备中的网页宽度会长期处于这样的状态下，在响应式网页宽度设计上，基本从这几个尺寸考虑就已经足够。
