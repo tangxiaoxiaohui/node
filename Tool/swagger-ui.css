@@ -1,0 +1,178 @@
+/* logo */
+#header .swagger-ui-wrap{
+  display: none;
+}
+body.swagger-section #header{
+  height: 100px;
+  background-color: #04132A;
+  padding: 0px;
+  display: flex;
+  vertical-align: middle;
+  justify-content: center;
+  align-items: center;
+}
+body.swagger-section #header::before{
+  content:"";
+  display:inline-block;
+  width: 68px;
+  height:  46px;
+  margin-right: 14px;
+  /* 标题图标 */
+  /*background-image: url('');*/
+  background-repeat: round;
+}
+body.swagger-section #header::after{
+  /* 标题名称 */
+  content:"";
+  display:inline-block;
+  font-size:  40px;
+  color: #ffffff;
+}
+/* 设置标题 */
+#api_info .info_title{
+  text-align: center;
+  font-size: 30px;
+  font-weight: 400;
+}
+#swagger-ui-container #resources_container .resource{
+  border: none;
+  margin-bottom: 30px;
+}
+#swagger-ui-container #resources_container .resource > div > h2{
+  position:relative;
+  padding-left: 20px;
+}
+#swagger-ui-container #resources_container .resource > div > h2::before{
+  content:"";
+  display:inline-block;
+  width:6px;
+  height:24px;
+  background-color:black;
+  vertical-align: bottom;
+  position: absolute;
+  left:0;
+}
+#swagger-ui-container #resources_container .resource > div > h2 > a{
+  font-size: 24px;
+  font-weight: 400;
+}
+#swagger-ui-container #resources_container .resource > div > ul >li >a{
+  font-size: 12px;
+  color:#1BA0FF;
+}
+#swagger-ui-container #resources_container .resource .endpoints .operation{
+  margin: 0px;
+}
+#swagger-ui-container #resources_container .resource .endpoints .operation{
+  position: relative;
+}
+#swagger-ui-container #resources_container .resource .endpoints .operation .markdown{
+  color: #124695;
+}
+#swagger-ui-container #resources_container .resource .endpoints .operation .heading{
+  background-color: transparent;
+  border: none;
+  display: flex;
+  flex-direction: column;
+}
+#swagger-ui-container #resources_container .resource .endpoint:last-of-type .heading{
+  border-bottom: 1px solid #EEF0F3;
+}
+#swagger-ui-container #resources_container .resource .endpoints .operation .heading{
+  padding: 15px 0px;
+  border-top: 1px solid #EEF0F3;
+}
+#swagger-ui-container #resources_container .resource .endpoints .operation .heading .path{
+  padding-left: 30px;
+}
+#swagger-ui-container #resources_container .resource .endpoints .operation .heading .options li{
+ padding-left: 30px; 
+}
+/* 左侧线条样式 */
+#swagger-ui-container #resources_container .resource .endpoints .get .heading::before,
+#swagger-ui-container #resources_container .resource .endpoints .post .heading::before,
+#swagger-ui-container #resources_container .resource .endpoints .put .heading::before,
+#swagger-ui-container #resources_container .resource .endpoints .delete .heading::before{
+  content: "";
+  display:  inline-block;
+  height:  calc(100% + 1px);
+  width: 6px;
+  position: absolute;
+  top: -1px;
+  left: 0px;
+}
+/* 图标颜色,左侧线颜色 */
+#swagger-ui-container #resources_container .resource .endpoints .get .heading::before,
+#swagger-ui-container #resources_container .resource .endpoints .get .heading .http_method .toggleOperation{
+  background-color: #1E95FF;
+}
+#swagger-ui-container #resources_container .resource .endpoints .post .heading::before,
+#swagger-ui-container #resources_container .resource .endpoints .post .heading .http_method .toggleOperation{
+  background-color: #0DCA6E;
+}
+#swagger-ui-container #resources_container .resource .endpoints .put .heading::before,
+#swagger-ui-container #resources_container .resource .endpoints .put .heading .http_method .toggleOperation{
+  background-color: #FFA507;
+}
+#swagger-ui-container #resources_container .resource .endpoints .delete .heading::before,
+#swagger-ui-container #resources_container .resource .endpoints .delete .heading .http_method .toggleOperation{
+  background-color: #FF4380;
+}
+/* 状态类型图标 */
+#swagger-ui-container #resources_container .resource .endpoints .operation .heading .http_method{
+  width: 66px;
+  height: 24px;
+  border-radius:18px;
+  position: absolute;
+  right: 0px;
+}
+#swagger-ui-container #resources_container .resource .endpoints .operation .heading .http_method .toggleOperation{
+  width: 66px;
+  height: 24px;
+  border-radius: 18px;
+  padding: 0px;
+  line-height: 24px;
+}
+/* 取消ol,li样式 */
+#swagger-ui-container #resources_container .resource .endpoints .operation .heading .options p,
+#swagger-ui-container #resources_container .resource .endpoints .operation .heading .options ol,
+#swagger-ui-container #resources_container .resource .endpoints .operation .heading .options ol li{
+  list-style: none;
+  margin:0px;
+  padding: 0px;
+  font-size: 12px;
+  line-height: 18px;
+}
+/* 展开框样式 */
+#swagger-ui-container #resources_container .resource .endpoints .operation .content{
+  padding:0px;
+  margin: 0px;
+  padding-left: 30px;
+  background-color: transparent;
+  border: none;
+  border-radius: 0px;
+}
+#swagger-ui-container #resources_container .resource .endpoints .operation .content .response-class{
+  border-top: 1px solid #EEF0F3;
+}
+#swagger-ui-container #resources_container .resource .endpoints .operation .content .response-class h4{
+  color: #1E95FF;
+}
+#swagger-ui-container #resources_container .resource .endpoints .operation .content .response-class + .sandbox{
+  border-top: none;
+}
+#swagger-ui-container #resources_container .resource .endpoints .operation .content .sandbox{
+  border-top: 1px solid #EEF0F3;
+}
+#swagger-ui-container #resources_container .resource .endpoints .operation .content .response-class .markdown p{
+  height: 30px;
+  line-height:30px;
+  padding: 0px;
+}
+#swagger-ui-container #resources_container .resource .endpoints .operation .content .model-signature .signature-container .snippet_json pre{
+  background-color: #F3F3F3;
+}
+/* 隐藏try in out */
+ #swagger-ui-container #resources_container .resource .endpoints .operation .content .sandbox .sandbox_header{ 
+  display: none; 
+} 

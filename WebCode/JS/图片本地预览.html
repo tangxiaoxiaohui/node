@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+ 
+    <style>
+       
+    </style>
+</head>
+<body>
+    <input type="file">
+ 
+    <img src="" alt="">
+ 
+</body>
+</html>
+ 
+<script>
+    var input =  document.querySelector("input");
+ 
+    //当选择完成图片之后调用
+    input.onchange = function(){
+        //1. 拿到fileinput里面的文件, 这个file是一个file对象， file对象不能直接展示的
+        var file =input.files[0];
+        console.log(file);
+ 
+        //2. 读取文件，成功img标签可以直接使用的格式
+        //FileReader类就是专门用来读文件的
+        var reader = new FileReader();
+ 
+        //3. 开始读文件
+        //readAsDataURL: dataurl它的本质就是图片的二进制数据， 进行base64加密后形成的一个字符串， 这个字符串可以直接作用img标签的图片资源使用
+ 
+        reader.readAsDataURL(file);
+ 
+        //4. 因为文件读取是一个耗时操作， 所以它在回调函数中，才能够拿到读取的结果
+        reader.onload = function() {
+            console.log(reader.result);
+            //直接使用读取的结果
+            document.querySelector("img").src = reader.result;
+        }
+        document.querySelector("img").src = file;
+    }
+ 
+</script>
