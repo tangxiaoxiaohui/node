@@ -1,9 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="9566e406-61dd-465a-b8c1-c3130a80b083" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/JavaScript/前端性能优化.md" beforeDir="false" afterPath="$PROJECT_DIR$/JavaScript/前端性能优化.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node/前端.xmind" beforeDir="false" afterPath="$PROJECT_DIR$/node/前端.xmind" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/前端知识梳理/图形/前端.xmind" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JavaScript/前端性能优化.md" beforeDir="false" afterPath="$PROJECT_DIR$/前端知识梳理/笔记/前端性能优化.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node/前端.xmind" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,6 +52,13 @@
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
   </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\GitHub\node\前端知识梳理\图形" />
+      <recent name="E:\GitHub\node\前端知识梳理\笔记" />
+      <recent name="E:\GitHub\node\前端知识梳理" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration name="server.js" type="NodeJSConfigurationType" temporary="true" path-to-js-file="server.js" working-dir="$PROJECT_DIR$/FirstStep100W/language/Node/api">
       <method v="2" />
@@ -54,11 +81,22 @@
       <updated>1559458357566</updated>
       <workItem from="1559458359227" duration="3950000" />
       <workItem from="1588816756155" duration="213000" />
-      <workItem from="1606888156889" duration="24000" />
+      <workItem from="1606888156889" duration="125000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="2" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>
