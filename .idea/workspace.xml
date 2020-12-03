@@ -20,10 +20,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9566e406-61dd-465a-b8c1-c3130a80b083" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/前端知识梳理/图形/前端.xmind" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/前端知识梳理/笔记/HTTTP协议详解.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/前端知识梳理/笔记/网络协议.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/JavaScript/前端性能优化.md" beforeDir="false" afterPath="$PROJECT_DIR$/前端知识梳理/笔记/前端性能优化.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node/前端.xmind" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,11 +47,14 @@
     <property name="HbShouldOpenHtmlAsHb" value="" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="javascript.nodejs.core.library.configured.version" value="12.18.3" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/前端知识梳理/笔记" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\GitHub\node\前端知识梳理\笔记" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="E:\GitHub\node\前端知识梳理\图形" />
       <recent name="E:\GitHub\node\前端知识梳理\笔记" />
@@ -82,6 +84,7 @@
       <workItem from="1559458359227" duration="3950000" />
       <workItem from="1588816756155" duration="213000" />
       <workItem from="1606888156889" duration="125000" />
+      <workItem from="1606963523758" duration="1268000" />
     </task>
     <servers />
   </component>
@@ -98,5 +101,6 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
 </project>
