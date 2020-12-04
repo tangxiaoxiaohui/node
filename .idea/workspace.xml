@@ -20,8 +20,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9566e406-61dd-465a-b8c1-c3130a80b083" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/前端知识梳理/笔记/HTTTP协议详解.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/前端知识梳理/笔记/网络协议.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/前端知识梳理/笔记/设计模式.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -32,12 +31,6 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
-    <option name="x" value="240" />
-    <option name="y" value="130" />
-    <option name="width" value="1440" />
-    <option name="height" value="780" />
-  </component>
   <component name="ProjectId" id="1l5XvN4BLpGZBYnuOWV4Ah7Ps1R" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -47,7 +40,13 @@
     <property name="HbShouldOpenHtmlAsHb" value="" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="javascript.nodejs.core.library.configured.version" value="12.18.3" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/前端知识梳理/笔记" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
   </component>
@@ -84,7 +83,9 @@
       <workItem from="1559458359227" duration="3950000" />
       <workItem from="1588816756155" duration="213000" />
       <workItem from="1606888156889" duration="125000" />
-      <workItem from="1606963523758" duration="1268000" />
+      <workItem from="1606963523758" duration="4043000" />
+      <workItem from="1607042291326" duration="26000" />
+      <workItem from="1607042333161" duration="3807000" />
     </task>
     <servers />
   </component>
@@ -102,5 +103,11 @@
       </map>
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="686" y="215" key="FileChooserDialogImpl" timestamp="1607042309482">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="686" y="215" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1607042309482" />
   </component>
 </project>
