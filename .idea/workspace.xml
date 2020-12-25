@@ -20,8 +20,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9566e406-61dd-465a-b8c1-c3130a80b083" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/前端知识梳理/笔记/设计模式.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/前端知识梳理/笔记/webpack.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/前端知识梳理/笔记/设计模式.md" beforeDir="false" afterPath="$PROJECT_DIR$/前端知识梳理/笔记/设计模式.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,7 +41,7 @@
     <property name="HbShouldOpenHtmlAsHb" value="" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="javascript.nodejs.core.library.configured.version" value="12.18.3" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../sms-web" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -85,7 +86,12 @@
       <workItem from="1606888156889" duration="125000" />
       <workItem from="1606963523758" duration="4043000" />
       <workItem from="1607042291326" duration="26000" />
-      <workItem from="1607042333161" duration="3807000" />
+      <workItem from="1607042333161" duration="3808000" />
+      <workItem from="1607301940913" duration="1216000" />
+      <workItem from="1607321391853" duration="3806000" />
+      <workItem from="1607388258421" duration="9865000" />
+      <workItem from="1607648295959" duration="1806000" />
+      <workItem from="1607906783284" duration="370000" />
     </task>
     <servers />
   </component>
@@ -105,9 +111,9 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="686" y="215" key="FileChooserDialogImpl" timestamp="1607042309482">
+    <state x="686" y="215" key="FileChooserDialogImpl" timestamp="1607906885928">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="686" y="215" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1607042309482" />
+    <state x="686" y="215" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1607906885928" />
   </component>
 </project>
